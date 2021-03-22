@@ -1,0 +1,47 @@
+<button mat-icon-button class="toggle-menu" [class.available]="dataLength>0" (click)="toggleMenu();">
+    <!-- <i class="fas fa-heart"></i> -->
+    <mat-icon>favorite_border</mat-icon>
+    <span *ngIf="dataLength>0" class="badge">{{dataLength}}</span>
+</button>
+<span class="on-dropdown-open" [style.opacity]="openMenu ? 1 : 0"></span>
+
+<div class="favorites-menu menu-dropdown" [class.open]="openMenu">
+    <div *ngIf="favorites.length===0" class="no-data">
+        <em class="text-warn">{{langContent.noData}}</em>
+    </div>
+
+    <ng-container *ngFor="let e of favorites">
+        <span class="heading">
+            {{e.name}}
+            <span class="length bg-warn">{{e.items.length}}</span>
+        </span>
+
+        <a *ngIf="e.data" class="liked-item">
+            <div class="pic">
+                <app-avatar
+                    type="avatar" 
+                    [filename]="e.data.avatar" 
+                    [src]="e.data.src" 
+                    [alt]="e.data.name" 
+                    width="40px" 
+                    shape="circle" 
+                    [noImage]="null" 
+                    [table]="null" 
+                    [updateId]="null" 
+                    [uploadPath]="null"></app-avatar>
+            </div>
+
+            <div class="details">
+                <span class="title">
+                    {{langContent.likeTitle}} <span class="font-600">{{e.data.nameValue}} </span>
+                    <em *ngIf="e.items.length>1">
+                        {{langContent.and}} {{e.items.length}} 
+                        {{e.data.other}}
+                    </em>
+                </span>
+            </div>
+        </a>
+    </ng-container>
+</div>
+
+<span *ngIf="openMenu" class="backdrop fixed" (click)="openMenu=false;"></span>

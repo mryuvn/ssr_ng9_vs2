@@ -1,3 +1,33 @@
-<h1>Chào mừng bạn đến với ứng dụng web angular 9!</h1>
+<ng-container *ngIf="data.JSON">
+    <ng-container *ngIf="!data.JSON.slideConfig">
+        <img class="cover" [src]="data.coverUrl" [alt]="appName">
+    </ng-container>
 
-<p>heheeheh</p>
+    <div *ngIf="data.JSON.slideConfig" class="header" 
+        [style.max-height]="data.JSON.headerHeight ? data.JSON.headerHeight : 'auto'">
+    
+        <app-main-slider
+            [pageID]="data.id" 
+            [coverUrl]="data.coverUrl" 
+            [title]="data.name" 
+            [caption]="data.caption" 
+            [slideConfig]="data.JSON.slideConfig"></app-main-slider>
+    </div>
+</ng-container>
+
+<div class="container">
+    <h1>Chào mừng bạn đến với ứng dụng web angular 9!</h1>
+
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni recusandae itaque ducimus expedita nisi obcaecati inventore iste magnam, et perferendis voluptatibus nostrum dolorum ut id ipsa corrupti! Reiciendis, harum neque.</p>
+</div>

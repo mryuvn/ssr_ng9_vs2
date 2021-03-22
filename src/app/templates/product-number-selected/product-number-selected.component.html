@@ -1,0 +1,13 @@
+<span class="product-number-selected">
+    <a mat-button class="remove flex" [disabled]="!number" (click)="remove();">
+        <!-- <i class="fas fa-minus"></i> -->
+        <mat-icon>remove</mat-icon>
+    </a>
+
+    <span class="number">{{number}}</span>
+
+    <a mat-button class="add flex" [disabled]="number>=available" (click)="add();">
+        <!-- <i class="fas fa-plus"></i> -->
+        <mat-icon>add</mat-icon>
+    </a>
+</span>

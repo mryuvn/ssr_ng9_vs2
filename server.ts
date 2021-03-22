@@ -43,10 +43,6 @@ function run() {
 
   // Start up the Node server
   const server = app();
-  // server.listen(port, () => {
-  //   console.log(`Node Express server listening on http://localhost:${port}`);
-  // });
-
   const http = require("http");
   const https = require("https");
   const fs = require("fs");

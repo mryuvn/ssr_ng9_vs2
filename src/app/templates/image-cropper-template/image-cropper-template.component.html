@@ -1,0 +1,111 @@
+<div id="imageCropper" class="image-cropper-template" [class.multiple]="multiple">
+  <div id="selectFile" 
+    class="select-file" 
+    [class.hidden]="imageOption!=='select-image' || hiddenFileInput" 
+    (mouseover)="hoverSelectFile();" 
+    (mouseleave)="leaveSelectFile();"
+    [style.width]="selectFileWidth"
+    [style.padding-top]="selectFilePaddingTop">
+
+    <input id="fileInput" type="file" [(ngModel)]="fileInput" #imageInput (change)="fileChangeEvent($event)" />
+    
+    <div class="background" [class.faded]="!currentImage">
+      <span class="upload-title">{{title}}</span>
+      <span [class.text-error]="selectedFileMessErr"><mat-icon>add_photo_alternate</mat-icon></span>
+      <span class="upload-mess" [class.text-error]="selectedFileMessErr"> {{selectedFileMess}} </span>
+      <em class="file-accepted" [class.text-error]="selectedFileMessErr">({{data.fileAccepted}}: .png, .jpg, .gif)</em>
+    </div>
+
+    <div *ngIf="currentImage" class="current-image" [class.faded]="!showCurrentImage">
+      <img [src]="currentImage" [class.landscape]="currentImageLandscape" alt="">
+    </div>
+  </div>
+  
+  <div class="image-cropper" [class.hidden]="imageOption!=='image-cropper'">
+    <div class="tools">
+      <a mat-icon-button (click)="rotateLeft()"><i class="fas fa-reply rotate-left"></i></a>
+      <a mat-icon-button (click)="rotateRight()"><i class="fas fa-share rotate-right"></i></a>
+      <a mat-icon-button (click)="flipHorizontal()"><i class="fas fa-exchange-alt flip-horizontal"></i></a>
+      <a mat-icon-button (click)="flipVertical()"><i class="fas fa-exchange-alt flip-vertical"></i></a>
+      <a mat-icon-button (click)="toggleContainWithinAspectRatio()">
+        <i class="{{containWithinAspectRatio ? 'fas fa-compress' : 'fas fa-expand'}}"></i></a>
+      <a mat-icon-button (click)="resetImage()"><i class="fas fa-redo-alt"></i></a>
+    </div>
+  
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [containWithinAspectRatio]="containWithinAspectRatio"
+      [aspectRatio]="aspectRatio"
+      [resizeToWidth]="resizeToWidth"
+      [cropperMinWidth]="cropperMinWidth"
+      [onlyScaleDown]="true"
+      [roundCropper]="false"
+      format="png"
+      outputType="both"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+      [style.display]="showCropper ? null : 'none'"
+      [alignImage]="'center'">
+    </image-cropper>
+  
+    <div *ngIf="customAspectRatio" class="aspect-ratio">
+      <span>{{data.croppingRatio}}</span>
+      <mat-slider [(ngModel)]="aspectRatioValue" (ngModelChange)="setAspectRatio(aspectRatioValue);"
+        thumbLabel
+        tickInterval="1000"
+        min="10"
+        max="90"></mat-slider>
+      <mat-form-field>
+        <input type="number" [(ngModel)]="aspectRatioValue" (ngModelChange)="setAspectRatio(aspectRatioValue);" matInput placeholder="">
+        <span class="matSuffix">/{{aspectRatioQuotient}} </span>
+      </mat-form-field>
+    </div>
+
+    <div class="btns text-right">
+      <a class="button pull-left" mat-raised-button (click)="imageInput.click();"><mat-icon>image_search</mat-icon></a>
+      <a class="button bg-accent" mat-button (click)="cropImage();"><mat-icon>crop</mat-icon></a>
+    </div>
+  </div>
+  
+  <div class="selected-image" 
+    [class.hidden]="imageOption!=='selected-image'" 
+    (mouseover)="removeImageBtn=true;" 
+    (mouseleave)="removeImageBtn=false;">
+
+    <img [src]="croppedImage" width="100%" />
+  
+    <a *ngIf="removeImageBtn" mat-icon-button class="remove-btn" (click)="removeSelectedImage();">
+      <mat-icon>close</mat-icon>
+    </a>
+  
+    <div class="btns text-right">
+      <a class="button pull-left" mat-raised-button (click)="imageInput.click();"><mat-icon>image_search</mat-icon></a>
+      <a class="button bg-warn" mat-raised-button (click)="imageOption='image-cropper';"><i class="fas fa-edit"></i></a>
+    </div>
+  </div>
+
+  <ng-container *ngIf="multiple">
+    <div class="selected-images row">
+      <ng-container *ngIf="currentPictures">
+        <div *ngFor="let picture of currentPictures; index as i;" class="selected-image" (mouseover)="removeBtn='picture_'+i;" (mouseleave)="removeBtn=null;">
+          <img [src]="picture.link" alt="" height="80px" />
+          <a *ngIf="removeBtn==='picture_'+i" mat-icon-button class="remove-btn" (click)="removePicture(picture);">
+            <mat-icon>close</mat-icon>
+          </a>
+        </div>
+      </ng-container>
+  
+      <ng-container *ngFor="let image of selectedImagesList; index as i;">
+        <div class="selected-image" (mouseover)="removeBtn='image_'+i;" (mouseleave)="removeBtn=null;">
+          <img [src]="image" alt="" height="80px" />
+          <a *ngIf="removeBtn==='image_'+i" mat-icon-button class="remove-btn" (click)="removeImage(image);">
+            <mat-icon>close</mat-icon>
+          </a>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

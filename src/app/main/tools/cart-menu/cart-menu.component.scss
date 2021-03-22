@@ -1,0 +1,115 @@
+.shopping-cart-menu {
+    background: var(--lightColor);
+    font-size: 90%;
+    min-width: 280px;
+    max-width: 100%;
+    padding: 15px;
+
+    .heading {
+        color: var(--primaryColor);
+        text-transform: uppercase;
+        font-weight: 600;
+        display: flex;
+    }
+
+    .no-data {
+        margin-top: .3rem;
+    }
+
+    ul {
+        margin: 0;
+
+        li {
+            position: relative;
+            padding: 15px 0;
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+
+            .pic {
+                position: relative;
+                margin-right: 10px;
+            }
+
+            .details {
+                position: relative;
+                flex-direction: column;
+                display: flex;
+
+                .name {
+                    font-weight: 600;
+                    color: var(--accentColor)
+                }
+
+                .price {
+                    color: var(--warnColor);
+                    flex-direction: row;
+                    display: flex;
+                    align-items: center;
+
+                    .tool {
+                        margin-left: .5rem;
+
+                        .mat-icon-button {
+                            width:26px;
+                            height: 26px;
+                            line-height: 24px;
+                        }
+                    }
+                }
+            }
+
+            .remove-item {
+                position: absolute;
+                right: -7px;
+                color: var(--accentColor);
+            }
+            .remove-item:hover {
+                color: var(--warnColor);
+            }
+        }
+        li:before {
+            position: absolute;
+            content: '';
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            border-bottom: 1px solid var(--primaryColor);
+            opacity: .1
+        }
+    }
+
+    .total {
+        color: var(--warnColor);
+        font-weight: 600;
+        overflow: hidden;
+        margin: 1rem 0;
+        display: block;
+    }
+
+    .btns {
+        overflow: hidden;
+        margin-bottom: .3rem;
+
+        .mat-button {
+            font-size: 14px;
+        }
+
+        .order {
+            width: 100%;
+        }
+    }
+
+    .find-prods {
+        width: 100%;
+        margin-top: .7rem;
+    }
+
+    .find-order {
+        margin-top: .7rem;
+        place-content: center;
+    }
+}
+.shopping-cart-menu:before {
+    background: var(--lightColor);
+}

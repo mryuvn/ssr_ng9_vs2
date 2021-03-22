@@ -1,0 +1,65 @@
+<button mat-icon-button class="toggle-menu" [class.available]="dataLength>0" (click)="toggleMenu();">
+    <!-- <i class="fas fa-shopping-cart"></i> -->
+    <mat-icon>shopping_cart</mat-icon>
+    <span *ngIf="dataLength>0" class="badge">{{dataLength}}</span>
+</button>
+<span class="on-dropdown-open" [style.opacity]="openMenu ? 1 : 0"></span>
+
+<div class="shopping-cart-menu menu-dropdown" [class.open]="openMenu">
+    <span class="heading">{{langContent.shoppingCart}}</span>
+
+    <div *ngIf="dataSource.length===0" class="no-data">
+        <em class="text-warn">{{langContent.noData}}</em>
+    </div>
+
+    <div class="data" [class.hidden]="dataSource.length===0">
+        <ul>
+            <li *ngFor="let item of dataSource; index as i;">
+                <div class="pic">
+                    <app-avatar
+                        type="avatar" 
+                        [filename]="item.avatar" 
+                        [src]="item.src" 
+                        [alt]="item.name" 
+                        width="40px" 
+                        shape="circle" 
+                        [noImage]="null" 
+                        [table]="null" 
+                        [updateId]="null" 
+                        [uploadPath]="null"></app-avatar>
+                </div>
+    
+                <div class="details">
+                    <span class="name">{{item.name}}</span>
+                    <span class="price">
+                        {{item.amount | currency:' ':'code':'2.0-0'}}{{item.currencySymbol}} x {{item.number}}
+
+                        <span class="tool">
+                            <a mat-icon-button (click)="minus(item, i);"><i class="fas fa-minus-square"></i></a>
+                            <a mat-icon-button (click)="add(item);"><i class="fas fa-plus-square"></i></a>
+                        </span>
+                    </span>
+                </div>
+
+                <a mat-icon-button class="remove-item" (click)="remove(i);"><mat-icon>close</mat-icon></a>
+            </li>
+        </ul>
+    
+        <span class="total">
+            {{langContent.totalFare}} <span class="pull-right">{{totalFare | currency:' ':'code':'2.0-0'}} đ</span>
+        </span>
+    
+        <div class="btns">
+            <a mat-button class="order bg-accent" (click)="order();">{{langContent.order}}</a>
+        </div>
+    </div>
+
+    <a *ngIf="dataSource.length===0 && path!==('/'+lang+'/'+moduleRoutes.products)" 
+        mat-button class="find-prods bg-accent" 
+        [routerLink]="'/'+lang+'/'+moduleRoutes.products">{{langContent.findProds}}</a>
+
+    <a *ngIf="!userData.username" mat-button class="find-order menu-item bg-warn" (click)="closeTool.emit()" 
+        [routerLink]="'/'+lang+'/'+moduleRoutes.orderConfirm">{{langContent.findOrder}}</a>
+</div>
+
+<span *ngIf="openMenu" class="backdrop fixed" (click)="openMenu=false;"></span>

@@ -1,0 +1,89 @@
+.sidenav {
+    position: fixed;
+    background: var(--primaryColor);
+    width: 280px;
+    height: 100%;
+    left: -100%;
+    z-index: 9999;
+    display: none;
+
+    @media (max-width: 1199px) {
+        display: block;
+    }
+
+    header {
+        position: relative;
+        background: var(--light);
+        font-weight: 400;
+        text-transform: uppercase;
+        height: 60px;
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        padding: 0 1.3rem;
+        box-shadow: 0 1px 3px -3px #000;
+
+        .name {
+            padding-top: 7px;
+            padding-left: 1rem;
+        }
+
+        .close-sidenav {
+            position: absolute;
+            right: 10px;
+        }
+    }
+
+    .body {
+        height: 100%;
+        padding-bottom: 60px;
+
+        .menu {
+            padding-top: 1rem;
+            padding-bottom: 3.5rem;
+
+            a {
+                color: var(--light);
+                text-transform: uppercase;
+                font-size: 14px;
+                font-weight: 400;
+                flex-direction: row;
+                display: flex;
+                align-items: center;
+                height: 44px;
+                padding: 0 1.3rem;
+
+                app-icon {
+                    width: 1.7rem;
+                }
+            }
+
+            a:hover {
+                color: var(--warnColor);
+            }
+
+            li {
+                ul {
+                    a {
+                        font-weight: 300;
+                        padding-left: 3rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.sidenav.open {
+    left: 0;
+}
+
+.backdrop {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 0;
+}
+.backdrop.open {
+    visibility: visible;
+    opacity: .3;
+}

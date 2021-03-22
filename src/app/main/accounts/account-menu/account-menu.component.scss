@@ -1,0 +1,255 @@
+.acc-menu, .login {
+    min-width: 250px;
+    z-index: 200;
+}
+
+// .login::before {
+//     background: var(--accentColor);
+// }
+
+.acc-menu {
+    width: 290px;
+
+    .data {
+        .user-info {
+            background: var(--accentColor);
+            color: #fff;
+            padding: 1rem;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            .name {
+                margin-top: .5rem;
+            }
+
+            .acc-manager {
+                font-size: 13px;
+                height: 26px;
+                line-height: 28px;
+                padding: 0 12px;
+                margin-top: .5rem;
+                border-radius: 13px;
+                overflow: hidden;
+            }
+            .acc-manager:hover {
+                color: #fff;
+            }
+            .acc-manager:before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                content: '';
+                background: var(--warnColor);
+                opacity: 1
+            }
+            .acc-manager:hover:before {
+                opacity: .5;
+            }
+        }
+
+        .sign-out {
+            width: 100%;
+            border-radius: 0;
+            height: 40px;
+        }
+    }
+}
+
+.login {
+    .login-form {
+        padding: 1rem 1.5rem;
+        width: 330px;
+        max-width: 100%;
+        text-align: center;
+        flex-direction: column;
+        display: flex;
+
+        span.title {
+            display: block;
+            margin-bottom: .7rem;
+        }
+
+        mat-radio-group {
+            display: block;
+            margin-bottom: .7rem;
+            text-align: center;
+    
+            .mat-radio-button {
+                span.checked {
+                    color: var(--warnColor)
+                }
+            }
+    
+            // .mat-radio-outer-circle {
+            //     border-color: var(--lightColor);
+            // }
+    
+            // .mat-radio-button.mat-accent.mat-radio-checked {
+            //     .mat-radio-outer-circle {
+            //         border-color: var(--accentColor);
+            //     }
+            // }
+    
+            // .mat-radio-button.mat-accent {
+            //     .mat-radio-inner-circle {
+            //         background-color: var(--accentColor);
+            //     }
+            // }
+        }
+
+        .form-group {
+            position: relative;
+            // border-radius: 4px;
+            height: 44px;
+
+
+            a {
+                color: var(--warnColor) !important;
+            }
+            a:hover {
+                color: var(--accentColor) !important;
+            }
+
+            input {
+                position: relative;
+                background: #fff;
+                height: 40px;
+                padding: 0 .7rem;
+                border-radius: 4px;
+                border: 2px solid;
+                border-color: #fff;
+                box-shadow: 0 1px 4px -4px #000;
+            }
+            input:focus {
+                border-color: var(--warnColor);
+                box-shadow: none;
+            }
+
+            .email-form-field-template {
+                margin-top: 7px;
+
+                .mat-error {
+                    display: none;
+                }
+            }
+
+            .phone-number-form-field {
+                margin-top: 7px;
+
+                .code {
+                    input {
+                        border: none !important;
+                        box-shadow: none;
+                        height: 34px;
+                        margin-top: 2px;
+                        margin-left: 2px;
+                        padding-left: 30px !important;
+                    }
+
+                    .icon {
+                        z-index: 999;
+                        top: -2px;
+                        left: 13px;
+                    }
+                }
+
+                .number {
+                    input {
+                        padding-left: 80px;
+                    }
+                }
+            }
+            .phone-number-form-field.style_2 {
+                .code {
+                    app-single-autocomplete {
+                        mat-form-field {
+                            .mat-form-field-wrapper {
+                                height: auto !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .sign-in {
+            flex-direction: column;
+            display: flex;
+
+            .sign-in-btn {
+                background: var(--warnColor);
+                color: #fff;
+                width: 100%;
+                margin: auto;
+                margin-top: .5rem;
+            }
+            .sign-in-btn:hover {
+                color: var(--accentColor);
+            }
+
+            .forgot-pass {
+                text-align: center;
+
+                a {
+                    color: var(--warnColor);
+                    display: unset;
+                }
+            }
+        }
+
+        .social-login {
+            flex-direction: column;
+            display: flex;
+
+            .or {
+                font-style: italic;
+                opacity: .7;
+                
+                .txt {
+                    position: relative;
+                }
+                .txt:before, .txt:after {
+                    position: absolute;
+                    content: '-';
+                }
+                .txt:before {
+                    left: -1rem;
+                }
+                .txt:after {
+                    right: -1rem;
+                }
+            }
+
+            .sign-in-with {
+                display: block;
+                text-transform: uppercase;
+            }
+
+            .mat-button {
+                margin: .5rem 7.5px 0;
+            }
+        }
+
+        .sign-up {
+            margin-top: 1.5rem;
+
+            .mat-button {
+                background: var(--lightColor);
+                color: var(--warnColor);
+            }
+        }
+    }
+    .login-form:before {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
+}

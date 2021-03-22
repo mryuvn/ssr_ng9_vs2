@@ -1,0 +1,24 @@
+<div *ngIf="data.id" class="news-subscribe {{dataConfig.bgColor ? 'bg-'+dataConfig.bgColor : ''}}">
+    <h4 *ngIf="dataConfig.title">{{data.name}}</h4>
+    <span *ngIf="dataConfig.caption && data.caption" class="caption" [innerHtml]="data.caption | safeHtml"></span>
+
+    <form *ngIf="isBrowser" class="news-subscribe-form" (ngSubmit)="submit(formData);" #dataForm="ngForm">
+        <span *ngIf="process.err && !process.loading" 
+            class="error {{dataConfig.bgColor ? (dataConfig.bgColor==='accent' ? 'text-warn' : 'text-accent') : 'text-warn'}}">{{process.err}}</span>
+    
+        <div class="form-group">
+            <input type="text" [(ngModel)]="formData.email" name="email" 
+                (ngModelChange)="checkEmail(formData.email);" 
+                required [placeholder]="dataConfig.mailPlaceholder" autocomplete="off">
+            <button mat-button [disabled]="dataForm.invalid" 
+                [class]="dataConfig.bgColor ? (dataConfig.bgColor==='warn' ? 'bg-accent' : 'bg-warn') : 'bg-warn'">
+                <i *ngIf="process.loading" class="fa fa-spinner fa-spin"></i>
+                {{process.loading ? '' : dataConfig.button}}
+            </button>
+        </div>
+    
+        <span *ngIf="dataConfig.checkbox" class="checkbox">
+            <mat-checkbox [(ngModel)]="formData.checked" name="checked">{{dataConfig.checkbox}}</mat-checkbox>
+        </span>
+    </form>
+</div>

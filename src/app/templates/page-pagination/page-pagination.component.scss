@@ -1,0 +1,36 @@
+nav {
+    flex-direction: row;
+    display: flex;
+
+    .pagination {
+        background: #fff;
+        flex-direction: row;
+        display: inline-flex;
+        box-shadow: 0 3px 12px -9px #000;
+    
+        .page-item {
+            font-weight: 400;
+            font-family: 'Quicksand', cursive;
+    
+            .page-link {
+                margin-left: 0 !important;
+                border-right: 1px solid var(--light);
+            }
+    
+            .page-link:hover {
+                border-radius: 0;
+            }
+    
+            .page-link.active {
+                background: var(--warnColor);
+                color: #fff;
+                border-right: none;
+            }
+        }
+        .page-item:last-of-type {
+            .page-link {
+                border-right: none;
+            }
+        }
+    }
+}

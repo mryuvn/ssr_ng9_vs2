@@ -1,0 +1,38 @@
+<mat-form-field class="autocomplete-template single" 
+    [class.input-not-match]="inputNotMatch && showInputNotMatchNotif" 
+    [appearance]="appearance" 
+    [floatLabel]="floatLabel">
+    <mat-label *ngIf="matlabel">{{matlabel}}</mat-label>
+
+    <input type="text" matInput 
+        [placeholder]="placeholder" 
+        [formControl]="myControl" 
+        [required]="required" 
+        (ngModelChange)="selectData(myControl.value);" 
+        (focus)="onFocus(myControl.value);"
+        (blur)="onBlur(myControl.value);" 
+        [matAutocomplete]="auto">
+
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" 
+            [value]="option.finderValue" 
+            [class.hidden]="option.hidden" 
+            [disabled]="option.disabled || option.hidden" 
+            [class.with-avatar]="withAvatar">
+
+            <flag-icon *ngIf="option.flagIcon" [country]="option.flagIcon"></flag-icon> 
+            <app-avatar *ngIf="withAvatar"
+                width="34px" 
+                shape="square" 
+                [src]="option.avatarUrl"></app-avatar>
+                
+            {{option.finderTitle}}
+        </mat-option>
+    </mat-autocomplete>
+
+    <mat-icon *ngIf="matSuffix!=='flagIcon'" matSuffix>{{matSuffix}}</mat-icon>
+    <flag-icon *ngIf="flagIcon && matSuffix" [country]="flagIcon"></flag-icon>
+
+    <span *ngIf="showInputNotMatchNotif && inputNotMatch" 
+        class="input-not-match mat-error"><i class="fas fa-exclamation-triangle"></i> {{inputNotMatch}}</span>
+</mat-form-field>

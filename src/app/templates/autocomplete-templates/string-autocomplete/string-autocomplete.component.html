@@ -1,0 +1,13 @@
+<mat-form-field [appearance]="appearance">
+    <mat-label *ngIf="matlabel">{{matlabel}}</mat-label>
+
+    <input type="text" [placeholder]="placeholder" (blur)="onBlur(myControl.value);" aria-label="String" [required]="required" matInput [formControl]="myControl" (ngModelChange)="selectData(myControl.value);" [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option}}
+        </mat-option>
+    </mat-autocomplete>
+
+    <mat-icon *ngIf="matSuffix" matSuffix>{{matSuffix}}</mat-icon>
+    <span *ngIf="inputNotMatch && showInputNotMatchNotif" class="mat-error">{{inputNotMatch}}</span>
+</mat-form-field>

@@ -1,0 +1,17 @@
+<div *ngIf="isBrowser" class="avatar {{shape}}" [style.width]="width" [style.height]="height">
+    <div class="images" [style.padding-top]="shape!=='circle' && shape!=='square' ? ratio+'%' : ''">
+        <span class="no-image">
+            <img *ngIf="!viewImage" [src]="'assets/imgs/'+noImage" alt="" width="100%">
+        </span>
+        <ng-container *ngIf="viewImage && src">
+            <img *ngIf="!src.type" class="image" [class.landscape]="landscape" [src]="src" [alt]="alt ? alt : ''">
+            <img *ngIf="src.type==='base64'" class="image" [class.landscape]="landscape" [src]="src.value" [alt]="alt ? alt : ''">
+            <div *ngIf="src.type==='iframe'" class="iframe" [innerHtml]="src.value | safeHtml"></div>
+        </ng-container>
+    </div>
+</div>
+
+<div *ngIf="src" style="display: none;">
+    <img *ngIf="!src.type" [src]="src" [alt]="alt ? alt : ''">
+    <div *ngIf="src.type==='iframe'" [innerHtml]="src.value | safeHtml"></div>
+</div>

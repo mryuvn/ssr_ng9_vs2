@@ -18,7 +18,7 @@ export class SetTagsService {
   setTags() {
     this.meta.addTags([
       { name: 'robots', content: 'index, follow' },
-      { name: 'author', content: 'Mr.Yu - VFL JSC' },
+      { name: 'author', content: 'Mr.Yu Design' },
       { property: 'og:type', content: 'article' }
     ]);
   }
@@ -52,7 +52,7 @@ export class SetTagsService {
       this.meta.updateTag({ name: 'og:image', content: data.image });
     }
 
-    this.meta.updateTag({ name: 'copyright', content: 'VFL JSC - Mr.Yu Design' });
+    this.meta.updateTag({ name: 'copyright', content: 'Mr.Yu Design' });
   }
 
   removeTags() {

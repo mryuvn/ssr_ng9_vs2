@@ -1,2 +1,167 @@
-<h1>Trang nội dung</h1>
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo veniam quae rem cupiditate consectetur dignissimos perspiciatis in, provident quis aliquid culpa. Natus, temporibus iure tenetur corporis accusamus sunt deserunt necessitatibus!</p>
+<div id="page" class="page {{params.moduleRoute}}" 
+    [class.router-loaded]="routerLoaded" 
+    [class.fullscreen]="pageConfig.pageFullscreen">
+
+    <ng-container *ngIf="!pageConfig.slideConfig">
+        <div class="page-banner" 
+            [style.height]="pageConfig.headerHeight ? pageConfig.headerHeight : '400px'">
+        
+            <div class="page-cover">
+                <img [src]="pageCover" alt="" width="100%">
+            </div>
+            
+            <div class="content">
+                <div class="container">
+                    <div class="data">
+                        <h1 class="site-title">{{siteTitle}}</h1>
+                        <span *ngIf="siteCaption" class="caption" [innerHtml]="siteCaption | safeHtml"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <div *ngIf="pageConfig.slideConfig" class="header" 
+        [style.max-height]="pageConfig.headerHeight ? pageConfig.headerHeight : 'auto'">
+        <app-main-slider 
+            [pageID]="data.id" 
+            [coverUrl]="pageCover" 
+            [title]="siteTitle" 
+            [caption]="siteCaption" 
+            [slideConfig]="pageConfig.slideConfig"></app-main-slider>
+    </div>
+
+    <div class="page-content {{data.id ? pageConfig.sidebar ? 'sidebar-'+pageConfig.sidebar : '' : 'sidebar-right'}}">
+        <ng-container *ngIf="!pageConfig.moduleTemplate">
+            <div class="container">
+                <div class="navigation-map">
+                    <a routerLink="/"><i class="fas fa-home"></i></a> 
+                    <span class="raquo">&raquo;</span> 
+                    <a [routerLink]="'/'+generalData.route">{{moduleData.nameValue}}</a>
+                    <ng-container *ngIf="data.id!==generalData.id">
+                        <span class="raquo">&raquo;</span> 
+                        <a [routerLink]="'/'+data.route">{{data.name}}</a>
+                    </ng-container>
+                </div>
+
+                <div [class.row]="pageConfig.sidebar || !data.id">
+                    <div [class.col-xl-8]="pageConfig.sidebar || !data.id">
+                        <ng-container *ngIf="pageTitle">
+                            <h2 class="page-title">{{pageTitle}}</h2>
+                            <span class="headingline"></span>
+                        </ng-container>
+        
+                        <em *ngIf="data.mess" class="text-error">{{data.mess}}</em>
+
+                        <div *ngIf="data.avatar" class="page-avatar {{pageConfig.avatarPosition}}">
+                            <div class="picture">
+                                <app-avatar (click)="openImageViewer(0)" 
+                                    type="avatar" 
+                                    [filename]="data.avatar" 
+                                    [src]="data.avatarUrl" 
+                                    [alt]="data.name" 
+                                    width="100%" 
+                                    shape="square" 
+                                    [noImage]="null" 
+                                    [table]="tables.posts" 
+                                    [updateId]="data.id" 
+                                    [uploadPath]="uploadPath"></app-avatar>
+                            </div>
+                        </div>
+                        
+                        <div class="text" [class.hidden]="!data.id">
+                            <p *ngIf="data.caption && data.caption!==generalData.caption" 
+                                class="caption" [innerHtml]="data.caption | safeHtml"></p>
+        
+                            <ng-container *ngFor="let item of contents; index as i;">
+                                <h3 *ngIf="item.title!==pageTitle">{{item.title}}</h3>
+                                <p *ngIf="item.caption" [innerHtml]="item.caption | safeHtml"></p>
+                                <div *ngIf="item.content" [innerHtml]="item.content | safeHtml"></div>
+                            </ng-container>
+
+                            <div [class.hidden]="categories.length===0" class="categories">
+                                <div *ngFor="let item of categories" class="item">
+                                    <a [routerLink]="'/'+lang+'/'+item.route">
+                                        <span class="icon">
+                                            <i class="fas fa-folder"></i>
+                                        </span>
+                                        <span class="name">{{item.nameValue}}</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div *ngIf="data.continueBtn" class="continue-button {{data.continueBtn.position}}">
+                                <app-continue-btn 
+                                    [data]="data.continueBtn" 
+                                    [color]="data.continueBtn.color" 
+                                    [size]="data.continueBtn.size" 
+                                    [icon]="data.continueBtn.icon"></app-continue-btn>            
+                            </div>
+        
+                            <div *ngIf="contents.length>0" class="page-bottom">
+                                <span class="pull-left">
+                                    <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&width=115&layout=button&action=like&size=small&share=true&height=65&appId=1121788874905560" width="115" height="65" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                                </span>
+        
+                                <span class="pull-right">
+                                    <span class="time" *ngIf="siteValues">
+                                        {{langData.updated}}: 
+                                        <ng-container *ngIf="data.updatedTime"> {{data.updatedTime | date:dateFormat}}</ng-container>
+                                        <ng-container *ngIf="!data.updatedTime"> {{data.createdTime | date:dateFormat}}</ng-container>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+        
+                        <div class="posts {{pageConfig.sameCatType ? pageConfig.sameCatType : 'list'}}" 
+                            [class.hidden]="articles.length===0 || data.id!==generalData.id&&articles.length===1">
+                            <h4 *ngIf="moduleData.contentData.sameCatTitle" class="title">{{moduleData.contentData.sameCatTitle}}</h4>
+        
+                            <div class="row">
+                                <div *ngFor="let item of articles" 
+                                    class="{{pageConfig.sameCatType==='articles' ? 'col-xl-6 col-lg-4 col-sm-6' : 'col-12'}}" 
+                                    [class.hidden]="item.id==data.id">
+                                    <div class="item">
+                                        <div class="post-avatar">
+                                            <div class="picture">
+                                                <app-avatar
+                                                    type="avatar" 
+                                                    [filename]="item.avatar" 
+                                                    [src]="item.avatarUrl" 
+                                                    [alt]="item.name" 
+                                                    width="100%" 
+                                                    shape="square" 
+                                                    [noImage]="null" 
+                                                    [table]="tables.posts" 
+                                                    [updateId]="item.id" 
+                                                    [uploadPath]="uploadPath"></app-avatar>
+                                            </div>
+                                        </div>
+            
+                                        <div class="data">
+                                            <h4 class="name"><a [routerLink]="item.route">{{item.name}}</a></h4>
+                                            <span class="time">{{langData.updated}}: {{item.createdTime | date:siteValues.dateFormat+' HH:mm:ss'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-container *ngIf="pageConfig.contentQuote && isBrowser">
+                            <app-content-quote></app-content-quote>
+                        </ng-container>
+                    </div>
+
+                    <div [class.col-xl-4]="pageConfig.sidebar || !data.id" 
+                        [class.sidebar]="pageConfig.sidebar || !data.id">
+                        <div class="sticky-top">
+                            <div *ngIf="siteValues && isBrowser" class="contact-form">
+                                <app-contact-form [siteValues]="siteValues"></app-contact-form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

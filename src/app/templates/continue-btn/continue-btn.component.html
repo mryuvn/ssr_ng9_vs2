@@ -1,0 +1,16 @@
+<ng-container *ngIf="data">
+    <a *ngIf="data.type!=='href' && data.type!=='call' && data.type!=='none'" mat-button 
+        class="mat-button flex bg-{{color ? color : 'accent'}} {{size}}" (click)="doAction(data);">
+        <app-icon *ngIf="icon" [iconValue]="icon"></app-icon> 
+        <span class="txt">{{data.title}}</span></a>
+
+    <a *ngIf="data.type==='href'" mat-button 
+        class="mat-button flex bg-{{color}} {{size}}" [href]="data.value" target="_blank">
+        <app-icon *ngIf="icon" [iconValue]="icon"></app-icon> 
+        <span class="txt">{{data.title}}</span></a>
+
+    <a *ngIf="data.type==='call'" mat-button 
+        class="mat-button flex bg-{{color}} {{size}}" [href]="'tel:'+data.value" target="_blank">
+        <app-icon *ngIf="icon" [iconValue]="icon"></app-icon> 
+        <span class="txt">{{data.title}}</span></a>
+</ng-container>

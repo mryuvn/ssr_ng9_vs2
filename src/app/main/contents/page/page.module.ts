@@ -19,13 +19,28 @@ const routes: Routes = [
 ];
 
 import { SafeHtmlModule } from 'src/app/safe-html';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { AvatarModule } from 'src/app/templates/avatar/avatar.module';
+import { ContinueBtnModule } from 'src/app/templates/continue-btn/continue-btn.module';
+import { IconModule } from 'src/app/templates/icon/icon.module';
+import { MainSliderModule } from '../_templates/main-slider/main-slider.module';
+import { ContentQuoteModule } from '../_templates/content-quote/content-quote.module';
+import { ContactFormModule } from '../_templates/contact-form/contact-form.module';
 
 @NgModule({
   declarations: [PageComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    SafeHtmlModule
+    SafeHtmlModule,
+    MatButtonModule, MatIconModule,
+    AvatarModule,
+    ContinueBtnModule,
+    IconModule,
+    MainSliderModule,
+    ContentQuoteModule,
+    ContactFormModule
   ]
 })
 export class PageModule { }

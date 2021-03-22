@@ -11,13 +11,15 @@ const routes: Routes = [
 ];
 
 import { SafeHtmlModule } from 'src/app/safe-html';
+import { MainSliderModule } from '../_templates/main-slider/main-slider.module';
 
 @NgModule({
   declarations: [HomeComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    SafeHtmlModule
+    SafeHtmlModule,
+    MainSliderModule
   ]
 })
 export class HomeModule { }

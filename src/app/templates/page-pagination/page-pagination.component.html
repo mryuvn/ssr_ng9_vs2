@@ -1,0 +1,21 @@
+<nav *ngIf="dataSource.length>1" aria-label="Page navigation" [style.place-content]="placeContent">
+    <ul class="pagination">
+        <li class="page-item" [class.disabled]="pageNumber===1">
+            <a class="page-link" aria-label="Previous" (click)="prevPage();">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+
+        <ng-container *ngFor="let page of dataSource; index as i;">
+            <li class="page-item"><a class="page-link" [class.active]="pageNumber===(i+1)" (click)="selectPage(page, i);"> {{i+1}} </a></li>
+        </ng-container>
+        
+        <li class="page-item" [class.disabled]="pageNumber===dataSource.length">
+            <a class="page-link" aria-label="Next" (click)="nextPage();">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</nav>

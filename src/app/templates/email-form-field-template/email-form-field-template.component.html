@@ -1,0 +1,13 @@
+<div class="email-form-field-template">
+    <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel">
+        <mat-label>{{matLabel ? matLabel : data.matLabel}}</mat-label>
+        <input type="text" [(ngModel)]="email" 
+            (ngModelChange)="checkEmail(email);" 
+            (focus)="showErr=false" (blur)="showErr=true"
+            matInput [required]="required" 
+            [placeholder]="placeholder ? placeholder : data.placeholder" autocomplete="off">
+        <mat-icon *ngIf="matSuffix" matSuffix>matSuffix</mat-icon>
+        <span *ngIf="matError && showErr && email" class="mat-error">{{matError}}</span>
+    </mat-form-field>
+    <em *ngIf="isExistence" class="is-existence text-error">{{isExistence}}</em>
+</div>

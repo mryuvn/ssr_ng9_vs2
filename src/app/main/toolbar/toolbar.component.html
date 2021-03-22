@@ -1,0 +1,138 @@
+<div class="toolbar">
+    <div class="top">
+        <div class="container">
+            <span class="toggle-sidenav">
+                <button mat-icon-button (click)="toggleSidenav.emit();">
+                    <mat-icon>menu</mat-icon>
+                    <!-- <i class="fas fa-bars"></i> -->
+                </button>
+            </span>
+
+            <a class="logo" [routerLink]="'/'+lang">
+                <img src="assets/imgs/logo/favicon.png" alt="" height="50%">
+            </a>
+    
+            <ul class="menu-top">
+                <li *ngFor="let menu of menuData.top" class="list">
+                    <a *ngIf="menu.desData.type!=='href'"
+                        [routerLink]="menu.desData.type==='path' ? (menu.desData.value ? menu.desData.value : path) : path" 
+                        (click)="doAction(menu.desData);" [class.active]="menu.active">
+                        <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                        <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+                    </a>
+                    <a *ngIf="menu.desData.type==='href'" [href]="menu.desData.value" [target]="menu.target">
+                        <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                        <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+                    </a>
+    
+                    <ul *ngIf="menu.childs.length>0">
+                        <li *ngFor="let li of menu.childs">
+                            <a *ngIf="li.desData.type!=='href'"
+                                [routerLink]="li.desData.type==='path' ? (li.desData.value ? li.desData.value : path) : path" 
+                                (click)="doAction(li.desData);">{{li.title}}</a>
+                            <a *ngIf="li.desData.type==='href'" [href]="li.desData.value" [target]="li.target">{{li.title}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+    
+            <div *ngIf="isBrowser" class="tools">
+                <span class="item home">
+                    <button mat-icon-button class="toggle-menu"
+                        (click)="closeTool.emit();
+                                favoritesMenu.openMenu=false;
+                                cartMenu.openMenu=false;
+                                accountMenu.openUserMenu=false;
+                                accountMenu.openLogin=false;"><mat-icon>home</mat-icon>
+                    </button>
+                </span>
+
+                <app-favorites-menu class="item favorites" #favoritesMenu
+                    [lang]="lang" 
+                    (openTool)="openTool.emit();
+                                cartMenu.openMenu=false;
+                                accountMenu.openUserMenu=false;
+                                accountMenu.openLogin=false;"></app-favorites-menu>
+
+                <app-cart-menu class="item cart" #cartMenu
+                    [lang]="lang" 
+                    (openTool)="openTool.emit();
+                                favoritesMenu.openMenu=false;
+                                accountMenu.openUserMenu=false;
+                                accountMenu.openLogin=false;"></app-cart-menu>
+
+                <app-account-menu class="item account" #accountMenu
+                    [lang]="lang" 
+                    (openTool)="openTool.emit();
+                                favoritesMenu.openMenu=false;
+                                cartMenu.openMenu=false;"></app-account-menu>
+
+                <span class="item langs">
+                    <a [matMenuTriggerFor]="langsMenu">
+                        <flag-icon *ngIf="selectedLang" [country]="selectedLang.code" squared></flag-icon> 
+                        <span class="txt">{{selectedLang ? selectedLang.title : ''}}</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <mat-menu #langsMenu="matMenu" class="small-size">
+                        <a mat-menu-item *ngFor="let item of siteLangs" (click)="changeLanguage(item);">
+                            <flag-icon [country]="item.code" squared></flag-icon> {{item.nameObj.vernacular}}</a>
+                    </mat-menu>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="menu">
+        <div class="container">
+            <span class="toggle-sidenav">
+                <button mat-icon-button (click)="toggleSidenav.emit();">
+                    <mat-icon>menu</mat-icon>
+                    <!-- <i class="fas fa-bars"></i> -->
+                </button>
+            </span>
+    
+            <ul class="menu-main">
+                <li *ngFor="let menu of menuData.main" class="list">
+                    <ng-container *ngIf="!menu.desData.value">
+                        <a [class.active]="menu.active">
+                            <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                            <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+                        </a>
+                    </ng-container>
+                    <ng-container *ngIf="menu.desData.value">
+                        <a *ngIf="menu.desData.type!=='href'"
+                            [routerLink]="menu.desData.type==='path' ? (menu.desData.value ? menu.desData.value : path) : path" 
+                            (click)="doAction(menu.desData);" [class.active]="menu.active">
+                            <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                            <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+                        </a>
+                        <a *ngIf="menu.desData.type==='href'" [href]="menu.desData.value" [target]="menu.target">
+                            <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                            <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+                        </a>
+                    </ng-container>
+    
+                    <ul *ngIf="menu.childs.length>0">
+                        <li *ngFor="let li of menu.childs">
+                            <ng-container *ngIf="!li.desData.value">
+                                <a>{{li.title}}</a>
+                            </ng-container>
+                            <ng-container *ngIf="li.desData.value">
+                                <a *ngIf="li.desData.type!=='href'"
+                                    [routerLink]="li.desData.type==='path' ? (li.desData.value ? li.desData.value : path) : path" 
+                                    (click)="doAction(li.desData);">{{li.title}}</a>
+                                <a *ngIf="li.desData.type==='href'" [href]="li.desData.value" [target]="li.target">{{li.title}}</a>
+                            </ng-container>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <app-continue-btn 
+                [data]="menuData.btn.desData" 
+                color="warn" 
+                size="small" 
+                [icon]="menuData.btn.icon"></app-continue-btn>
+        </div>
+    </div>
+</div>

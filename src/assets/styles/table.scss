@@ -1,0 +1,36 @@
+.mat-table {
+    width: 100%;
+
+    .mat-header-row, .mat-row {
+        border-bottom: 1px solid var(--backgroundColor);
+
+        .mat-header-cell {
+            font-size: 90%;
+        }
+
+        .mat-header-cell, .mat-cell {
+            padding: 10px 15px;
+            color: inherit;
+
+            .data-col.flex-column {
+                place-content: center;
+            }
+            .data-col.flex-column.flex-end {
+                align-items: flex-end;
+            }
+            .data-col.flex-column.center {
+                align-items: center;
+            }
+
+            .data-col.flex-row {
+                align-items: center;
+            }
+        }
+    }
+    .mat-row:last-of-type {
+        border-bottom: none;
+    }
+}
+.mat-table.box-shadow {
+    box-shadow: 0 1px 3px -3px #000;
+}

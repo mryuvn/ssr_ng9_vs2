@@ -1,0 +1,16 @@
+<div class="image-viewer-template">
+    <span class="title" [class.showPDFOnlyOption]="showPDFOnlyOption">{{title ? title : 'Image viewer'}}</span>
+    <app-image-viewer [images]="images"
+        [idContainer]="'idOnHTML'"
+        [loadOnInit]="true" 
+        [showPDFOnlyOption]="showPDFOnlyOption" 
+        [showOptions]="showOptions"
+        [download]="download" 
+        [enableTooltip]="enableTooltip" 
+        [primaryColor]="primaryColor ? primaryColor : '#263238'" 
+        [buttonsColor]="buttonsColor ? buttonsColor : '#fff'" 
+        [buttonsHover]="buttonsHover ? buttonsHover : '#fff000'" 
+        [defaultDownloadName]="defaultDownloadName ? defaultDownloadName : 'File'" 
+        (onNext)="onNext.emit($event);" 
+        (onPrevious)="onPrevious.emit($event);"></app-image-viewer>
+</div>

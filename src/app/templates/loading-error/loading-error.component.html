@@ -1,0 +1,9 @@
+<ng-container *ngIf="data">
+  <div class="err-500 {{show}}" [class.bg-light]="bg" [class.fixed]="fixed">
+      <span class="err">500</span>
+      <span class="title">{{data.title}}</span>
+      <em class="mess">{{data.mess}}</em>
+      <button mat-button (click)="data.loading=true; retry.emit();">
+        <i *ngIf="data.loading" class="fa fa-spinner fa-spin"></i> {{data.retry}}</button>
+  </div>
+</ng-container>

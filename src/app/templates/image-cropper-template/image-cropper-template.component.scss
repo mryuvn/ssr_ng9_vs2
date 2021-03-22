@@ -1,0 +1,218 @@
+.image-cropper-template {
+    .select-file {
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
+        margin: auto;
+    
+        input {
+            position: absolute;
+            background: none;
+            width: 100%;
+            margin-left: 0;
+            height: 100%;
+            top: 0;
+            z-index: 200;
+            cursor: pointer;
+            opacity: 0;
+        }
+    
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            padding: 0 20px 5px;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            place-content: center;
+            text-align: center;
+            z-index: 100;
+    
+            mat-icon {
+                font-size: 72px;
+                height: 72px;
+                width: 72px;
+                opacity: .7;
+            }
+        }
+
+        .background.faded {
+            color: #999;
+        }
+    
+        .current-image {
+            position: absolute;
+            background: #fbfbfb;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            display: flex;
+            place-content: center;
+            align-items: center;
+            z-index: 150;
+
+            img {
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+            }
+    
+            img.landscape {
+                max-width: none;
+                width: auto;
+                max-height: 100%;
+            }
+    
+            span {
+                display: block;
+                padding: 10px 24px;
+                opacity: .7;
+                text-align: center;
+            }
+        }
+
+        .current-image.faded {
+            opacity: .3;
+            z-index: 1;
+        }
+    }
+    
+    .image-cropper {
+        position: relative;
+        margin: 0 -4px;
+        width: 500px;
+        max-width: 100%;
+    
+        .tools {
+            position: absolute;
+            width: 100%;
+            bottom: 5px;
+            text-align: center;
+    
+            .flip-vertical {
+                transform: rotate(90deg);
+            }
+
+            @media (max-width: 666px) {
+                bottom: auto;
+                top: 0;
+                right: -36px;
+                width: 50px;
+            }
+        }
+    
+        .btns {
+            padding: 7px 5px;
+
+            .button {
+                min-width: auto;
+            }
+        }
+    }
+
+    .aspect-ratio {
+        position: relative;
+        padding-right: 70px;
+        margin-top: .5rem;
+        text-align: left;
+    
+        .mat-slider {
+            width: 100%;
+            margin-left: -8px;
+        }
+    
+        mat-form-field {
+            position: absolute;
+            right: 0;
+            bottom: 3px;
+            width: 75px;
+    
+            input {
+                padding-left: 7px;
+            }
+    
+            .matSuffix {
+                position: absolute;
+                right: 15px;
+            }
+        }
+    }
+    
+    .selected-image {
+        position: relative;
+        max-width: 100%;
+        margin: 0 auto;
+    
+        .remove-btn {
+            position: absolute;
+            background: #e5e5e5;
+            right: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+    
+            mat-icon {
+                font-size: 18px;
+                margin-top: -11px;
+            }
+        }
+    
+        .btns {
+            padding: 7px 0;
+
+            .button {
+                min-width: auto;
+            }
+        }
+    }
+}
+
+.image-cropper-template.multiple {
+    .select-file {
+        padding-top: 0 !important;
+        height: 180px;
+        width: 400px !important;
+        border: 3px dashed #dedede;
+
+        @media (max-width: 567px) {
+            height: 200px;
+        }
+
+        @media (max-width: 410px) {
+            height: 230px;
+        }
+
+        @media (max-width: 374px) {
+            height: 290px;
+        }
+    }
+
+    .select-file:hover {
+        border-color: #03a9f4;
+    }
+
+    .selected-images {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        place-content: center;
+
+        .selected-image {
+            max-width: 130px;
+            float: left;
+            border: 1px solid #fff;
+            margin: 10px 5px;
+            overflow: hidden;
+            box-shadow: 0 1px 5px -3px #000;
+            flex-direction: row;
+            display: flex;
+            place-content: center;
+            align-items: center;
+        }
+    }
+}

@@ -1,0 +1,30 @@
+<div *ngIf="startDate && returnDate" class="schadule-dates">
+    <div class="start-date">
+        <app-datepicker-templates 
+            [appearance]="appearance" 
+            [floatLabel]="floatLabel" 
+            [matLabel]="startDate.label" 
+            [placeholder]="startDate.placeholder" 
+            [required]="startDate.required" 
+            [defaultDate]="startDate.default" 
+            [readonly]="true" 
+            [inputNotMatch]="startDate.inputNotMatch" 
+            (emitData)="getStartDate($event);"></app-datepicker-templates>
+    </div>
+    
+    <div class="return-date">
+        <app-datepicker-templates *ngIf="!resetReturnDate"
+            [appearance]="appearance" 
+            [floatLabel]="floatLabel" 
+            [matLabel]="returnDate.label" 
+            [placeholder]="returnDate.placeholder" 
+            [required]="returnDate.required" 
+            [defaultDate]="returnDate.value" 
+            [readonly]="true" 
+            [disabled]="returnDate.disabled" 
+            [inputNotMatch]="returnDate.inputNotMatch" 
+            (emitData)="getReturnDate($event);"></app-datepicker-templates>
+    </div>
+
+    <span *ngIf="error" class="error-mess"><i class="fas fa-exclamation-triangle"></i> {{error}}</span>
+</div>

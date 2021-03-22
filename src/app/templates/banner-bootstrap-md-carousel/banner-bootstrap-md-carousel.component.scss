@@ -1,0 +1,55 @@
+.banner-bootstrap-md-carousel {
+    position: relative;
+    
+    mdb-carousel {
+    
+        .carousel-indicators {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .slider-manager {
+        position: absolute;
+        right: 10px;
+        bottom: 0;
+        margin-top: -3rem;
+        padding: 0 24px;
+        z-index: 9999;
+
+        .toggle-config {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            .icon {
+                position: relative;
+                z-index: 2;
+            }
+    
+            .bg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                z-index: 1;
+                opacity: .3;
+            }
+            .bg.bg-light {
+                background: #fff;
+            }
+        }
+        
+        .form-data {
+            background:  rgba(255, 255, 255, .95);
+            padding: 24px;
+            width: 500px;
+            box-shadow: 0 2px 7px -5px #000;
+            position: absolute;
+            bottom: 40px;
+            right: 23px;
+            border-radius: 7px;
+        }
+    }
+}

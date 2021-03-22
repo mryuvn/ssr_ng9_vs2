@@ -1,10 +1,62 @@
-<h1>Welcome to {{title}}</h1>
+<div id="wrapper">
+  <div id="wrapper-content" [class.router-loaded]="routerLoaded" [class.tool-open]="toolOpen">
+      <app-sidenav *ngIf="isBrowser" 
+          [open]="sidenavOpen" 
+          [siteValues]="siteValues" 
+          [menuData]="menuData" 
+          (close)="sidenavOpen=false"></app-sidenav>
 
-<ul>
-  <li><a routerLink="/vi">Trang chủ</a></li>
-  <li><a routerLink="/en">Home</a></li>
-  <li><a routerLink="/vi/gioi-thieu">Giới thiệu</a></li>
-  <li><a routerLink="/en/about-us">About Us</a></li>
-</ul>
+      <app-toolbar [class.nav-is-fixed]="navIsFixed"  
+          [class.fixed]="themeSettings ? (themeSettings.toolbar ? themeSettings.toolbar.fixed : '') : ''" 
+          [style.height]="toolbarHeight+'px'"
+          [navIsFixed]="navIsFixed" 
+          [selectedLang]="language" 
+          [siteLangs]="siteLangs" 
+          [themeSettings]="themeSettings" 
+          [siteValues]="siteValues" 
+          (emitMenuData)="menuData=$event" 
+          (toggleSidenav)="sidenavOpen=!sidenavOpen" 
+          (openTool)="toolOpen=true" 
+          (closeTool)="toolOpen=false"></app-toolbar>
 
-<router-outlet></router-outlet>
+      <div class="router-content" [class.hidden]="routerLoading || !isBrowser">
+          <router-outlet></router-outlet>
+      </div>
+
+      <app-footer [class.hidden]="routerLoading || !isBrowser || pageFullscreen" 
+          [siteValues]="siteValues" 
+          [visitorData]="visitorData"></app-footer>
+
+      <div *ngIf="routerLoading && isBrowser" class="router-loading-screen">
+          <!-- <img src="assets/imgs/favicon.png" alt="min food" width="100"> -->
+          <img class="loading-icon" src="assets/imgs/dot-loading.gif" alt="" width="110">
+      </div>
+
+      
+  </div>
+
+  <ng-container *ngIf="lang && siteValues && isBrowser">
+    <!-- <app-imageviewer-template></app-imageviewer-template> -->
+    <app-album-viewer-template [lang]="lang" [viewDemo]="false"></app-album-viewer-template>
+  </ng-container>
+
+  <app-visitor-data (emitData)="visitorData=$event"></app-visitor-data>
+
+  <span *ngIf="!toolOpen" class="scroll-top" [class.show]="navIsFixed">
+      <button mat-button (click)="scrollToTop();">
+          <!-- <i class="fas fa-arrow-up"></i> -->
+          <i class="fas fa-angle-double-up"></i>
+        </button>
+  </span>
+
+  <app-theme-settings *ngIf="openThemeSettings" 
+      (close)="openThemeSettings=false; ($event ? getSiteValues(true) : '')"></app-theme-settings>
+</div>
+
+<ng-container *ngIf="isBrowser && loadingData">
+    <app-loading-error *ngIf="loadingData.err"
+      [data]="loadingData" 
+      [bg]="true" 
+      [fixed]="true" 
+      (retry)="getSiteValues(false);"></app-loading-error>
+</ng-container>

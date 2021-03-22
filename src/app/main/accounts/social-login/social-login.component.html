@@ -1,0 +1,15 @@
+<span class="sign-in-with">{{title}}</span>
+
+<a class="sign-in-btn flex" mat-button 
+    [style.background]="defaultColor ? '#3b559f' : ''" 
+    [style.color]="defaultColor ? '#fff' : ''" 
+    (click)="signInWithFB();">
+    <span class="icon"><i class="fab fa-facebook"></i></span> Facebook
+</a>
+
+<a class="sign-in-btn flex" mat-button 
+    [style.background]="defaultColor ? '#ea4335' : ''" 
+    [style.color]="defaultColor ? '#fff' : ''" 
+    (click)="signInWithGoogle();">
+    <span class="icon"><i class="fab fa-google"></i></span> Google
+</a>

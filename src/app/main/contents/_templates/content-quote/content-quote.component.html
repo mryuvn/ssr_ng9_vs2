@@ -1,0 +1,6 @@
+<div class="content-quote m-card" [class.hidden]="!data.id">
+    <ng-container *ngFor="let item of contents">
+        <p class="title">{{item.title}}</p>
+        <div [innerHtml]="item.content | safeHtml"></div>
+    </ng-container>
+</div>

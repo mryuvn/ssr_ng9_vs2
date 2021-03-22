@@ -1,0 +1,5 @@
+<button mat-icon-button [(colorPicker)]="color"
+    (colorPickerChange)="selectColor($event);" [style.background]="color"
+    [style.color]="invertBL">
+    <mat-icon>color_lens</mat-icon>
+</button>

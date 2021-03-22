@@ -1,0 +1,31 @@
+<div class="theme-settings {{open}}">
+    <div class="header">
+        <button mat-button class="close-settings" (click)="closeSetting();"><i class="fas fa-times"></i></button>
+        <h4 class="font-600">Theme settings</h4>
+    </div>
+
+    <div class="data">
+        <h5 class="font-500">Colors</h5>
+        <div class="colors">
+            <ng-container *ngFor="let item of colors">
+                <div class="color-item">
+                    <span class="title"
+                        [style.background]="item.data ? item.data.value : ''" 
+                        [style.color]="item.data ? item.data.invertBL : ''" >{{item.type}}</span>
+    
+                    <app-color-picker-template 
+                        [lang]="lang" 
+                        [colorPreview]="false" 
+                        [selectedColor]="item.data" 
+                        [custom]="true" 
+                        (emitData)="selectColor($event, item);"></app-color-picker-template>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="btns">
+            <button mat-raised-button (click)="closeSetting();">Cancel</button>
+            <button mat-raised-button color="accent" [disabled]="!data.enabled" (click)="submit();">Save</button>
+        </div>
+    </div>
+</div>

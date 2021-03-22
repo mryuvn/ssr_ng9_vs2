@@ -1,0 +1,15 @@
+<app-single-autocomplete
+    [appearance]="appearance" 
+    [floatLabel]="floatLabel" 
+    [matlabel]="matlabel"
+    [placeholder]="placeholder"
+    [matSuffix]="matSuffix" 
+    [required]="required" 
+    [options]="data" 
+    [myControlValue]="myControl" 
+    [disabled]="disabled" 
+    [requireMatchValue]="requireMatchValue" 
+    [flagIcon]="countryCode" 
+    (emitValue)="selectValue($event);"
+    (emitData)="selectData($event);">
+</app-single-autocomplete>
