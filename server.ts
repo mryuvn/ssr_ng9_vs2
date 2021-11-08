@@ -39,7 +39,7 @@ export function app() {
 
 function run() {
   const port = process.env.PORT || 4000;
-  const portSSL = 4222;
+  const portSSL = 9999;
 
   // Start up the Node server
   const server = app();
@@ -52,9 +52,9 @@ function run() {
     cert: fs.readFileSync('cert.pem')
   }
 
-  http.createServer(server).listen(port, () => {
-    console.log('App runing on http://localhost:' + port);
-  });
+  // http.createServer(server).listen(port, () => {
+  //   console.log('App runing on http://localhost:' + port);
+  // });
   
   https.createServer(httpsOptions, server).listen(portSSL, () => {
     console.log('App runing on https://localhost:' + portSSL);
