@@ -1,0 +1,11 @@
+<div *ngIf="data" class="starting-template">
+    <div class="container">
+        <div class="data">
+            <h4 [innerHTML]="data.name | safeHtml"></h4>
+            <a *ngIf="data.continueBtn" 
+                mat-button class="lg flex bg-primary rounded" 
+                [routerLink]="data.continueBtn.value">
+                {{ data.continueBtn.title }}</a>
+        </div>
+    </div>
+</div>

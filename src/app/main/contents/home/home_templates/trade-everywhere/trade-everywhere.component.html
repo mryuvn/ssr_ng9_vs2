@@ -1,0 +1,12 @@
+<article *ngIf="data" class="trade-everywhere-template">
+    <div class="container">
+        <div class="title center">
+            <h4 [innerHTML]="data.name | safeHtml"></h4>
+            <p class="caption" *ngIf="data.caption" [innerHTML]="data.caption | safeHtml"></p>
+        </div>
+    </div>
+
+    <div class="bg">
+        <img *ngIf="data.coverUrl" [src]="data.coverUrl" alt="forex">
+    </div>
+</article>

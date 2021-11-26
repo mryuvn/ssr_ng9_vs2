@@ -1,0 +1,7 @@
+<div class="data-search-form">
+    <input [id]="'dataSearchInput_'+ID" type="text" [(ngModel)]="searchKey" name="searchKey" placeholder="Tìm kiếm" autocomplete="off">
+    <button mat-button class="submit" (click)="search(searchKey)" [disabled]="!searchKey">
+        <!-- <i class="fas fa-search"></i> -->
+        <mat-icon>search</mat-icon>
+    </button>
+</div>

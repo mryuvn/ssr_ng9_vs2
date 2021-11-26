@@ -23,7 +23,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow-y:
 }
 
 .font-face {
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 
 ul, ol {
@@ -317,7 +317,7 @@ textarea.mat-input-element,
 .mat-option-text, 
 .mat-menu-item, 
 .mat-tab-label {
-    font-family: 'Josefin Sans', sans-serif !important;
+    font-family: 'Nunito', sans-serif !important;
     font-weight: 400 !important;
     font-size: 16px;
 }
@@ -347,8 +347,11 @@ textarea.mat-input-element,
 
 .mat-raised-button.lg, .mat-button.lg {
     font-size: 18px;
-    padding: 7px 30px;
+    padding: 7px 40px;
     height: 60px;
+}
+.mat-raised-button.lg.rounded, .mat-button.lg.rounded {
+    border-radius: 30px !important;
 }
 
 .mat-raised-button.medium, .mat-button.medium {
@@ -356,12 +359,18 @@ textarea.mat-input-element,
     padding: 3px 20px;
     height: 44px;
 }
+.mat-raised-button.medium.rounded, .mat-button.medium.rounded {
+    border-radius: 9px !important;
+}
 
 .mat-raised-button.small, .mat-button.small {
     font-size: 14px;
     padding: 0 10px;
     height: 30px;
     line-height: 27px;
+}
+.mat-raised-button.small.rounded, .mat-button.small.rounded {
+    border-radius: 15px !important;
 }
 
 .mat-button.box-shadow {

@@ -1,0 +1,42 @@
+<article *ngIf="data" class="market-analysis-template">
+    <div class="container">
+        <div class="title center">
+            <h3 [innerHTML]="data.name | safeHtml"></h3>
+            <p class="caption" *ngIf="data.caption" [innerHTML]="data.caption | safeHtml"></p>
+        </div>
+
+        <div class="contents">
+            <div class="row">
+                <div *ngFor="let item of articles" 
+                    class="data-col {{ articles.length === 2 || articles.length === 4 ? 'col-md-6' : 'col-md-4 col-sm-6' }}">
+                    <div class="item">
+                        <div class="picture">
+                            <app-avatar 
+                                type="avatar" 
+                                [filename]="item.avatar" 
+                                [src]="item.avatarUrl" 
+                                [alt]="item.name" 
+                                width="100%" 
+                                shape="square" 
+                                [noImage]="null" 
+                                [table]="tables.posts" 
+                                [updateId]="item.id" 
+                                [uploadPath]="uploadPath"></app-avatar>
+                        </div>
+                        <div class="data">
+                            <a [routerLink]="moduleRoute + item.route">
+                                <h4 [innerHTML]="item.name | safeHtml"></h4>
+                            </a>
+
+                            <em class="updated">
+                                <span>{{ commonData.updated }} : </span>
+                                <ng-container *ngIf="item.updatedTime">{{ item.updatedTime | date: commonData.dateFormat }}</ng-container>
+                                <ng-container *ngIf="!item.createdTime">{{ item.createdTime | date: commonData.dateFormat }}</ng-container>
+                            </em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

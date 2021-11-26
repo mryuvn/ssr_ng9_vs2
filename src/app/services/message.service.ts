@@ -13,6 +13,7 @@ export class MessageService {
     removeUserData: 'removeUserData',
     changeLanguage: 'changeLanguage',
     emitSiteValues: 'emitSiteValues',
+    emitMenuData: 'emitMenuData',
     setActivePath: 'setActivePath',
     routerLoaded: 'routerLoaded',
     getPageConfig: 'getPageConfig',

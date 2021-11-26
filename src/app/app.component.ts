@@ -10,12 +10,12 @@ import { MessageService } from './services/message.service';
 import { SocketioService } from './services/socketio.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'yufx',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Ng9+ SSR';
+  title = 'YuFX.vn';
 
   lang: string;
   siteValues: any;
@@ -275,9 +275,11 @@ export class AppComponent {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const number = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    if (number > 50) {
+    let fixedNumber = 50;
+    fixedNumber = 500;
+    if (number > fixedNumber) {
       this.navIsFixed = true;
-    } else if (this.navIsFixed && number < 50) {
+    } else if (this.navIsFixed && number < fixedNumber) {
       this.navIsFixed = false;
     }
     if (this.themeSettings) {

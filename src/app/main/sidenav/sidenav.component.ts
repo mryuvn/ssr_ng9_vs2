@@ -32,6 +32,7 @@ export class SidenavComponent implements OnInit {
       if (val instanceof RoutesRecognized) {
         this.path = val.url;
         this.open = false;
+        this.close.emit();
       }
     });
   }
@@ -40,6 +41,7 @@ export class SidenavComponent implements OnInit {
     if (desData.type === 'action') {
       this.messageService.sendMessage(desData.value, null);
       this.open = false;
+      this.close.emit();
     }
   }
 }

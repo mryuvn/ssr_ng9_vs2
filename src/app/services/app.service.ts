@@ -8,9 +8,9 @@ import formurlencoded from 'form-urlencoded';
 })
 export class AppService {
 
-  public domain = 'webdemo.vfl-admin.com';
-  public appName = 'VFL Web demo';
-  public appSlogan = 'Slogan here';
+  public domain = 'yufx.vn';
+  public appName = 'YuFX';
+  public appSlogan = 'Giao dịch để kiếm sống';
   public url: string;
   public webAvatar: string = 'assets/imgs/web_avatar.jpg';
 
@@ -118,6 +118,7 @@ export class AppService {
   public domainDataConfig: any;
   public langsData: any = {};
   public siteValues: any = [];
+  public menuData: any;
 
   public hostname: string;
   public origin: string;

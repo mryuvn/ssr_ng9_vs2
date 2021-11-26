@@ -1,0 +1,99 @@
+.menu-main {
+    height: 100%;
+    margin-bottom: 0;
+
+    li.list {
+        position: relative;
+        height: 100%;
+        display: inline-flex;
+        margin-right: 1.5rem;
+        margin-top: -1px;
+
+        a {
+            height: 100%;
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+            -webkit-transition: color 0s ease-out !important;
+            -moz-transition: color 0s ease-out !important;
+            -o-transition: color 0s ease-out !important;
+            transition: color 0s ease-out !important;
+        }
+
+        ul {
+            position: absolute;
+            border-color: var(--warnColor);
+            width: 100%;
+            top: 100%;
+            height: 0;
+            overflow: hidden;
+            margin-top: 0;
+            visibility: hidden;
+            opacity: 0;
+
+            li {
+                min-width: 250px;
+                background: var(--warnColor);
+
+                a {
+                    position: relative;
+                    color: var(--light) !important;
+                    padding: 15px 15px 10px !important;
+                    width: 100%;
+                    border-bottom: 1px solid var(--warnBorder);
+
+                    * {
+                        position: relative;
+                        z-index: 1;
+                    }
+                }
+
+                a:hover {
+                    color: var(--light) !important;
+                }
+
+                a:before {
+                    position: absolute;
+                    background-color: var(--primaryColor);
+                    content: '';
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    opacity: 0;
+                    z-index: 0;
+                }
+
+                a:hover:before {
+                    opacity: .05;
+                }
+            }
+        }
+        ul::after {
+            content: ''; 
+            position: absolute;
+            width: 0; 
+            height: 0; 
+            top: 0; 
+            border: 8px solid transparent;
+            border-bottom-color: inherit;
+            border-top: 0; 
+            left: 45%;
+            margin-top: -8px;
+        }
+    }
+
+    li.list:last-child {
+        margin-right: 0;
+    }
+
+    li.list:hover {
+        ul {
+            height: auto;
+            overflow: unset;
+            margin-top: 0;
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}

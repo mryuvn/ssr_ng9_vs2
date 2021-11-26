@@ -27,6 +27,7 @@ import { IconModule } from 'src/app/templates/icon/icon.module';
 import { MainSliderModule } from '../_templates/main-slider/main-slider.module';
 import { ContentQuoteModule } from '../_templates/content-quote/content-quote.module';
 import { ContactFormModule } from '../_templates/contact-form/contact-form.module';
+import { MenuModule } from '../_templates/menu/menu.module';
 
 @NgModule({
   declarations: [PageComponent],
@@ -40,7 +41,8 @@ import { ContactFormModule } from '../_templates/contact-form/contact-form.modul
     IconModule,
     MainSliderModule,
     ContentQuoteModule,
-    ContactFormModule
+    ContactFormModule,
+    MenuModule
   ]
 })
 export class PageModule { }

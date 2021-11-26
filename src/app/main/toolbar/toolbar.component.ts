@@ -39,8 +39,8 @@ export class ToolbarComponent implements OnInit {
     btn: {}
   };
   
-  routerLoading: boolean;
-  getMenuErr: boolean;
+  routerLoading: boolean = false;
+  getMenuErr: boolean = false;
 
   socials: any = [
     {
@@ -66,7 +66,8 @@ export class ToolbarComponent implements OnInit {
     }
   ]
 
-  openMenu: boolean;
+  openMenu: boolean = false;
+  openSearch: boolean = false;
 
   isBrowser: boolean;
 
@@ -129,7 +130,7 @@ export class ToolbarComponent implements OnInit {
           if (newPath !== this.path) {
             this.path = newPath;
             this.setActivePath(this.navs);
-            this.emitMenuData.emit(this.navs);
+            // this.emitMenuData.emit(this.navs);
             this.renderMenus();
           }
           this.routerLoading = false;
@@ -181,6 +182,7 @@ export class ToolbarComponent implements OnInit {
       }
 
       if (e.viewMode) {
+        e.isHome = e.viewMode.indexOf('home') !== -1;
         const isBtn = e.viewMode.indexOf('btn') === -1 ? false : true;
         if (isBtn) {
           e.desData.title = e.title;
@@ -199,7 +201,9 @@ export class ToolbarComponent implements OnInit {
     });
     this.menuData = menuData;
     this.setActivePath(this.menuData);
+    this.appService.menuData = this.menuData;
     this.emitMenuData.emit(this.menuData.main);
+    this.messageService.sendMessage(this.messageService.messages.emitMenuData, this.menuData);
   }
 
   doAction(desData) {

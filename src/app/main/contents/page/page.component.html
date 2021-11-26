@@ -1,4 +1,4 @@
-<div id="page" class="page {{params.moduleRoute}}" 
+<div *ngIf="pageConfig" id="page" class="page {{params.moduleRoute}}" 
     [class.router-loaded]="routerLoaded" 
     [class.fullscreen]="pageConfig.pageFullscreen">
 
@@ -34,14 +34,21 @@
     <div class="page-content {{data.id ? pageConfig.sidebar ? 'sidebar-'+pageConfig.sidebar : '' : 'sidebar-right'}}">
         <ng-container *ngIf="!pageConfig.moduleTemplate">
             <div class="container">
-                <div class="navigation-map">
-                    <a routerLink="/"><i class="fas fa-home"></i></a> 
-                    <span class="raquo">&raquo;</span> 
-                    <a [routerLink]="'/'+generalData.route">{{moduleData.nameValue}}</a>
-                    <ng-container *ngIf="data.id!==generalData.id">
+                <div class="navigation">
+                    <div class="map">
+                        <a routerLink="/"><i class="fas fa-home"></i></a> 
                         <span class="raquo">&raquo;</span> 
-                        <a [routerLink]="'/'+data.route">{{data.name}}</a>
-                    </ng-container>
+                        <a [routerLink]="'/'+generalData.route">{{moduleData.nameValue}}</a>
+                        <ng-container *ngIf="data.id!==generalData.id">
+                            <span class="raquo">&raquo;</span> 
+                            <a [routerLink]="'/'+data.route">{{data.name}}</a>
+                        </ng-container>
+    
+                    </div>
+    
+                    <div class="menu">
+                        <app-menu></app-menu>
+                    </div>
                 </div>
 
                 <div [class.row]="pageConfig.sidebar || !data.id">

@@ -1,0 +1,36 @@
+<ul *ngIf="menuData" class="menu-main">
+    <li *ngFor="let menu of menuData.main" class="list">
+        <ng-container *ngIf="!menu.desData.value">
+            <a [class.active]="menu.active" [class.home]="menu.isHome">
+                <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+            </a>
+        </ng-container>
+        <ng-container *ngIf="menu.desData.value">
+            <a *ngIf="menu.desData.type!=='href'"
+                [routerLink]="menu.desData.type==='path' ? (menu.desData.value ? menu.desData.value : path) : path" 
+                (click)="doAction(menu.desData);" [class.active]="menu.active" [class.home]="menu.isHome">
+                <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+            </a>
+            <a *ngIf="menu.desData.type==='href'" [href]="menu.desData.value" [target]="menu.target">
+                <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
+            </a>
+        </ng-container>
+
+        <ul *ngIf="menu.childs.length>0">
+            <li *ngFor="let li of menu.childs">
+                <ng-container *ngIf="!li.desData.value">
+                    <a>{{li.title}}</a>
+                </ng-container>
+                <ng-container *ngIf="li.desData.value">
+                    <a *ngIf="li.desData.type!=='href'"
+                        [routerLink]="li.desData.type==='path' ? (li.desData.value ? li.desData.value : path) : path" 
+                        (click)="doAction(li.desData);">{{li.title}}</a>
+                    <a *ngIf="li.desData.type==='href'" [href]="li.desData.value" [target]="li.target">{{li.title}}</a>
+                </ng-container>
+            </li>
+        </ul>
+    </li>
+</ul>

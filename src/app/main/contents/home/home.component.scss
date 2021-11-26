@@ -1,0 +1,32 @@
+.home-page {
+    .main-nav {
+        position: relative;
+        background-color: var(--lightColor);
+        height: 60px;
+        z-index: 100;
+
+        @media (max-width: 1023px) {
+            display: none;
+        }
+
+        .container {
+            height: 100%;
+        }
+
+        li.list {
+            a {
+                color: var(--primaryColor);
+                font-size: 14px;
+                font-weight: 400;
+                text-transform: uppercase;
+            }
+            a:hover {
+                color: var(--warnColor);
+            }
+        }
+    }
+
+    .about-template {
+        background-color: #fff;
+    }
+}

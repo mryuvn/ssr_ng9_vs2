@@ -1,9 +1,9 @@
 .page {
     a {
-        color: var(--accentColor);
+        color: var(--warnColor);
     }
     a:hover {
-        color: var(--warnColor);
+        color: var(--accentDark);
     }
 
     .page-banner {

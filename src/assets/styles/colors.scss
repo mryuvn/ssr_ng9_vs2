@@ -4,17 +4,17 @@
     }
     .bg-accent {
         background-color: var(--accentColor);
-        color: #fff;
+        color: unset;
     
         a {
-            color: var(--lightColor);
+            color: unset;
         }
         a:hover {
             color: var(--warnColor);
         }
 
         .mat-button-wrapper {
-            color: #fff;
+            color: unset;
         }
 
         .mat-checkbox-frame {
@@ -28,7 +28,11 @@
         }
     }
     .mat-button.bg-accent:hover, .mat-icon-button.bg-accent:hover {
-        background-color: var(--warnColor);
+        background-color: var(--accentDark);
+
+        .mat-button-wrapper {
+            color: #fff;
+        }
     }
     .border-accent {
         border-color: var(--accentColor);
@@ -111,6 +115,9 @@
 
         .mat-button-wrapper {
             color: #fff;
+        }
+        .mat-button-wrapper:hover {
+            color: var(--accentColor);
         }
 
         .mat-checkbox-frame {

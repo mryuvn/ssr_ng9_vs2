@@ -37,7 +37,9 @@ export class SetTagsService {
     }
     
     this.meta.updateTag({ name: 'description', content: data.description });
-    this.meta.updateTag({ name: 'keywords', content: data.keywords });
+    if (data.keywords) {
+      this.meta.updateTag({ name: 'keywords', content: data.keywords });
+    }
     this.meta.updateTag({ name: 'DC.title', content: data.dcTitle });
     this.meta.updateTag({ property: 'og:url', content: this.dom.URL });
 

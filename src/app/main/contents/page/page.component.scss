@@ -5,11 +5,20 @@
         overflow: hidden;
 
         .page-cover {
+            position: relative;
             height: 100%;
             overflow: hidden;
             flex-direction: column;
             display: flex;
             place-content: center;
+        }
+        .page-cover:after {
+            position: absolute;
+            background: #000;
+            content: '';
+            width: 100%;
+            height: 100%;
+            opacity: .5;
         }
 
         @media (max-width: 567px) {
@@ -23,22 +32,43 @@
     }
 
     .page-content {
-        .navigation-map {
+        .navigation {
+            position: relative;
             font-size: 90%;
+            height: 40px;
             border-bottom: 1px solid var(--accentBorder);
             margin-bottom: 2rem;
             padding-bottom: .5rem;
+            z-index: 200;
 
             a {
                 color: var(--primaryColor);
             }
 
             a:hover {
-                color: var(--accentColor);
+                color: var(--warnColor);
             }
 
-            .raquo {
-                margin: 0 .5rem;
+            .map, .menu {
+                height: 100%;
+                flex-direction: row;
+                display: flex;
+                align-items: center;
+            }
+
+            .map {
+                float: left;
+                .raquo {
+                    margin: 0 .5rem;
+                }
+            }
+
+            .menu {
+                float: right;
+
+                .home {
+                    display: none;
+                }
             }
         }
 

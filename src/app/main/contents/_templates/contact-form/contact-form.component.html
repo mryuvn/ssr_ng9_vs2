@@ -4,7 +4,7 @@
         <span class="sub-title">{{data.subName}}</span>
     </div>
     
-    <div class="form-data small-size">
+    <div class="form-data size-80 bg-white">
         <span *ngIf="dataConfig.caption && data.caption" class="caption" [innerHtml]="data.caption | safeHtml"></span>
 
         <form *ngIf="formData && isBrowser" (ngSubmit)="submit(formData);" #dataForm="ngForm">
@@ -57,7 +57,7 @@
             </mat-form-field>
         
             <div class="btns text-right">
-                <button mat-button class="button medium bg-accent" [disabled]="dataForm.invalid">
+                <button mat-button class="button medium bg-warn" [disabled]="dataForm.invalid">
                     <mat-icon>send</mat-icon>&nbsp;<span class="txt">{{langData.send}}</span></button>
             </div>
         

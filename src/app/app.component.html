@@ -1,4 +1,4 @@
-<div id="wrapper">
+<div id="wrapper" [class.fixed]="sidenavOpen">
   <div id="wrapper-content" [class.router-loaded]="routerLoaded" [class.tool-open]="toolOpen">
       <app-sidenav *ngIf="isBrowser" 
           [open]="sidenavOpen" 

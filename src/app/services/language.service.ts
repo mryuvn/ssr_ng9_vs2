@@ -209,9 +209,6 @@ export class LanguageService {
 
   constructor() { }
 
-  /**
-   * getLangData
-   */
   public getLangData(lang: string) {
     var data = this.langsData.find(item => item.lang === lang);
     if (!data) {
@@ -220,9 +217,6 @@ export class LanguageService {
     return data;
   }
 
-  /**
-   * getLangContent
-   */
   public getLangContent(data: any[], lang: string) {
     const rs = data.find(item => item.lang === lang);
     if (rs) {
@@ -231,25 +225,16 @@ export class LanguageService {
     return data[0];
   }
 
-  /**
-   * getPageNotFound
-   */
   public getPageNotFound(lang: string) {
     return this.getLangData(lang).pageNotFound;
   }
 
-  /**
-   * getLoadingErr
-   */
   public getLoadingErr(lang: string) {
     var data = this.getLangData(lang).connectErr;
     data.loading = false;
     return data;
   }
 
-  /**
-   * getLangValue
-   */
   public getLangValue(data: any, lang: string) {
     if (!lang) {
       lang = 'vi';
@@ -284,9 +269,6 @@ export class LanguageService {
     }
   }
 
-  /**
-   * isArray
-   */
   public isArray(value: any) {
     const JSON = this.isJSON(value);
     if (Array.isArray(JSON)) {
@@ -301,9 +283,6 @@ export class LanguageService {
     };
   }
 
-  /**
-   * isObject
-   */
   public isObject(value: any) {
     const JSON = this.isJSON(value);
     if (JSON) {

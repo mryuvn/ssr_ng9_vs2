@@ -30,6 +30,41 @@ export class FooterComponent implements OnInit {
   EMBED_CODES: any = [];
   embedCodes: any;
 
+  socials: any = [
+    {
+      name: 'Youtube',
+      icon: {
+        type: 'fa-icon',
+        name: 'fab fa-youtube'
+      },
+      link: 'https://www.youtube.com/channel/UClmrAjJZoW5YQY1ZB6sLBwQ'
+    },
+    {
+      name: 'Facebook',
+      icon: {
+        type: 'fa-icon',
+        name: 'fab fa-facebook-f'
+      },
+      link: '#'
+    },
+    {
+      name: 'Telegram',
+      icon: {
+        type: 'fa-icon',
+        name: 'fab fa-telegram-plane'
+      },
+      link: '#'
+    },
+    {
+      name: 'Zalo',
+      icon: {
+        type: 'img-link',
+        name: 'assets/imgs/icons/zalo2.png'
+      },
+      link: '#'
+    }
+  ];
+
   isBrowser: boolean;
 
   constructor(
@@ -106,7 +141,7 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getEmbedCodes();
+    // this.getEmbedCodes();
 
     this.router.events.subscribe(val => {
       if (val instanceof RoutesRecognized) {

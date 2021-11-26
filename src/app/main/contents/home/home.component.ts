@@ -37,9 +37,26 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   cat: string = 'home_page';
   alias = {
-    general: 'general'
+    general: 'general',
+    article: 'article'
   }
   data: any = {};
+
+  articles: any = [];
+  articlesID = {
+    about: 'about',
+    tradeEverywhere: 'tradeEverywhere',
+    forexMarket: 'forexMarket',
+    whyForex: 'whyForex',
+    starting: 'starting',
+    tradeWithUs: 'tradeWithUs'
+  }
+  about: any;
+  tradeEverywhere: any;
+  forexMarket: any;
+  whyForex: any;
+  starting: any;
+  tradeWithUs: any;
 
   routerLoaded: boolean;
 
@@ -62,7 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.socket = this.socketioService.on(this.socketioService.messages.userActions.checkConnecting).subscribe(data => {
         // this.getSiteValues();
-        this.getData();
+        // this.getData();
       }, err => console.log({ err: err, time: new Date() }));
 
       this.socket = this.socketioService.on(this.socketioService.messages.domains.edit).subscribe(content => {
@@ -81,7 +98,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         const e = content.newData;
         if (!this.data.id && e.cat === this.cat && e.alias === this.alias.general && e.lang === this.lang && e.enabled) {
           this.renderData(e);
-          this.getContents(e.id);
+          // this.getContents(e.id);
         }
       }, err => console.log(err));
 
@@ -162,17 +179,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   getData() {
     this.appService.getSqlData({
       table: this.tables.posts,
-      where: 'WHERE cat = "' + this.cat + '" AND alias = "' + this.alias.general + '" AND lang = "' + this.lang + '"'
+      where: 'WHERE cat = "' + this.cat + '" AND lang = "' + this.lang + '"'
     }).subscribe(res => {
       if (res.mess === 'ok') {
-        if (res.data.length > 0) {
-          const e = res.data[0]
+        var articles = [];
+        res.data.forEach(e => {
           this.renderData(e);
-          if (e.enabled) {
-            this.getContents(e.id);
+          if (e.alias === this.alias.article) {
+            articles.push(e);
           }
-        } else {
-          this.data = {};
+        });
+        
+        const data = res.data.find(item => item.alias === this.alias.general && item.enabled);
+        if (data) {
+          this.data = data;
+        }
+        
+        if (articles.length > 0) {
+          articles = this.appService.sortArray(articles, { field: 'sortNum' });
+          this.getContents(articles);
         }
       } else {
         this.data.err = res.err;
@@ -190,43 +215,63 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   renderData(e) {
-    if (e.enabled) {
-      if (e.avatar) {
-        e.avatarUrl = this.appService.getFileSrc(e.avatar, this.uploadPath);
-      }
-      if (e.cover) {
-        e.coverUrl = this.appService.getFileSrc(e.cover, this.uploadPath);
-      }
-  
-      e.JSON = this.appService.isObject(e.jsonData);
-      if (e.JSON.continueBtn) {
-        e.continueBtn = e.JSON.continueBtn;
-      }
+    if (e.avatar) {
+      e.avatarUrl = this.appService.getFileSrc(e.avatar, this.uploadPath);
+    }
+    if (e.cover) {
+      e.coverUrl = this.appService.getFileSrc(e.cover, this.uploadPath);
+    }
 
-      this.data = e;
-    } else {
-      this.data = {};
+    e.JSON = this.appService.isObject(e.jsonData);
+    if (e.JSON.continueBtn) {
+      e.continueBtn = e.JSON.continueBtn;
     }
   }
 
-  getContents(postID) {
+  getContents(articles) {
+    let where = 'WHERE postID = "' + articles[0].id + '"';
+    const arr = [];
+    articles.forEach((e, index) => {
+      e.contents = [];
+      if (index > 0) {
+        arr.push(' OR postID = "' + e.id + '"');
+      }
+    });
+    const idStr = arr.join('');
+    where = where + idStr;
     this.appService.getSqlData({
       table: this.tables.contents,
-      where: 'WHERE postID = "' + postID + '" AND lang = "' + this.lang + '" AND enabled = 1'
+      where: where
     }).subscribe(res => {
       if (res.mess === 'ok') {
-        this.renderContents(res.data);
+        res.data.forEach(e => {
+          this.renderContents(e);
+        });
+        articles.forEach(ar => {
+          ar.contents = res.data.filter(item => item.postID === ar.id);
+        });
       } else {
         this.data.getContentsErr = res.err;
       }
+      this.articles = articles;
+      this.exportArticles();
     }, err => {
       this.data.getContentsErr = err;
+      this.articles = articles;
+      this.exportArticles();
     });
   }
-  renderContents(contents) {
-    contents.forEach(e => {
-      e.JSON = this.appService.isObject(e.jsonData);
-    });
+  renderContents(e) {
+    e.JSON = this.appService.isObject(e.jsonData);
+  }
+
+  exportArticles() {
+    this.about = this.articles.find(item => item.JSON.articleID === this.articlesID.about);
+    this.tradeEverywhere = this.articles.find(item => item.JSON.articleID === this.articlesID.tradeEverywhere);
+    this.forexMarket = this.articles.find(item => item.JSON.articleID === this.articlesID.forexMarket);
+    this.whyForex = this.articles.find(item => item.JSON.articleID === this.articlesID.whyForex);
+    this.starting = this.articles.find(item => item.JSON.articleID === this.articlesID.starting);
+    this.tradeWithUs = this.articles.find(item => item.JSON.articleID === this.articlesID.tradeWithUs);
   }
 
   emitRouterLoaded() {

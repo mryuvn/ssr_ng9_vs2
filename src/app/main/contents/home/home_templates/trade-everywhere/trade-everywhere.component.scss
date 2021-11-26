@@ -1,0 +1,57 @@
+.trade-everywhere-template {
+    position: relative;
+    flex-direction: column;
+    display: flex;
+    place-content: center;
+    overflow: hidden;
+
+    .title {
+        z-index: 1;
+        margin-bottom: 0 !important;
+
+        h4 {
+            color: var(--accentColor);
+            text-transform: uppercase;
+            line-height: 48px;
+
+            @media (max-width: 575px) {
+                line-height: 36px;
+            }
+        }
+
+        .caption {
+            color: #fff;
+            margin-top: .5rem;
+        }
+    }
+
+    .bg {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        display: flex;
+        place-content: center;
+        align-items: center;
+        z-index: 0;
+
+        img {
+            width: 100%;
+
+            @media (max-width: 735px) {
+                width: auto;
+                height: 100%;
+            }
+        }
+    }
+    .bg::before {
+        position: absolute;
+        content: '';
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+        opacity: .75;
+        z-index: 1;
+    }
+}

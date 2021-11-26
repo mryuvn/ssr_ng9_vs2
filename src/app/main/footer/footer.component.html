@@ -1,6 +1,63 @@
 
 <div *ngIf="siteValues" id="footer">
-    <div class="container">
+    <article class="lets-connect">
+        <div class="container">
+            <div class="title center">
+                <h3 [innerHTML]="'Kết nối với chúng tôi' | safeHtml"></h3>
+                <p class="caption" [innerHTML]="'Lorem ipsum dolor sit amet consectetur adipisicing elit' | safeHtml"></p>
+            </div>
+
+            <div class="contents">
+                <div class="row">
+                    <div *ngFor="let item of socials" class="col-sm-3 col-6">
+                        <a class="item" [href]="item.link" target="_blank">
+                            <app-icon [iconValue]="item.icon"></app-icon>
+                            <span class="name">{{ item.name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg">
+            <img src="assets/imgs/social_connect.jpg" alt="">
+        </div>
+    </article>
+
+    <div class="bottom">
+        <div class="container">
+            <div class="col-left">
+                <div class="copyright">
+                    <span class="flex-column">
+                        <span>Copyright &copy; 2021</span>
+                        <span>Design by <a>Mr. Yu</a></span>
+                    </span>
+                </div>
+            </div>
+    
+            <div class="col-right">
+                <div *ngIf="visitorData" class="visitor-data flex-column">
+                    <ng-container *ngIf="visitorData.visitors>=0">
+                        <span class="visitors">
+                            {{langData.visitors}}:
+                            <span class="number">{{visitorData.visitors ? visitorData.visitors : 0}}</span>
+                        </span>
+                        <!-- <span class="Iota">&Iota;</span> -->
+                    </ng-container>
+                    
+                    <span class="visitings">
+                        {{langData.visitings}}: 
+                        <span class="number">{{visitorData.visitings ? visitorData.visitings : 0}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container hidden">
         <div class="fotter-content">
             <div class="row">
                 <div class="col-lg-7">
@@ -8,7 +65,7 @@
                         <h5 class="name">{{siteValues.name}}</h5>
                         <h6 class="slogan">{{siteValues.slogan}}</h6>
                         <ul class="contacts">
-                            <li>
+                            <li *ngIf="siteValues.address">
                                 <span class="icon"><i class="fas fa-map-marker-alt"></i></span> 
                                 <a [href]="siteValues.mapsLink" target="_blank">{{siteValues.address}}</a>
                             </li>

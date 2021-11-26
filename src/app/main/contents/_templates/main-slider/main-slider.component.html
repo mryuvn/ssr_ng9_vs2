@@ -11,10 +11,10 @@
                     [dataSource]="slideData.dataSource"></app-banner-bootstrap-md-carousel>
             </ng-container>
 
-            <div *ngIf="slideConfig.imgOnly" class="title">
+            <div *ngIf="slideConfig.imgOnly" class="title font-face">
                 <div class="container" [style.text-align]="slideConfig.textAlign">
-                    <h2>{{title}}</h2>
-                    <span class="caption">{{caption}}</span>
+                    <h2 *ngIf="title" [innerHtml]="title | safeHtml"></h2>
+                    <span *ngIf="caption" [innerHtml]="caption | safeHtml" class="caption"></span>
     
                     <div *ngIf="slideConfig.continueBtn" class="button">
                         <app-continue-btn 

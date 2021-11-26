@@ -492,37 +492,39 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   setPageConfig() {
+    var pageConfig: any = {};
     const pageAlias = this.moduleData.aliasData.find(item => item.name === this.data.alias);
     if (pageAlias) {
-      var pageConfig = pageAlias.config;
-      if (!pageConfig) {
-        pageConfig = {};
-      }
-      if (!pageConfig.pageFullscreen) {
-        pageConfig.pageFullscreen = this.moduleData.config.pageFullscreen;
-      }
-      if (!pageConfig.headerHeight) {
-        pageConfig.headerHeight = this.moduleData.config.headerHeight;
-      }
-      if (!pageConfig.slideConfig) {
-        pageConfig.slideConfig = this.moduleData.config.slideConfig;
-      }
-      if (!pageConfig.sidebar) {
-        pageConfig.sidebar = this.moduleData.config.sidebar;
-      }
-      if (!pageConfig.moduleTemplate) {
-        pageConfig.moduleTemplate = this.moduleData.config.moduleTemplate;
-      }
-      if (!pageConfig.avatarPosition) {
-        pageConfig.avatarPosition = this.moduleData.config.avatarPosition;
-      }
-      if (!pageConfig.sameCatType) {
-        pageConfig.sameCatType = this.moduleData.config.sameCatType;
-      }
-      if (!pageConfig.contentQuote) {
-        pageConfig.contentQuote = this.moduleData.config.contentQuote;
+      if (pageAlias.config) {
+        pageConfig = pageAlias.config;
       }
     }
+
+    if (!pageConfig.pageFullscreen) {
+      pageConfig.pageFullscreen = this.moduleData.config.pageFullscreen;
+    }
+    if (!pageConfig.headerHeight) {
+      pageConfig.headerHeight = this.moduleData.config.headerHeight;
+    }
+    if (!pageConfig.slideConfig) {
+      pageConfig.slideConfig = this.moduleData.config.slideConfig;
+    }
+    if (!pageConfig.sidebar) {
+      pageConfig.sidebar = this.moduleData.config.sidebar;
+    }
+    if (!pageConfig.moduleTemplate) {
+      pageConfig.moduleTemplate = this.moduleData.config.moduleTemplate;
+    }
+    if (!pageConfig.avatarPosition) {
+      pageConfig.avatarPosition = this.moduleData.config.avatarPosition;
+    }
+    if (!pageConfig.sameCatType) {
+      pageConfig.sameCatType = this.moduleData.config.sameCatType;
+    }
+    if (!pageConfig.contentQuote) {
+      pageConfig.contentQuote = this.moduleData.config.contentQuote;
+    }
+
     this.pageConfig = pageConfig;
   }
 

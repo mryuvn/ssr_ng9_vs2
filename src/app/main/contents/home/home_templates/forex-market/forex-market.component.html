@@ -1,0 +1,25 @@
+<article *ngIf="data" class="forex-market-template">
+    <div class="container">
+        <div class="title center">
+            <h3 [innerHTML]="data.name | safeHtml"></h3>
+            <p class="caption" *ngIf="data.caption" [innerHTML]="data.caption | safeHtml"></p>
+        </div>
+
+        <div class="contents">
+            <div class="row">
+                <div *ngFor="let item of data.contents" class="col-sm-4">
+                    <div class="item">
+                        <div class="pic">
+                            <app-icon [iconValue]="item.icon"></app-icon>
+                        </div>
+                        <div class="data">
+                            <h4 [innerHTML]="item.title | safeHtml"></h4>
+                        </div>
+
+                        <a *ngIf="item.JSON.routeData" [routerLink]="item.JSON.routeData.value">{{ item.JSON.routeData.title }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
