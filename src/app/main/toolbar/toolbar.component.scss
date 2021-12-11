@@ -221,6 +221,19 @@
             -moz-transition: color 0s ease-out !important;
             -o-transition: color 0s ease-out !important;
             transition: color 0s ease-out !important;
+
+            .toggle-menu {
+                .mat-button-wrapper {
+                    position: relative;
+
+                    .data-length {
+                        position: absolute;
+                        bottom: 0;
+                        left: 18px;
+                        font-size: 80%;
+                    }
+                }
+            }
         }
 
         @media (max-width: 926px) {
@@ -250,6 +263,25 @@
     
                     .toggle-menu {
                         color: var(--primaryColor);
+                    }
+                    .toggle-menu.opening, .toggle-menu:hover {
+                        color: var(--warnColor);
+                    }
+
+                    .on-dropdown-open {
+                        position: relative;
+                    }
+                    .on-dropdown-open::after {
+                        content: ''; 
+                        position: absolute;
+                        width: 0; 
+                        height: 0; 
+                        top: 0; 
+                        border: 8px solid transparent;
+                        border-bottom-color: var(--warnColor);
+                        border-top: 0; 
+                        left: 12px;
+                        margin-top: 2px;
                     }
                 }
         
@@ -346,6 +378,10 @@
                         z-index: 2;
                     }
 
+                    .on-dropdown-open {
+                        display: none;
+                    }
+
                     .menu-dropdown {
                         position: fixed;
                         top: auto;
@@ -381,6 +417,10 @@
                 .langs {
                     background: var(--primaryColor);
                     z-index: 2;
+
+                    .txt, .fa-caret-dow {
+                        display: none;
+                    }
                 }
             }
         }
@@ -461,6 +501,18 @@
             }
             .tools {
                 margin-right: 45px;
+            }
+        }
+    }
+
+    @media (min-width: 668px) {
+        .top {
+            .tools {
+                .item {
+                    .on-dropdown-open::after {
+                        margin-top: -4px;
+                    }
+                }
             }
         }
     }

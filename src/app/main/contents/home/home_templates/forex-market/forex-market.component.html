@@ -10,7 +10,7 @@
                 <div *ngFor="let item of data.contents" class="col-sm-4">
                     <div class="item">
                         <div class="pic">
-                            <app-icon [iconValue]="item.icon"></app-icon>
+                            <app-icon *ngIf="isBrowser" [iconValue]="item.icon"></app-icon>
                         </div>
                         <div class="data">
                             <h4 [innerHTML]="item.title | safeHtml"></h4>

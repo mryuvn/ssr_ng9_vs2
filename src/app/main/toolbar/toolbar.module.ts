@@ -15,6 +15,7 @@ import { ContinueBtnModule } from '../../templates/continue-btn/continue-btn.mod
 import { AccountMenuModule } from '../accounts/account-menu/account-menu.module';
 import { CartMenuModule } from '../tools/cart-menu/cart-menu.module';
 import { FavoritesMenuModule } from '../tools/favorites-menu/favorites-menu.module';
+import { NotificationsModule } from '../tools/notifications/notifications.module';
 import { DataSearchModule } from '../contents/_templates/data-search/data-search.module';
 
 @NgModule({
@@ -29,6 +30,7 @@ import { DataSearchModule } from '../contents/_templates/data-search/data-search
     AccountMenuModule,
     CartMenuModule,
     FavoritesMenuModule,
+    NotificationsModule,
     DataSearchModule
   ],
   exports: [ToolbarComponent]

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from 'src/app/services/app.service';
 import { LanguageService } from 'src/app/services/language.service';
@@ -6,7 +6,8 @@ import { LanguageService } from 'src/app/services/language.service';
 @Component({
   selector: 'app-market-analysis',
   templateUrl: './market-analysis.component.html',
-  styleUrls: ['./market-analysis.component.scss']
+  styleUrls: ['./market-analysis.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MarketAnalysisComponent implements OnInit {
 
@@ -74,10 +75,7 @@ export class MarketAnalysisComponent implements OnInit {
   }
   
   getModuleRoute() {
-    console.log(this.moduleData.routes);
     this.moduleRoute = this.languageService.getLangValue(this.moduleData.routes, this.lang);
-    console.log(this.moduleRoute);
-    
   }
 
   getPosts() {
@@ -86,7 +84,6 @@ export class MarketAnalysisComponent implements OnInit {
       where: 'WHERE cat = "' + this.cat + '" AND lang = "' + this.lang + '" AND enabled = 1 AND highlight = 1'
     }).subscribe(res => {
       if (res.mess === 'ok') {
-        console.log(res.data);
         res.data.forEach(e => {
           this.renderData(e);
           if (e.alias === this.alias.article) {

@@ -28,6 +28,9 @@ import { MainSliderModule } from '../_templates/main-slider/main-slider.module';
 import { ContentQuoteModule } from '../_templates/content-quote/content-quote.module';
 import { ContactFormModule } from '../_templates/contact-form/contact-form.module';
 import { MenuModule } from '../_templates/menu/menu.module';
+import { CatsListModule } from './cats-list/cats-list.module';
+import { PostsListModule } from './posts-list/posts-list.module';
+import { CourceModule } from './_page_modules/cource/cource.module';
 
 @NgModule({
   declarations: [PageComponent],
@@ -42,7 +45,10 @@ import { MenuModule } from '../_templates/menu/menu.module';
     MainSliderModule,
     ContentQuoteModule,
     ContactFormModule,
-    MenuModule
+    MenuModule,
+    CatsListModule,
+    PostsListModule,
+    CourceModule
   ]
 })
 export class PageModule { }

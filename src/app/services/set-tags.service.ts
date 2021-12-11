@@ -37,9 +37,11 @@ export class SetTagsService {
     }
     
     this.meta.updateTag({ name: 'description', content: data.description });
-    if (data.keywords) {
-      this.meta.updateTag({ name: 'keywords', content: data.keywords });
-    }
+
+    // if (data.keywords) {
+    //   this.meta.updateTag({ name: 'keywords', content: data.keywords });
+    // }
+
     this.meta.updateTag({ name: 'DC.title', content: data.dcTitle });
     this.meta.updateTag({ property: 'og:url', content: this.dom.URL });
 
@@ -59,7 +61,7 @@ export class SetTagsService {
 
   removeTags() {
     this.meta.removeTag("property='description'");
-    this.meta.removeTag("property='keywords'");
+    // this.meta.removeTag("property='keywords'");
     this.meta.removeTag("property='DC.title'");
     this.meta.removeTag("property='og:title'");
     this.meta.removeTag("property='og:description'");

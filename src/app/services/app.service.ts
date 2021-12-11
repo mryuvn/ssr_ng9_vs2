@@ -1520,9 +1520,11 @@ export class AppService {
    public renderPageData(data: any, uploadPath: string) {
     if (data.avatar) {
       data.avatarUrl = this.getFileSrc(data.avatar, uploadPath);
+      data.avatarType = this.isObject(data.avatar).type;
     }
     if (data.cover) {
       data.coverUrl = this.getFileSrc(data.cover, uploadPath);
+      data.coverType = this.isObject(data.cover).type;
     }
 
     data.JSON = this.isObject(data.jsonData);

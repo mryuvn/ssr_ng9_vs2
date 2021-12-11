@@ -1,0 +1,103 @@
+<div *ngIf="data" class="container cource">
+    <div class="row">
+        <div class="col-xl-8">
+            <div *ngIf="data.avatar" class="page-avatar">
+                <div class="picture">
+                    <app-avatar class="{{data.avatarType}}" 
+                        type="avatar" 
+                        [filename]="data.avatar" 
+                        [src]="data.avatarUrl" 
+                        [alt]="data.name" 
+                        width="100%" 
+                        shape="square" 
+                        [noImage]="'no-avatar.jpg'" 
+                        [table]="table" 
+                        [updateId]="data.id" 
+                        [uploadPath]="uploadPath"></app-avatar>
+                </div>
+            </div>
+
+            <ng-container *ngIf="pageTitle">
+                <h2 class="page-title">{{pageTitle}}</h2>
+                <span class="headingline"></span>
+            </ng-container>
+
+            <div class="text" [class.hidden]="!data.id">
+                <ng-container *ngFor="let item of contents; index as i;">
+                    <h3 *ngIf="item.title!==pageTitle">{{item.title}}</h3>
+                    <p *ngIf="item.caption" [innerHtml]="item.caption | safeHtml"></p>
+                    <div *ngIf="item.content" [innerHtml]="item.content | safeHtml"></div>
+                </ng-container>
+            </div>
+
+            <div class="page-bottom">
+                <span class="pull-left">
+                    <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&width=115&layout=button&action=like&size=small&share=true&height=65&appId=1121788874905560" width="115" height="65" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                </span>
+
+                <span class="pull-right">
+                    <span class="time">
+                        {{langData.updated}}: 
+                        <ng-container *ngIf="data.updatedTime"> {{data.updatedTime | date:dateFormat + ' HH:mm:ss'}}</ng-container>
+                        <ng-container *ngIf="!data.updatedTime"> {{data.createdTime | date:dateFormat + ' HH:mm:ss'}}</ng-container>
+                    </span>
+                </span>
+            </div>
+
+            <ng-container *ngIf="lang && sameCatsConfig && sameCats">
+                <app-cats-list *ngIf="sameCatsConfig.position==='affterContent' && sameCats.length>0"
+                    [dataSource]="sameCats" 
+                    [lang]="lang" 
+                    [config]="sameCatsConfig" 
+                    [title]="moduleData.contentData.sameCatsTitle" 
+                    [db_table]="table" 
+                    [uploadPath]="uploadPath" 
+                    [dateFormat]="dateFormat" 
+                    [moduleID]="moduleData.id"></app-cats-list>
+            </ng-container>
+        </div>
+
+        <div class="col-xl-4 sidebar">
+            <div class="lessions m-card">
+                <ng-container *ngIf="data.JSON">
+                    <div *ngIf="data.JSON.price" class="price bg-warn">
+                        <span class="title">{{ langContent.price }}</span>
+                        <ng-container *ngIf="data.JSON.price.free">
+                            <span class="free">{{ langContent.free }}</span>
+                        </ng-container>
+        
+                        <ng-container *ngIf="!data.JSON.price.free">
+                            <span class="cost" [class.strike]="data.JSON.price.saleOff">{{ data.JSON.price.cost | currency:'VND ':'code':'0.0-0' }}</span>
+                            <span *ngIf="data.JSON.price.saleOff" class="sale-off">{{ data.JSON.price.saleOff | currency:'VND ':'code':'0.0-0' }}</span>
+                            <a class="register">{{ langContent.register }}</a>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <div *ngIf="lessions" class="bg-white">
+                    <div class="part" *ngFor="let part of lessions">
+                        <span class="heading" [class.menu-open]="part.open">
+                            <span class="text-relative">{{ part.name }}</span>
+                            <button *ngIf="isBrowser" mat-icon-button class="expand-menu" (click)="expandMenu(part)">
+                                <!-- <mat-icon>expand_more</mat-icon> -->
+                                <i class="fas fa-angle-down"></i>
+                            </button>
+                        </span>
+
+                        <ul [class.open]="part.open">
+                            <li *ngFor="let item of part.items; index as i;">
+                                <a [routerLink]="item.route" [class.active]="item.id===data.id">
+                                    <span *ngIf="isBrowser" class="icon"><i class="fas fa-play-circle"></i></span>
+                                    <span class="txt">
+                                        <span class="title">{{ langContent.lession + ' ' + (i+1) + ': ' }}</span>
+                                        <span class="name">{{ item.name }}</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

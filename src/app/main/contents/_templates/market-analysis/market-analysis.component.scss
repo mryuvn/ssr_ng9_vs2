@@ -18,6 +18,12 @@
             padding: 1px;
             box-shadow: 0 2px 12px -10px #000;
 
+            .picture {
+                .iframe {
+                    height: 100%;
+                }
+            }
+
             .data {
                 flex-direction: column;
                 display: flex;

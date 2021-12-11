@@ -1,7 +1,18 @@
-<div class="data-search-form">
-    <input [id]="'dataSearchInput_'+ID" type="text" [(ngModel)]="searchKey" name="searchKey" placeholder="Tìm kiếm" autocomplete="off">
-    <button mat-button class="submit" (click)="search(searchKey)" [disabled]="!searchKey">
-        <!-- <i class="fas fa-search"></i> -->
-        <mat-icon>search</mat-icon>
+<form class="data-search-form" (ngSubmit)="search(searchKey)">
+    <input [id]="'dataSearchInput_'+ID" type="text" 
+        [(ngModel)]="searchKey" name="searchKey" 
+        [placeholder]="langContent.placeholder" 
+        [readonly]="loadingData.loading" 
+        autocomplete="off">
+    
+    <button mat-button class="submit" [disabled]="!searchKey">
+        <ng-container *ngIf="!loadingData.loading">
+            <!-- <i class="fas fa-search"></i> -->
+            <mat-icon>search</mat-icon>
+        </ng-container>
+
+        <ng-container *ngIf="loadingData.loading">
+            <i class="fas fa-spinner fa-spin"></i>
+        </ng-container>
     </button>
-</div>
+</form>

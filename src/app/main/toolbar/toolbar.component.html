@@ -1,7 +1,7 @@
 <div class="toolbar" [class.nav-is-fixed]="navIsFixed">
     <div class="top">
         <div class="container">
-            <span class="toggle-sidenav">
+            <span *ngIf="isBrowser" class="toggle-sidenav">
                 <button mat-icon-button (click)="toggleSidenav.emit();">
                     <mat-icon>menu</mat-icon>
                     <!-- <i class="fas fa-bars"></i> -->
@@ -14,7 +14,7 @@
                     <img class="logo-ls" src="assets/imgs/logo/logo_lsc_sm.png" alt="" height="70%">
                 </a>
 
-                <div class="data-search">
+                <div *ngIf="isBrowser" class="data-search">
                     <button mat-icon-button class="search-icon" 
                         (click)="openSearch=true; dataSearchTemplate.focus()">
                         <mat-icon>search</mat-icon>
@@ -33,11 +33,11 @@
                         <a *ngIf="menu.desData.type!=='href'"
                             [routerLink]="menu.desData.type==='path' ? (menu.desData.value ? menu.desData.value : path) : path" 
                             (click)="doAction(menu.desData);" [class.active]="menu.active">
-                            <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                            <app-icon *ngIf="!menu.textOnly && isBrowser" [iconValue]="menu.iconData"></app-icon>
                             <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
                         </a>
                         <a *ngIf="menu.desData.type==='href'" [href]="menu.desData.value" [target]="menu.target">
-                            <app-icon *ngIf="!menu.textOnly" [iconValue]="menu.iconData"></app-icon>
+                            <app-icon *ngIf="!menu.textOnly && isBrowser" [iconValue]="menu.iconData"></app-icon>
                             <span *ngIf="!menu.iconOnly" class="txt">{{menu.title}}</span>
                         </a>
         
@@ -63,25 +63,36 @@
                         </button>
                     </span>
     
-                    <app-favorites-menu class="item favorites" #favoritesMenu
+                    <app-favorites-menu class="item favorites hidden" #favoritesMenu
                         [lang]="lang" 
                         (openTool)="openTool.emit();
                                     cartMenu.openMenu=false;
+                                    notifMenu.openMenu=false;
                                     accountMenu.openUserMenu=false;
                                     accountMenu.openLogin=false;"></app-favorites-menu>
     
-                    <app-cart-menu class="item cart" #cartMenu
+                    <app-cart-menu class="item cart hidden" #cartMenu
                         [lang]="lang" 
                         (openTool)="openTool.emit();
                                     favoritesMenu.openMenu=false;
+                                    notifMenu.openMenu=false;
                                     accountMenu.openUserMenu=false;
                                     accountMenu.openLogin=false;"></app-cart-menu>
     
+                    <app-notifications class="item notifications" #notifMenu 
+                        [lang]="lang" 
+                        (openTool)="openTool.emit();
+                                    favoritesMenu.openMenu=false;
+                                    cartMenu.openMenu=false;
+                                    accountMenu.openUserMenu=false;
+                                    accountMenu.openLogin=false;"></app-notifications>
+
                     <app-account-menu class="item account" #accountMenu
                         [lang]="lang" 
                         (openTool)="openTool.emit();
                                     favoritesMenu.openMenu=false;
-                                    cartMenu.openMenu=false;"></app-account-menu>
+                                    cartMenu.openMenu=false;
+                                    notifMenu.openMenu=false;"></app-account-menu>
     
                     <span class="item langs">
                         <a [matMenuTriggerFor]="langsMenu">
@@ -90,13 +101,14 @@
                             <i class="fas fa-caret-down"></i>
                         </a>
                         <mat-menu #langsMenu="matMenu" class="small-size">
-                            <a mat-menu-item *ngFor="let item of siteLangs" (click)="changeLanguage(item);">
-                                <flag-icon [country]="item.code" squared></flag-icon> {{item.nameObj.vernacular}}</a>
+                            <ng-container *ngFor="let item of siteLangs">
+                                <a *ngIf="!item.disable" mat-menu-item (click)="changeLanguage(item);">
+                                    <flag-icon [country]="item.code" squared></flag-icon> {{item.nameObj.vernacular}}</a>
+                            </ng-container>
                         </mat-menu>
                     </span>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

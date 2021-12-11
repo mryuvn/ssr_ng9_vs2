@@ -1,0 +1,47 @@
+<div class="item">
+    <div *ngIf="config.type==='articles'" class="post-avatar">
+        <div class="picture">
+            <app-avatar *ngIf="item.avatar" class="{{item.avatarType}}"
+                type="avatar" 
+                [filename]="item.avatar" 
+                [src]="item.avatarUrl" 
+                [alt]="item.nameValue" 
+                width="100%" 
+                [shape]="config.avatarStyle ? config.avatarStyle : 'square'" 
+                [noImage]="'no-avatar.jpg'" 
+                [table]="db_table" 
+                [updateId]="item.dataID" 
+                [uploadPath]="uploadPath"></app-avatar>
+            
+            <div *ngIf="isBrowser && !item.avatar" class="no-avatar">
+                <img src="assets/imgs/no-avatar.jpg" alt="" width="100%">
+            </div>
+        </div>
+    </div>
+
+    <a [routerLink]="'/'+lang+'/'+item.route" class="cat-name">
+        <span *ngIf="isBrowser" class="icon">
+            <i class="fas fa-folder"></i>
+        </span>
+        <span class="name">{{item.nameValue}}</span>
+    </a>
+
+    <div *ngIf="config.type==='articles' && config.showDetails && item.details" class="data">
+        <div *ngIf="item.details.price" class="price">
+            <span *ngIf="item.details.price.free" class="free">{{ langContent.free }}</span>
+            <ng-container *ngIf="!item.details.price.free">
+                <span class="cost" [class.strike]="item.details.price.saleOff">
+                    {{ item.details.price.cost | currency:'VND ':'code':'0.0-0' }}
+                </span>
+                <span *ngIf="item.details.price.saleOff" class="sale-off">
+                    {{ item.details.price.saleOff | currency:'VND ':'code':'0.0-0' }}
+                </span>
+            </ng-container>
+        </div>
+
+        <span *ngIf="item.details.description" class="description" [innerHtml]="item.details.description | safeHtml"></span>
+        <span *ngIf="item.details.content" class="item-content" [innerHtml]="item.details.content | safeHtml"></span>
+    </div>
+
+    <a *ngIf="isBrowser" [routerLink]="'/'+lang+'/'+item.route" class="full-bg-link"></a>
+</div>

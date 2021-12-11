@@ -42,16 +42,15 @@
             .data {
                 height: 100%;
                 color: var(--light);
-                max-width: 700px;
-                width: 80%;
-                // margin: auto;
                 flex-direction: column;
                 display: flex;
                 place-content: center;
-                // align-items: center;
-                // text-align: center;
                 padding-top: 150px;
                 opacity: 0;
+
+                @media (min-width: 1023px) {
+                    max-width: 80%;
+                }
         
                 .sub-title {
                     font-size: 35px;
@@ -62,22 +61,48 @@
                     font-size: 40px;
                     text-transform: uppercase;
                     font-weight: 600;
-                    margin-bottom: 0;
-                    margin-top: 1rem;
+                    margin-bottom: .3rem;
                 }
         
                 .caption {
-                    font-size: 22px;
-                    margin-top: 0;
+                    font-size: 20px;
+                    line-height: 26px;
+                }
+
+                @media (max-width: 1023px) {
+                    .site-title {
+                        font-size: 36px;
+                    }
+                }
+
+                @media (max-width: 767px) {
+                    .site-title {
+                        font-size: 28px;
+                    }
+                    .caption {
+                        font-size: 18px;
+                        line-height: 24px;
+                    }
                 }
 
                 @media (max-width: 567px) {
                     .site-title {
-                        font-size: 30px;
+                        margin-top: -1.5rem;
+                        font-size: 22px;
                     }
 
                     .caption {
-                        font-size: 18px;
+                        font-size: 16px;
+                        line-height: 20px;
+                    }
+                }
+
+                @media (max-width: 410px) {
+                    .site-title {
+                        margin-top: 0;
+                    }
+                    .caption {
+                        display: none;
                     }
                 }
         
@@ -102,15 +127,14 @@
         // }
 
         .picture {
-            background: var(--lightColor);
-            border: 5px solid var(--lightColor);
+            background: var(--light);
+            border: 5px solid var(--light);
             box-shadow: 0 1px 5px -4px #000;
             margin-left: 1px;
     
             app-avatar {
                 width: 100%;
                 padding-top: 100%;
-                position: relative;
                 overflow: hidden;
                 flex-direction: column;
                 display: flex;
@@ -123,8 +147,6 @@
                 top: 0;
 
                 .iframe {
-                    height: 70% !important;
-                    
                     iframe {
                         border: none !important;
                         padding: 0 !important;

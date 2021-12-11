@@ -17,6 +17,9 @@ export class MessageService {
     setActivePath: 'setActivePath',
     routerLoaded: 'routerLoaded',
     getPageConfig: 'getPageConfig',
+    updateModuleData: 'updateModuleData',
+    updatePageData: 'updatePageData',
+    updateCats: 'updateCats',
     emitThemeSettings: 'emitThemeSettings',
     openThemeSettings: 'openThemeSettings',
     updateThemeSettings: 'updateThemeSettings',
@@ -32,7 +35,8 @@ export class MessageService {
       updateOrder: 'updateOrder',
       favorite: 'markFavorite'
     },
-    pageFullscreen: 'pageFullscreen'
+    pageFullscreen: 'pageFullscreen',
+    emitDataSearchResult: 'emitDataSearchResult'
   }
 
   private subject = new Subject<any>();

@@ -1,0 +1,43 @@
+<div *ngIf="config" 
+    class="posts 
+    {{config.type ? config.type : 'list'}}
+    {{config.carded ? 'm-card' : ''}}
+    {{config.bgColor ? config.bgColor : ''}}
+    {{config.position}}">
+    <h4 *ngIf="contentData.postsTitle" class="title" [innerHtml]="contentData.postsTitle | safeHtml"></h4>
+
+    <div class="row">
+        <div *ngFor="let item of DATA" 
+            class="{{config.cols ? config.cols : 'col-xl-6 col-lg-4 col-sm-6'}}" 
+            [class.hidden]="item.id==pageData.id">
+            <app-post-item 
+                [item]="item" 
+                [config]="config" 
+                [db_table]="db_table" 
+                [uploadPath]="uploadPath" 
+                [langData]="langData" 
+                [dateFormat]="dateFormat" 
+                [isBrowser]="isBrowser"></app-post-item>
+        </div>
+    </div>
+
+    <div *ngIf="isBrowser && config.viewMod==='pagination' && pagination.length > 1" 
+        class="pagination {{config.paginationFlex ? config.paginationFlex : 'center'}}">
+        <span class="page-item" [class.disable]="currentPage===0" 
+            (click)="firstPage()"><mat-icon>first_page</mat-icon></span>
+
+        <span class="page-item" [class.disable]="currentPage===0" 
+            (click)="prev()"><mat-icon>navigate_before</mat-icon></span>
+
+        <ng-container *ngFor="let data of pagination; index as i;">
+            <span matRipple class="page-item" [class.active]="currentPage===i"
+                (click)="selectPage(data, i)">{{i + 1}}</span>
+        </ng-container>
+
+        <span class="page-item" [class.disable]="currentPage===(pagination.length-1)" 
+            (click)="next()"><mat-icon>navigate_next</mat-icon></span>
+
+        <span class="page-item" [class.disable]="currentPage===(pagination.length-1)" 
+            (click)="lastPage()"><mat-icon>last_page</mat-icon></span>
+    </div>
+</div>

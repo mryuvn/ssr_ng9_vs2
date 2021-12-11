@@ -28,7 +28,7 @@
           [visitorData]="visitorData"></app-footer>
 
       <div *ngIf="routerLoading && isBrowser" class="router-loading-screen">
-          <!-- <img src="assets/imgs/favicon.png" alt="min food" width="100"> -->
+          <!-- <img src="assets/imgs/favicon.png" alt="" width="100"> -->
           <img class="loading-icon" src="assets/imgs/dot-loading.gif" alt="" width="110">
       </div>
 
@@ -36,13 +36,12 @@
   </div>
 
   <ng-container *ngIf="lang && siteValues && isBrowser">
-    <!-- <app-imageviewer-template></app-imageviewer-template> -->
     <app-album-viewer-template [lang]="lang" [viewDemo]="false"></app-album-viewer-template>
   </ng-container>
 
   <app-visitor-data (emitData)="visitorData=$event"></app-visitor-data>
 
-  <span *ngIf="!toolOpen" class="scroll-top" [class.show]="navIsFixed">
+  <span *ngIf="!toolOpen && isBrowser" class="scroll-top" [class.show]="navIsFixed">
       <button mat-button (click)="scrollToTop();">
           <!-- <i class="fas fa-arrow-up"></i> -->
           <i class="fas fa-angle-double-up"></i>

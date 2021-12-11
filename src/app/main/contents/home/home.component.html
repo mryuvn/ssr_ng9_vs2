@@ -22,17 +22,17 @@
         </div>
     </div>
     
-    <app-about *ngIf="about" [data]="about"></app-about>
+    <app-about *ngIf="about" [data]="about" [isBrowser]="isBrowser"></app-about>
 
-    <app-trade-everywhere *ngIf="tradeEverywhere" [data]="tradeEverywhere"></app-trade-everywhere>
+    <app-trade-everywhere *ngIf="tradeEverywhere" [data]="tradeEverywhere" [isBrowser]="isBrowser"></app-trade-everywhere>
 
-    <app-forex-market *ngIf="forexMarket" [data]="forexMarket"></app-forex-market>
+    <app-forex-market *ngIf="forexMarket" [data]="forexMarket" [isBrowser]="isBrowser"></app-forex-market>
 
-    <app-why-forex *ngIf="whyForex" [data]="whyForex"></app-why-forex>
+    <app-why-forex *ngIf="whyForex" [data]="whyForex" [isBrowser]="isBrowser"></app-why-forex>
 
-    <app-starting *ngIf="starting" [data]="starting"></app-starting>
+    <app-starting *ngIf="starting" [data]="starting" [isBrowser]="isBrowser"></app-starting>
 
-    <app-trade-with-us *ngIf="tradeWithUs" [data]="tradeWithUs"></app-trade-with-us>
+    <app-trade-with-us *ngIf="tradeWithUs" [data]="tradeWithUs" [isBrowser]="isBrowser"></app-trade-with-us>
 
     <app-market-analysis></app-market-analysis>
 </div>

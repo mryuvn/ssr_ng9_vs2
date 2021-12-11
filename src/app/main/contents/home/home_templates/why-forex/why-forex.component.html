@@ -8,7 +8,7 @@
         <div class="row">
             <div *ngFor="let item of data.contents" class="col-sm-3">
                 <div class="item">
-                    <app-icon [iconValue]="item.icon"></app-icon>
+                    <app-icon *ngIf="isBrowser" [iconValue]="item.icon"></app-icon>
                     <div class="data">
                         <h4 [innerHTML]="item.title | safeHtml"></h4>
                         <span class="text" *ngIf="item.caption" [innerHTML]="item.caption | safeHtml"></span>

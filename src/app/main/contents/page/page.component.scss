@@ -22,11 +22,11 @@
         }
 
         @media (max-width: 567px) {
-            height: 260px !important;
+            height: 360px !important;
 
             .page-cover {
-                width: 200%;
-                margin-left: -50%;
+                width: 150%;
+                margin-left: -25%;
             }
         }
     }
@@ -66,6 +66,10 @@
             .menu {
                 float: right;
 
+                @media (max-width: 1023px) {
+                    display: none;
+                }
+
                 .home {
                     display: none;
                 }
@@ -74,6 +78,7 @@
 
         .page-title {
             margin-bottom: 1.5rem;
+            // font-size: 28px;
         }
 
         .text-error {
@@ -94,8 +99,17 @@
     
                 app-avatar {
                     position: absolute;
+                }
+                app-avatar:not(.iframe) {
                     top: -20%;
                     cursor: pointer;
+                }
+                app-avatar.iframe {
+                    top: 0;
+
+                    .iframe {
+                        height: 70%;
+                    }
                 }
             }
         }
@@ -118,8 +132,6 @@
         }
 
         .text {
-            padding-bottom: 1rem;
-
             img {
                 max-width: 100%;
             }
@@ -145,115 +157,6 @@
         overflow: hidden;
     }
 
-    .categories {
-        .item {
-            margin-bottom: .5rem;
-
-            .icon {
-                margin-right: 1rem;
-                font-size: 24px;
-            }
-    
-            .name {
-                /*   font-size: 18px; */
-                  text-transform: uppercase;
-                /*   font-weight: 400; */
-            }
-        }
-    }
-
-    .posts {
-        .title {
-            color: var(--warnColor);
-            text-transform: uppercase;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-        }
-
-        .picture {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-top: 70%;
-            overflow: hidden;
-            flex-direction: column;
-            display: flex;
-            place-content: center;
-
-            app-avatar {
-                position: absolute;
-                top: -10%;
-            }
-        }
-
-        .item {
-            .name {
-                font-size: 20px;
-                color: var(--warnColor);
-                font-weight: 400;
-    
-                a {
-                    color: var(--warnColor);
-                }
-    
-                a:hover {
-                    color: var(--accentColor);
-                }
-            }
-
-            .time {
-                font-size: 90%;
-                font-style: ÷italic;
-                opacity: .8;
-            }
-        }
-    }
-    
-    .posts.articles {
-        .item {
-            margin-bottom: 2rem;
-            padding: 1rem;
-            box-shadow: 0 2px 9px -7px #000;
-
-            .picture {
-                margin-bottom: 1rem;
-                border: none !important;
-                box-shadow: none !important;
-            }
-        }
-    
-        .item:hover {
-            box-shadow: 0 2px 9px -5px #000;
-        }
-    }
-
-    .posts.list {
-        .item {
-            display: flex;
-            flex-wrap: wrap;
-            margin-left: -15px;
-            margin-right: -15px;
-            margin-bottom: 2rem;
-
-            .post-avatar, .data {
-                float: left;
-                padding-left: 15px;
-                padding-right: 15px;
-            }
-
-            .post-avatar {
-                width: 100px;
-            }
-
-            .data {
-                // width: 75%;
-                flex-direction: column;
-                display: flex;
-                place-content: center;
-            }
-        }
-    }
-
     .sidebar {
         padding-bottom: 2rem;
 
@@ -262,7 +165,7 @@
         }
 
         .sticky-top {
-            top: 160px !important;
+            top: 80px !important;
             z-index: 1 !important;
         }
 

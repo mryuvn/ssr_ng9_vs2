@@ -9,6 +9,7 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 export class WhyForexComponent implements OnInit {
 
   @Input() data: any;
+  @Input() isBrowser: boolean;
 
   constructor() { }
 

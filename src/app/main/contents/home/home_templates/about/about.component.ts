@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class AboutComponent implements OnInit {
 
   @Input() data: any;
+  @Input() isBrowser: boolean;
 
   constructor() { }
 

@@ -53,7 +53,9 @@ export class PageComponent implements OnInit, OnDestroy {
     contentData: {},
     aliasData: []
   };
-  categories: any = [];
+  childCats: any = [];
+  sameCats: any = [];
+  parentCat: any = {};
 
   pageConfig: any = {};
 
@@ -89,7 +91,10 @@ export class PageComponent implements OnInit, OnDestroy {
     private socketioService: SocketioService
   ) { 
     this.subscription = messageService.getMessage().subscribe(message => {
-      //
+      if (message.text === messageService.messages.emitDataSearchResult) {
+        this.data.mess = message.data.mess;
+        this.articles = message.data.articles;
+      }
     });
 
     if (isPlatformBrowser(this.platformId)) {
@@ -134,9 +139,12 @@ export class PageComponent implements OnInit, OnDestroy {
             const moduleData = this.MODULES.find(item => item.route === this.params.moduleRoute && item.enabled);
             if (moduleData) {
               this.moduleData = moduleData;
+              messageService.sendMessage(messageService.messages.updateModuleData, null);
               this.emitPageFullscreen();
               this.getPageData();
+              this.messageService.sendMessage(this.messageService.messages.updatePageData, null);
               this.renderCategories();
+              this.messageService.sendMessage(this.messageService.messages.updateCats, null);
             }
           }
         }
@@ -160,14 +168,17 @@ export class PageComponent implements OnInit, OnDestroy {
           const moduleData = this.MODULES.find(item => item.route === this.params.moduleRoute && item.enabled);
           if (moduleData) {
             this.moduleData = moduleData;
+            messageService.sendMessage(messageService.messages.updateModuleData, null);
             this.emitPageFullscreen();
             if (!this.data.id) {
               this.getPageData();
+              this.messageService.sendMessage(this.messageService.messages.updatePageData, null);
             } else {
               this.setPageConfig();
             }
             messageService.sendMessage(messageService.messages.getPageConfig, null);
             this.renderCategories();
+            this.messageService.sendMessage(this.messageService.messages.updateCats, null);
           }
         }
       }, err => console.log({ err: err, time: new Date() }));
@@ -180,8 +191,9 @@ export class PageComponent implements OnInit, OnDestroy {
           if (index !== -1) {
             this.MODULES.splice(index, 1);
             this.renderCategories();
+            this.messageService.sendMessage(this.messageService.messages.updateCats, null);
           }
-
+          //...
         }
       }, err => console.log({ err: err, time: new Date() }));
 
@@ -191,6 +203,7 @@ export class PageComponent implements OnInit, OnDestroy {
           if (e.cat === this.moduleData.alias && e.lang === this.lang) {
             this.DATA.push(e);
             this.renderData();
+            this.messageService.sendMessage(this.messageService.messages.updatePageData, null);
           }
         }
       }, err => console.log({ err: err, time: new Date() }));
@@ -211,21 +224,23 @@ export class PageComponent implements OnInit, OnDestroy {
           });
           if (edited.length > 0) {
             this.renderData();
+            this.messageService.sendMessage(this.messageService.messages.updatePageData, null);
           }
         }
       }, err => console.log({ err: err, time: new Date() }));
 
       this.socket = socketioService.on(messages.deletePost).subscribe(content => {
-        const edited = [];
+        const deleted = [];
         content.dataArr.forEach(e => {
           const index = this.DATA.findIndex(item => item.id === e.id);
           if (index !== -1) {
-            edited.push(e);
+            deleted.push(e);
             this.DATA.splice(index, 1);
           }
         });
-        if (edited.length > 0) {
+        if (deleted.length > 0) {
           this.renderData();
+          this.messageService.sendMessage(this.messageService.messages.updatePageData, null);
         }
       }, err => console.log({ err: err, time: new Date() }));
     }
@@ -243,8 +258,6 @@ export class PageComponent implements OnInit, OnDestroy {
       this.siteValues = siteValues;
       if (this.siteValues.dateFormat) {
         this.dateFormat = this.siteValues.dateFormat;
-      } else {
-        this.dateFormat = this.langData.dateFormat;
       }
       this.getModuleData();
     } else {
@@ -259,14 +272,22 @@ export class PageComponent implements OnInit, OnDestroy {
           this.getLangData();
         }
 
+        this.data = {};
         const params = val.state.root.firstChild.firstChild.firstChild.params;
         // console.log(params);
         if (params) {
           this.params = params;
+          this.moduleData = {
+            config: {},
+            contentData: {},
+            aliasData: []
+          };
+          this.pageConfig = {};
           const moduleData = this.MODULES.find(item => item.route === this.params.moduleRoute && item.enabled);
           if (moduleData) {
             this.moduleData = moduleData;
             // console.log(this.moduleData);
+
             this.emitPageFullscreen();
             this.renderCategories();
 
@@ -276,11 +297,6 @@ export class PageComponent implements OnInit, OnDestroy {
             this.uploadPath = moduleData.db_table_basename.replace(/_/g, "");
             this.getPageData();
           } else {
-            this.moduleData = {
-              config: {},
-              contentData: {},
-              aliasData: []
-            };
             this.pageNotFound();
           }
         }
@@ -291,6 +307,7 @@ export class PageComponent implements OnInit, OnDestroy {
   getLangData() {
     this.langData = this.languageService.getLangData(this.lang);
     this.langContent = this.languageService.getLangContent(this.langsData, this.lang);
+    this.dateFormat = this.langData.dateFormat;
   }
 
   getSiteValues() {
@@ -301,8 +318,6 @@ export class PageComponent implements OnInit, OnDestroy {
           this.siteValues = siteValues;
           if (this.siteValues.dateFormat) {
             this.dateFormat = this.siteValues.dateFormat;
-          } else {
-            this.dateFormat = this.langData.dateFormat;
           }
           this.getModuleData();
           setTimeout(() => {
@@ -331,6 +346,8 @@ export class PageComponent implements OnInit, OnDestroy {
         const moduleData = this.MODULES.find(item => item.route === this.params.moduleRoute && item.enabled);
         if (moduleData) {
           this.moduleData = moduleData;
+          // console.log(this.moduleData);
+          
           this.emitPageFullscreen();
           this.renderCategories();
 
@@ -376,22 +393,32 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   renderCategories() {
-    const categories = [];
+    const childCats = [];
+    const sameCats = [];
     this.MODULES.forEach(e => {
       if (e.cat === this.moduleData.id) {
-        e.nameValue = this.languageService.getLangValue(e.name, this.lang);
-        categories.push(e);
+        childCats.push(e);
+      } else if (e.cat && e.cat === this.moduleData.cat) {
+        sameCats.push(e);
       }
     });
-    this.categories = categories;
-    // console.log(this.categories);
+    this.childCats = childCats;
+    this.sameCats = sameCats;
+    const parentCat = this.MODULES.find(item => item.id === this.moduleData.cat);
+    if (parentCat) {
+      this.parentCat = parentCat;
+    }
   }
 
   getPageData() {
+    let orderBy = 'ORDER BY id DESC';
+    if (this.moduleData.config.orderBy) {
+      orderBy = 'ORDER BY ' + this.moduleData.config.orderBy;
+    }
     this.appService.getSqlData({
       table: this.tables.posts,
       where: 'WHERE cat = "' + this.moduleData.alias + '" AND lang = "' + this.lang + '"',
-      orderBy: 'ORDER BY id DESC'
+      orderBy: orderBy
     }).subscribe(res => {
       if (res.mess === 'ok') {
         this.DATA = res.data;
@@ -434,6 +461,7 @@ export class PageComponent implements OnInit, OnDestroy {
     });
 
     this.articles = articles;
+    // console.log(this.articles);
 
     const generalData = this.DATA.find(item => item.alias === 'general');
     if (generalData) {
@@ -453,7 +481,7 @@ export class PageComponent implements OnInit, OnDestroy {
           pageData = this.languageService.getPageNotFound(this.lang);
         }
         data = pageData;
-        this.pageTitle = this.data.name;
+        this.pageTitle = data.name;
       } else {
         data = this.generalData;
       }
@@ -463,6 +491,7 @@ export class PageComponent implements OnInit, OnDestroy {
       }
       this.data = data;
       // console.log(this.data);
+
       this.updateTags();
       this.getContents();
       this.setPageConfig();
@@ -484,6 +513,17 @@ export class PageComponent implements OnInit, OnDestroy {
       this.imageSource = imageSource;
       
       this.emitRouterLoaded();
+
+      if (this.isBrowser) {
+        const stateData = history.state;
+        this.data.mess = stateData.mess;
+        if (stateData.articles) {
+          this.articles = stateData.articles;
+        }
+      }
+      if (this.moduleData.alias === 'search' && !this.data.mess) {
+        this.data.mess = this.moduleData.contentData.noResult;
+      }
     } else {
       this.siteTitle = this.siteValues.name;
       this.siteCaption = this.siteValues.slogan;
@@ -499,33 +539,42 @@ export class PageComponent implements OnInit, OnDestroy {
         pageConfig = pageAlias.config;
       }
     }
-
+    const moduleConfig = this.moduleData.config;
+    // console.log(moduleConfig);
+    
     if (!pageConfig.pageFullscreen) {
-      pageConfig.pageFullscreen = this.moduleData.config.pageFullscreen;
+      pageConfig.pageFullscreen = moduleConfig.pageFullscreen;
     }
     if (!pageConfig.headerHeight) {
-      pageConfig.headerHeight = this.moduleData.config.headerHeight;
+      pageConfig.headerHeight = moduleConfig.headerHeight;
     }
     if (!pageConfig.slideConfig) {
-      pageConfig.slideConfig = this.moduleData.config.slideConfig;
+      pageConfig.slideConfig = moduleConfig.slideConfig;
     }
     if (!pageConfig.sidebar) {
-      pageConfig.sidebar = this.moduleData.config.sidebar;
+      pageConfig.sidebar = moduleConfig.sidebar;
     }
     if (!pageConfig.moduleTemplate) {
-      pageConfig.moduleTemplate = this.moduleData.config.moduleTemplate;
+      pageConfig.moduleTemplate = moduleConfig.moduleTemplate;
     }
     if (!pageConfig.avatarPosition) {
-      pageConfig.avatarPosition = this.moduleData.config.avatarPosition;
+      pageConfig.avatarPosition = moduleConfig.avatarPosition;
     }
-    if (!pageConfig.sameCatType) {
-      pageConfig.sameCatType = this.moduleData.config.sameCatType;
+    if (!pageConfig.sameCatStyles) {
+      pageConfig.sameCatStyles = moduleConfig.sameCatStyles;
+    }
+    if (!pageConfig.childCatStyles) {
+      pageConfig.childCatStyles = moduleConfig.childCatStyles;
+    }
+    if (!pageConfig.postStyles) {
+      pageConfig.postStyles = moduleConfig.postStyles;
     }
     if (!pageConfig.contentQuote) {
-      pageConfig.contentQuote = this.moduleData.config.contentQuote;
+      pageConfig.contentQuote = moduleConfig.contentQuote;
     }
 
     this.pageConfig = pageConfig;
+    // console.log(this.pageConfig);
   }
 
   getContents() {

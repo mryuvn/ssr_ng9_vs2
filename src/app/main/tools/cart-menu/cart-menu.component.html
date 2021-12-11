@@ -1,7 +1,10 @@
-<button mat-icon-button class="toggle-menu" [class.available]="dataLength>0" (click)="toggleMenu();">
+<button mat-icon-button class="toggle-menu" 
+    [class.available]="dataLength>0" 
+    [class.opening]="openMenu" 
+    (click)="toggleMenu();">
     <!-- <i class="fas fa-shopping-cart"></i> -->
     <mat-icon>shopping_cart</mat-icon>
-    <span *ngIf="dataLength>0" class="badge">{{dataLength}}</span>
+    <span *ngIf="dataLength>0" class="data-length">{{dataLength}}</span>
 </button>
 <span class="on-dropdown-open" [style.opacity]="openMenu ? 1 : 0"></span>
 

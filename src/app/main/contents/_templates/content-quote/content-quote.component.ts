@@ -116,6 +116,7 @@ export class ContentQuoteComponent implements OnInit, OnDestroy {
           this.getContents();
         } else {
           this.data.err = 'No data';
+          console.log('No data with alias = "' + this.pageAlias + '"');
         }
       } else {
         this.data.err = res.err,
@@ -128,7 +129,7 @@ export class ContentQuoteComponent implements OnInit, OnDestroy {
   }
 
   renderData(e) {
-    e.JSON = this.appService.isObject(e.jsonData);
+    e.config = this.appService.isObject(e.jsonData);
     this.data = e;
     this.pageID = e.id;
   }

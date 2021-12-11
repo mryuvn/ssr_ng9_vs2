@@ -196,6 +196,7 @@ export class AppComponent {
         this.appService.siteValues.forEach(e => {
           const data = res.data.find(item => item.lang === e.lang);
           if (data) {
+            data.disable = !e.enabled;
             siteLangs.push(data);
           }
         });

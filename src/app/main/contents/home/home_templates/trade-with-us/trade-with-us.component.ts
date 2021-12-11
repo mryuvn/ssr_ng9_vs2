@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TradeWithUsComponent implements OnInit {
 
   @Input() data;
+  @Input() isBrowser: boolean;
 
   constructor() { }
 

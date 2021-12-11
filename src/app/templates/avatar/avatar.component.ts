@@ -38,16 +38,16 @@ export class AvatarComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.isBrowser = true;
-    
     if (!this.noImage) {
       this.noImage = 'no-image.jpg';
     }
     
-    if (isPlatformBrowser(this.platformId)) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    if (this.isBrowser) {
       if (!this.src) {
         this.src = this.appService.getFileSrc(this.filename, this.uploadPath);
       }
+
       if (!this.src.type || this.src.type === 'base64') {
         this.checkImage();
       } else {
