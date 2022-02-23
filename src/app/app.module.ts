@@ -17,14 +17,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { SidenavModule } from './main/sidenav/sidenav.module';
-import { ToolbarModule } from './main/toolbar/toolbar.module';
-import { FooterModule } from './main/footer/footer.module';
-import { VisitorDataModule } from './main/visitor-data/visitor-data.module';
-import { TemplatesModule } from './templates/templates.module';
-import { ThemeSettingsModule } from './templates/theme-settings/theme-settings.module';
-import { AlbumViewerTemplateModule } from './templates/album-viewer-template/album-viewer-template.module';
-
 @NgModule({
   declarations: [
     AppComponent
@@ -37,14 +29,7 @@ import { AlbumViewerTemplateModule } from './templates/album-viewer-template/alb
     MDBBootstrapModule.forRoot(),
     RecaptchaModule.forRoot({ siteKey: '6LeZzs0UAAAAAIvhaHwCgrCmaqj_em0I58VOHITo' }),
     SocialLoginModule,
-    MatButtonModule, MatIconModule, MatSnackBarModule,
-    SidenavModule,
-    ToolbarModule,
-    FooterModule,
-    VisitorDataModule,
-    TemplatesModule,
-    ThemeSettingsModule,
-    AlbumViewerTemplateModule
+    MatButtonModule, MatIconModule, MatSnackBarModule
   ],
   schemas: [ NO_ERRORS_SCHEMA ], //For MDBBootstrapModule
   providers: [

@@ -79,68 +79,13 @@ export class FilesService {
     private socketioService: SocketioService
   ) { }
 
-  /**
-  * uploadFiles
-  */
-  public uploadFiles(selectedFile, options) {
-    var formData = new FormData();
-    formData.append('file', selectedFile);
-
-    const data = {
-      domain: this.appService.domain,
-      upload_path: options.uploadPath,
-      filename: options.fileName
+  public getFileExt(filename: string) {
+    if (filename) {
+      return filename.split('.').pop();
     }
-    const params = new HttpParams().set('data', JSON.stringify(data));
-    const headers = new HttpHeaders({ 'Accept': 'application/json' });
-
-    var url = this.appService.baseUrl + 'upload/single';
-    return this.http.post<any>(url, formData, { headers: headers, params: params });
+    return null;
   }
-
-  /**
-   * updateGallery
-   */
-  public updateGallery(file_name, db_table, uploadPath, album, postID, user) {
-    const dataPost = {
-      table: this.appService.tables.gallery,
-      fields: {
-        file_name: file_name,
-        db_table: db_table,
-        uploadPath: uploadPath,
-        album: album,
-        postID: postID,
-        createdTime: new Date(),
-        user: user
-      }
-    }
-    this.appService.addSqlData(dataPost).subscribe(res => {
-      if (res.mess === 'ok') {
-        const dataEmit = {
-          message: this.socketioService.messages.gallery.new,
-          emit: true,
-          broadcast: true,
-          content: {
-            id: res.newId,
-            file_name: file_name,
-            database: this.appService.databaseName,
-            db_table: db_table,
-            uploadPath: uploadPath,
-            album: album,
-            postID: postID,
-            domain: this.appService.domain
-          }
-        }
-        this.socketioService.emit('client_emit', dataEmit);
-      } else {
-        console.log({ res: res, time: new Date() });
-      }
-    }, err => console.log({ err: err, time: new Date() }));
-  }
-
-  /**
-   * getFileSize
-   */
+ 
   public getFileSize(size: number) {
     if (size < 1024) {
       var data = {
@@ -205,9 +150,6 @@ export class FilesService {
     return data;
   }
 
-  /**
-   * getFileType
-   */
   public getFileType(filename) {
     if (filename) {
       const results = [];
@@ -236,60 +178,37 @@ export class FilesService {
       return {
         type: fileType.type,
         faIcon: fileType.faIcon,
-        image: fileType.image
+        isImage: fileType.image
       };
     } else {
       return {
         type: null,
         faIcon: null,
-        image: null
+        isImage: null
       }
     }
   }
 
-  /**
-   * getImageBase64
-   */
-  public getImageBase64(file) {
+  getImageBase64(file: File) {
+    const imageToBase64 = (fileReader: FileReader, fileToRead: File): Observable<any> => {
+      fileReader.readAsDataURL(fileToRead);
+      return fromEvent(fileReader, 'load').pipe(pluck('currentTarget', 'result'));
+    }
     const fileReader = new FileReader();
-    return this.imageToBase64(fileReader, file);
+    return imageToBase64(fileReader, file);
   }
-
-  /**
-   * imageToBase64
-   */
-  public imageToBase64(fileReader: FileReader, fileToRead: File): Observable<string> {
-    fileReader.readAsDataURL(fileToRead);
-    return fromEvent(fileReader, 'load').pipe(pluck('currentTarget', 'result'));
-  }
-
-  /**
-   * imageToDataUri
-   */
 
   public imageToDataUri(img, width, height) {
-    // create an off-screen canvas
     var canvas = document.createElement('canvas'),
-      // ctx = canvas.getContext('2d');
-      ctx = <CanvasRenderingContext2D>canvas.getContext('2d');
-
-    // set its dimension to target size
+    ctx = <CanvasRenderingContext2D>canvas.getContext('2d');
     canvas.width = width;
     canvas.height = height;
-
-    // draw source image into the off-screen canvas:
     var image = new Image();
     image.src = img;
     ctx.drawImage(image, 0, 1, width, height);
-    // ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
-
-    // encode image to data-uri with base64 version of compressed image
     return canvas.toDataURL();
   }
-  
-  /**
-   * getBase64FromUrl
-   */
+
   public getBase64FromUrl() {
     async (url) => {
       const data = await fetch(url);
@@ -303,6 +222,22 @@ export class FilesService {
         }
       });
     }
+  }
+
+  public uploadFile(file: File, options: any) {
+    var formData = new FormData();
+    formData.append('file', file);
+
+    const data = {
+      api_key: this.appService.api.password,
+      upload_path: options.uploadPath,
+      filename: options.filename
+    }
+    const params = new HttpParams().set('data', JSON.stringify(data));
+    const headers = new HttpHeaders({ 'Accept': 'application/json' });
+
+    var url = this.appService.api.base + '/upload/single';
+    return this.http.post<any>(url, formData, { headers: headers, params: params });
   }
 
 }

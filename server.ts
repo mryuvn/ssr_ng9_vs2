@@ -39,7 +39,7 @@ export function app() {
 
 function run() {
   const port = process.env.PORT || 4000;
-  const portSSL = 9999;
+  const portSSL = 4201;
 
   // Start up the Node server
   const server = app();

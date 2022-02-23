@@ -1,0 +1,26 @@
+#preloading {
+    position: fixed;
+    background-color: #ffd7e9;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+    place-content: center;
+    align-items: center;
+
+    img {
+        position: absolute;
+    }
+
+    .logo {
+        z-index: 2;
+    }
+
+    .loading-icon {
+        z-index: 1;
+        opacity: .1;
+        max-width: 80%;
+    }
+}

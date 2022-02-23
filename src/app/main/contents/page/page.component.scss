@@ -1,218 +1,25 @@
-#page {
-    padding-top: 0;
-
-    .page-banner {
-        overflow: hidden;
-
-        .page-cover {
-            position: relative;
-            height: 100%;
-            overflow: hidden;
-            flex-direction: column;
-            display: flex;
-            place-content: center;
-        }
-        .page-cover:after {
-            position: absolute;
-            background: #000;
-            content: '';
-            width: 100%;
-            height: 100%;
-            opacity: .5;
-        }
-
-        @media (max-width: 567px) {
-            height: 360px !important;
-
-            .page-cover {
-                width: 150%;
-                margin-left: -25%;
-            }
-        }
-    }
-
-    .page-content {
-        .navigation {
-            position: relative;
-            font-size: 90%;
-            height: 40px;
-            border-bottom: 1px solid var(--accentBorder);
-            margin-bottom: 2rem;
-            padding-bottom: .5rem;
-            z-index: 200;
-
-            a {
-                color: var(--primaryColor);
-            }
-
-            a:hover {
-                color: var(--warnColor);
-            }
-
-            .map, .menu {
-                height: 100%;
-                flex-direction: row;
-                display: flex;
-                align-items: center;
-            }
-
-            .map {
-                float: left;
-                .raquo {
-                    margin: 0 .5rem;
-                }
-            }
-
-            .menu {
-                float: right;
-
-                @media (max-width: 1023px) {
-                    display: none;
-                }
-
-                .home {
-                    display: none;
-                }
-            }
-        }
-
-        .page-title {
-            margin-bottom: 1.5rem;
-            // font-size: 28px;
-        }
-
-        .text-error {
-            background: var(--lightBorder);
-            display: block;
-            margin-bottom: 2rem;
-            padding: 1rem;
-        }
-
-        .page-avatar {
-            margin-bottom: 2rem;
-
-            .picture {
-                position: relative;
-                height: 0;
-                overflow: hidden;
-                padding-top: 69%;
-    
-                app-avatar {
-                    position: absolute;
-                }
-                app-avatar:not(.iframe) {
-                    top: -20%;
-                    cursor: pointer;
-                }
-                app-avatar.iframe {
-                    top: 0;
-
-                    .iframe {
-                        height: 70%;
-                    }
-                }
-            }
-        }
-
-        .page-avatar.left {
-            @media (min-width: 568px) {
-                float: left;
-                width: 200px;
-                margin-right: 1.5rem;
-                margin-bottom: 1rem;
-            }
-            
-            @media (min-width: 768px) {
-                width: 250px;
-            }
-        }
-
-        .caption {
-            white-space: pre-wrap;
-        }
-
-        .text {
-            img {
-                max-width: 100%;
-            }
-        }
-    }
-
-    .continue-button {
-        margin-top: 2rem;
-        margin-bottom: 3rem;
-    }
-    .continue-button.right {
-        text-align: right;
-    }
-    .continue-button.center {
-        text-align: center;
-    }
-    
-    .page-bottom {
-        font-size: 14px;
-        margin-top: 2rem;
-        display: block;
-        height: 40px;
-        overflow: hidden;
-    }
-
-    .sidebar {
-        padding-bottom: 2rem;
-
-        @media (max-width: 1199px) {
-            padding-top: 2rem;
-        }
-
-        .sticky-top {
-            top: 80px !important;
-            z-index: 1 !important;
-        }
-
-        .contact-form {
-            box-shadow: 0 2px 9px -7px #000;
-
-            .title {
-                background: var(--warnColor);
-                color: var(--light);
-                text-align: center;
-                padding: 1rem;
-
-                h4 {
-                    text-transform: uppercase;
-                    font-weight: 400;
-                    margin-top: 0.5rem;
-                    margin-bottom: 0;
-                }
-            }
-
-            .form-data {
-                padding: 1.3rem 1rem;
-            }
-        }
-    }
+#page-layout {
+    margin-top: 10%;
+    opacity: 0;
+}
+#page-layout.loaded {
+    margin-top: 0;
+    opacity: 1;
 }
 
-#page.fullscreen {
+.router-loading {
     position: fixed;
-    background: var(--light);
+    background-color: #fff;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    z-index: 199;
+    flex-direction: column;
+    display: flex;
+    place-content: center;
+    align-items: center;
 
-    .page-banner {
-        display: none;
-    }
-
-    .page-content {
-        position: absolute;
-        background: var(--light);
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding-top: 124px;
-        padding-bottom: 100px;
+    .loading-icon {
+        opacity: .2;
     }
 }

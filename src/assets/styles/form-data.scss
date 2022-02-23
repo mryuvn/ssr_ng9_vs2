@@ -1,0 +1,160 @@
+.web-page-form {
+    h4.title {
+        margin-bottom: 1.3rem;
+        font-size: 20px;
+    }
+
+    span.title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 0.7rem;
+
+        mat-slide-toggle {
+            margin-left: .5rem;
+        }
+    }
+
+    .m-card {
+        margin-bottom: 1rem;
+
+        .m-card-content {
+            padding: 0 1rem;
+        }
+    }
+
+    .with-expand-content {
+        .expand-icon {
+            margin-top: 3px;
+            margin-left: 5px;
+        }
+
+        .close-content {
+            cursor: pointer;
+        }
+
+        .m-card-header {
+            .m-card-title {
+                cursor: pointer;
+                flex-direction: row;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .m-card-content {
+            height: 0;
+            overflow: hidden;
+        }
+    }
+    .with-expand-content.open-content {
+        .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        .m-card-content {
+            height: auto;
+            overflow: unset;
+        }
+    }
+}
+
+.form-data {
+    mat-form-field {
+        width: 100%;
+        font-size: 90%;
+
+        
+
+        .data-length {
+            position: absolute;
+            right: 1.3rem;
+            bottom: 0.5rem;
+            font-size: 80%;
+        }
+
+        .mat-error {
+            font-size: 12px;
+            display: block;
+            margin-top: 1rem;
+            background: #fff;
+            box-shadow: 0 1px 2px -1px #000;
+            padding: 5px 9px;
+            margin-left: -9px;
+            margin-right: -10px;
+        }
+
+        .prefix {
+            position: absolute;
+            left: 0;
+            margin-top: 2px;
+        }
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+        padding: .7em 0 1em 0 !important;
+        height: 56px !important;
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
+        top: -3px;
+    }
+
+    .number {
+        .mat-form-field-suffix {
+            position: absolute;
+            right: 25px;
+            bottom: 29px;
+        }
+    }
+
+    .btns {
+        .button {
+            margin-right: .7rem;
+        }
+    }
+    .btns.text-right {
+        .button {
+            margin-right: 0;
+            margin-left: .7rem;
+        }
+    }
+
+    .disable-field {
+        position: relative;
+    }
+    .disable-field:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background-color: #fff;
+        opacity: .5;
+        cursor: not-allowed;
+        z-index: 999;
+    }
+}
+
+.inline-form-fields {
+    position: relative;
+
+    .buttons {
+        position: absolute;
+        top: 4px;
+        right: 0;
+
+        .mat-raised-button, .mat-button {
+            height: 57px;
+
+            .mat-button-wrapper {
+                flex-direction: row;
+                display: flex;
+                place-content: center;
+                align-items: center;
+                height: 100%;
+            }
+        }
+    }
+}

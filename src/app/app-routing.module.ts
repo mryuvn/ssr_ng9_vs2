@@ -11,23 +11,8 @@ const routes: Routes = [
 
   {
     path: ':lang',
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('./main/contents/home/home.module').then(m => m.HomeModule),
-        data: { preloading: true }
-      },
-      {
-        path: ':moduleRoute',
-        loadChildren: () => import('./main/contents/page/page.module').then(m => m.PageModule),
-        data: { preloading: true }
-      },
-      {
-        path: '**',
-        redirectTo: '',
-        pathMatch: 'full'
-      }
-    ]
+    loadChildren: () => import('./main/contents/page/page.module').then(m => m.PageModule),
+    data: { preloading: true }
   },
   
   {

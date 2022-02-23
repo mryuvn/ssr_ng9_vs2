@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>YuFX.vn</title>
+  <title>NG9 SSR WEB DEMO</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -23,126 +23,7 @@
 </head>
 
 <body>
-  <yufx></yufx>
-
-  <div class="app-bg">
-    <!-- <img src="assets/imgs/wrapper.jpg" alt=""> -->
-  </div>
-
-  <div id="preloading">
-    <div class="spiner-container">
-      <img class="logo" src="assets/imgs/logo/favicon_sm.png" alt="" width="60">
-      <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-        <span class="sr-only"></span>
-      </div>
-    </div>
-  </div>
-
-  <style>
-    .app-bg {
-      position: fixed;
-      background: #edfbfe;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      flex-direction: column;
-      display: flex;
-      place-content: center;
-      align-items: center;
-      z-index: 9990;
-    }
-
-    .app-bg.faded {
-      z-index: 1;
-    }
-
-    .app-bg img {
-      width: 100%;
-    }
-
-    #preloading {
-      position: fixed;
-      color: #eee;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      flex-direction: column;
-      display: flex;
-      place-content: center;
-      align-items: center;
-      text-align: center;
-      z-index: 9999;
-      -webkit-transition: all 0.3s ease-out;
-      -moz-transition: all 0.3s ease-out;
-      -o-transition: all 0.3s ease-out;
-      transition: all 0.3s ease-out;
-    }
-
-    #preloading * {
-      position: relative;
-      -webkit-transition: all 0.3s ease-out;
-      -moz-transition: all 0.3s ease-out;
-      -o-transition: all 0.3s ease-out;
-      transition: all 0.3s ease-out;
-    }
-
-    #preloading::before {
-      position: absolute;
-      background: #000;
-      content: '';
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-    }
-
-    #preloading.hide {
-      opacity: 0;
-    }
-
-    #preloading .spiner-container {
-      position: relative;
-      flex-direction: column;
-      display: flex;
-      place-content: center;
-      align-items: center;
-      margin-top: 1rem;
-    }
-
-    #preloading .spiner-container .spinner-border {
-      color: #f3bb10;
-      border-width: .35em;
-    }
-
-    #preloading .spiner-container .logo {
-      position: absolute;
-    }
-
-    .addthis-smartlayers .at4-share,
-    #at-share-dock,
-    .addthis-smartlayers-mobile {
-      display: none;
-      opacity: 0;
-      z-index: 0;
-    }
-  </style>
-
-  <script src="assets/js/jquery.min.js"></script>
-  <script>
-    $('document').ready(function () {
-      setTimeout(() => {
-        $(".app-bg").addClass("faded");
-        $("#preloading").addClass("hide");
-        
-        setTimeout(() => {
-          $("#preloading").remove();
-        }, 1000);
-      }, 500);
-    });
-  </script>
+  <wep-app></wep-app>
 </body>
 
 </html>

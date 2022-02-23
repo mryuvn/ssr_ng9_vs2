@@ -7,35 +7,8 @@ import { Observable, Subject } from 'rxjs';
 export class MessageService {
 
   public messages = {
-    emitClientUser: 'emitClientUser',
-    loginChecked: 'loginChecked',
-    sendUserData: 'sendUserData',
-    removeUserData: 'removeUserData',
-    changeLanguage: 'changeLanguage',
-    emitSiteValues: 'emitSiteValues',
-    emitMenuData: 'emitMenuData',
-    setActivePath: 'setActivePath',
-    routerLoaded: 'routerLoaded',
-    getPageConfig: 'getPageConfig',
-    updateModuleData: 'updateModuleData',
-    updatePageData: 'updatePageData',
-    updateCats: 'updateCats',
-    emitThemeSettings: 'emitThemeSettings',
-    openThemeSettings: 'openThemeSettings',
-    updateThemeSettings: 'updateThemeSettings',
-    changeToolbarMenuViewMode: 'changeToolbarMenuViewMode',
-    openImageViewer: 'openImageViewer',
-    openForm: {
-      consulRegister: 'openConsulRegister',
-      review: 'openReviewForm'
-    },
-    marks: {
-      addToCart: 'addToCart',
-      updateCart: 'updateCart',
-      updateOrder: 'updateOrder',
-      favorite: 'markFavorite'
-    },
-    pageFullscreen: 'pageFullscreen',
+    layoutLoaded: 'layoutLoaded',
+    routerLoading: 'routerLoading',
     emitDataSearchResult: 'emitDataSearchResult'
   }
 

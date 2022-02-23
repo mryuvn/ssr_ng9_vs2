@@ -9,11 +9,15 @@ const routes: Routes = [
     component: PageComponent
   },
   {
-    path: ':pageID',
+    path: ':moduleRoute',
     component: PageComponent
   },
   {
-    path: ':pageID/:path',
+    path: ':moduleRoute/:pageID',
+    component: PageComponent
+  },
+  {
+    path: ':moduleRoute/:pageID/:path',
     component: PageComponent
   }
 ];
@@ -21,16 +25,6 @@ const routes: Routes = [
 import { SafeHtmlModule } from 'src/app/safe-html';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AvatarModule } from 'src/app/templates/avatar/avatar.module';
-import { ContinueBtnModule } from 'src/app/templates/continue-btn/continue-btn.module';
-import { IconModule } from 'src/app/templates/icon/icon.module';
-import { MainSliderModule } from '../_templates/main-slider/main-slider.module';
-import { ContentQuoteModule } from '../_templates/content-quote/content-quote.module';
-import { ContactFormModule } from '../_templates/contact-form/contact-form.module';
-import { MenuModule } from '../_templates/menu/menu.module';
-import { CatsListModule } from './cats-list/cats-list.module';
-import { PostsListModule } from './posts-list/posts-list.module';
-import { CourceModule } from './_page_modules/cource/cource.module';
 
 @NgModule({
   declarations: [PageComponent],
@@ -38,17 +32,7 @@ import { CourceModule } from './_page_modules/cource/cource.module';
     CommonModule,
     RouterModule.forChild(routes),
     SafeHtmlModule,
-    MatButtonModule, MatIconModule,
-    AvatarModule,
-    ContinueBtnModule,
-    IconModule,
-    MainSliderModule,
-    ContentQuoteModule,
-    ContactFormModule,
-    MenuModule,
-    CatsListModule,
-    PostsListModule,
-    CourceModule
+    MatButtonModule, MatIconModule
   ]
 })
 export class PageModule { }
