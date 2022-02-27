@@ -1,31 +1,14 @@
 <div id="wrapper" [class.loaded]="layoutLoaded">
-    <ul>
-        <li><a routerLink="/">Trang chủ</a></li>
-        <li><a routerLink="/vi/gioi-thieu">Giới thiệu</a></li>
-        <li><a routerLink="/vi/lien-he">Liên hệ</a></li>
-        <li>
-            <a routerLink="/vi/khoa-hoc">Khóa học</a>
-            <ul>
-                <li>
-                    <a routerLink="/vi/khoa-hoc-angular">Khóa học Angular</a>
-                    <ul>
-                        <li><a routerLink="/vi/khoa-hoc-angular/1/angular-can-ban">Angular căn bản</a></li>
-                        <li><a routerLink="/vi/khoa-hoc-angular/2/angular-universal">Angular universal</a></li>
-                    </ul>
-                </li>
+    <app-sidenav [isBrowser]="isBrowser" [open]="sidenavOpen" (toggleSidenav)="sidenavOpen=$event"></app-sidenav>
 
-                <li>
-                    <a routerLink="/vi/khoa-hoc-nodejs">Khóa học NodeJs</a>
-                    <ul>
-                        <li><a routerLink="/vi/khoa-hoc-nodejs/1/nodejs-can-ban">NodeJs căn bản</a></li>
-                        <li><a routerLink="/vi/khoa-hoc-nodejs/2/nodejs-universal">NodeJs universal</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ul>
+    <div class="wrapper-content">
+        <app-toolbar [isBrowser]="isBrowser" (toggleSidenav)="sidenavOpen=$event"></app-toolbar>
+        
+        <router-outlet></router-outlet>
     
-    <router-outlet></router-outlet>
+        <app-footer></app-footer>
+
+    </div>
 </div>
 
 <div *ngIf="!layoutLoaded && isBrowser" id="preloading">

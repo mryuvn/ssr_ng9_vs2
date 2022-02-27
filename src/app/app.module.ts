@@ -17,6 +17,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { SidenavModule } from './main/sidenav/sidenav.module';
+import { ToolbarModule } from './main/toolbar/toolbar.module';
+import { FooterModule } from './main/footer/footer.module';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -29,7 +33,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MDBBootstrapModule.forRoot(),
     RecaptchaModule.forRoot({ siteKey: '6LeZzs0UAAAAAIvhaHwCgrCmaqj_em0I58VOHITo' }),
     SocialLoginModule,
-    MatButtonModule, MatIconModule, MatSnackBarModule
+    MatButtonModule, MatIconModule, MatSnackBarModule,
+    SidenavModule, ToolbarModule, FooterModule
   ],
   schemas: [ NO_ERRORS_SCHEMA ], //For MDBBootstrapModule
   providers: [

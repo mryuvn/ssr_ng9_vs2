@@ -1,0 +1,29 @@
+<ul class="menu on-{{position}}">
+    <ng-container *ngFor="let menu of menuData">
+        <li>
+            <span class="menu-item">
+                <a *ngIf="menu.destination.type==='route'" [routerLink]="menu.destination.value">
+                    <span class="txt">{{menu.title}}</span>
+                </a>
+    
+                <a *ngIf="menu.destination.type==='href'" [href]="menu.destination.value" target="_blank">
+                    <span class="txt">{{menu.title}}</span>
+                </a>
+            </span>
+
+            <ul class="childs">
+                <ng-container *ngFor="let child of menu.childs">
+                    <li class="menu-child">
+                        <a *ngIf="child.destination.type==='route'" [routerLink]="child.destination.value">
+                            <span class="txt">{{child.title}}</span>
+                        </a>
+
+                        <a *ngIf="child.destination.type==='href'" [href]="child.destination.value" target="_blank">
+                            <span class="txt">{{child.title}}</span>
+                        </a>
+                    </li>
+                </ng-container>
+            </ul>
+        </li>
+    </ng-container>
+</ul>

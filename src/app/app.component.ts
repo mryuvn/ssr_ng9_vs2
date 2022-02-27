@@ -20,6 +20,7 @@ export class AppComponent {
   routerLoading: boolean = false;
   navIsFixed: boolean = false;
   toolOpen: boolean = false;
+  sidenavOpen: boolean = false;
   
   constructor(
     @Inject(DOCUMENT) private document: Document,

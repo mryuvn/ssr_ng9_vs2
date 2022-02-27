@@ -1,0 +1,36 @@
+<div class="toolbar">
+    <div class="toolbar-content" [class.container]="toolbarSettings.container">
+        <a *ngIf="isBrowser" class="toggle-sidenav" (click)="toggleSidenav.emit(true)"><i class="fas fa-bars"></i></a>
+
+        <a class="logo" [routerLink]="'/'+selectedLang.lang">
+            <img src="assets/imgs/logo/favicon.png" alt="" width="20">
+        </a>
+
+        <span *ngIf="siteValues.name" class="site-name" [innerHtml]="siteValues.name | safeHtml"></span>
+    
+        <ng-container *ngIf="isBrowser">
+            <app-menu position="toolbar"></app-menu>
+        </ng-container>
+
+        <div class="socials">
+            <ng-container *ngFor="let item of siteSocials">
+                <a [href]="item.href" mat-button [target]="item.target">
+                    <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
+                    <img *ngIf="item.imgIcon && !item.faIcon" [src]="'assets/imgs/icons/'+item.imgIcon" alt="" width="18">
+                </a>
+            </ng-container>
+        </div>
+    
+        <div *ngIf="isBrowser && siteLangs.length>0" class="langs">
+            <a class="selected-lang" [matMenuTriggerFor]="langsMenu">
+                <span class="flag-icon flag-icon-{{selectedLang.flagCode}}"></span> {{selectedLang.lang | uppercase}}
+            </a>
+    
+            <mat-menu #langsMenu="matMenu">
+                <span mat-menu-item *ngFor="let item of siteLangs" (click)="changeLanguage(item)">
+                    <span class="item-icon flag-icon flag-icon-{{item.flagCode}}"></span> {{item.name}}
+                </span>
+            </mat-menu>
+        </div>
+    </div>
+</div>

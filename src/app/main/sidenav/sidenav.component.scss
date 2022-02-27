@@ -1,0 +1,22 @@
+.sidenav {
+    position: relative;
+    background-color: #333;
+    width: 280px;
+    height: 100%;
+    left: -280px;
+    z-index: 100;
+}
+
+.sidenav.open {
+    left: 0;
+}
+
+.toggle-sidenav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}

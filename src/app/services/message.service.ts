@@ -9,6 +9,8 @@ export class MessageService {
   public messages = {
     layoutLoaded: 'layoutLoaded',
     routerLoading: 'routerLoading',
+    emitSiteData: 'emitSiteData',
+    changeLanguage: 'changeLanguage',
     emitDataSearchResult: 'emitDataSearchResult'
   }
 

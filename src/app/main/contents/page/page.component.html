@@ -1,10 +1,20 @@
 <div id="page-layout" [class.loaded]="routerLoaded">
-    <h2>Page title</h2>
+    <div class="page-cover">
 
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
+    </div>
+
+    <div class="page-content">
+        <div class="container">
+            <h2>{{moduleData.nameValue}}</h2>
+        
+            <div *ngIf="data.mess" class="message"><em>{{data.mess}}</em></div>
+        
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
+        </div>
+    </div>
 </div>
 
 <div *ngIf="routerLoading" class="router-loading">

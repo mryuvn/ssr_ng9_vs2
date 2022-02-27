@@ -16,6 +16,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow-y:
 @import 'assets/styles/colors.scss';
 @import 'assets/styles/form-data.scss';
 @import 'assets/styles/table.scss';
+@import 'assets/styles/page.scss';
 
 *:focus {
     outline: none;
@@ -228,7 +229,7 @@ button:focus, .mat-icon-button:focus, .mat-raised-button:focus, .mat-button:focu
     outline: none !important;
 }
 
-  .cdk-overlay-pane, .mat-dialog-title, 
+.cdk-overlay-pane, .mat-dialog-title, 
 mat-card, 
 mat-form-field, 
 mat-label, 
