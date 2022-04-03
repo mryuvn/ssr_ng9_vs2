@@ -1,0 +1,11 @@
+.action-button {
+    .mat-button {
+        position: relative;
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        place-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+}

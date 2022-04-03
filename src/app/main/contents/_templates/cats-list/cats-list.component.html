@@ -1,0 +1,13 @@
+<div *ngIf="dataSource" class="cats-list {{className}}">
+    <!-- <em>{{className}}</em> -->
+    <ng-container *ngIf="type==='menu'">
+        <ng-container *ngFor="let cat of dataSource">
+            <h4 class="cat-name">{{cat.nameValue}}</h4>
+            <app-products-list [dataSource]="cat.posts" [config]="config.postStyles" [activeID]="activeID"></app-products-list>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="type==='product'">
+        <app-products-list [dataSource]="dataSource" [config]="config.postStyles"></app-products-list>
+    </ng-container>
+</div>

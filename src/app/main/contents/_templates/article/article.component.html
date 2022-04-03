@@ -1,0 +1,12 @@
+<article [style.color]="article.config.cover.color ? article.config.cover.color.rgba : ''">
+    <div *ngIf="article.mainCover" class="cover-image">
+        <img [src]="article.mainCover" [alt]="article.name" class="cover-img">
+    </div>
+
+    <app-cover-data [data]="article" [coverConfig]="article.config.cover"></app-cover-data>
+
+    <div *ngIf="dataSource" 
+        class="content posts" [class.container]="article.config.cover.container">
+        <app-products-list [dataSource]="dataSource" [config]="article.config.postStyles"></app-products-list>
+    </div>
+</article>

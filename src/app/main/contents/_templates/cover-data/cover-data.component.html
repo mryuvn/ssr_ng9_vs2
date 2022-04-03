@@ -1,0 +1,38 @@
+<div *ngIf="coverConfig && data" class="cover-data">
+    <div class="bg" 
+        [style.backgroundColor]="coverConfig.bgColor ? coverConfig.bgColor.rgba : 'none'" 
+        [style.opacity]="coverConfig.bgOpacity ? (coverConfig.bgOpacity/100) : 0"></div>
+
+    <div class="cover-container" [class.container]="coverConfig.container">
+        <div class="cover-content {{coverConfig.avatarPosition}} horizontal-{{coverConfig.horizontalAlign}} vertical-{{coverConfig.verticalAlign}}" [ngStyle]="coverConfig.contentStyles">
+            <div class="data text-{{coverConfig.textAlign ? coverConfig.textAlign : 'left'}}" [ngStyle]="coverConfig.dataStyles">
+                <h2 *ngIf="coverConfig.title?.enable" 
+                    class="title {{coverConfig.title?.colorClass}}" [ngStyle]="coverConfig.title?.styles">
+                    <span *ngIf="title" [innerHtml]="title | safeHtml" class="txt"></span>
+                    <span *ngIf="!title" [innerHtml]="data.name | safeHtml" class="txt"></span>
+                </h2>
+    
+                <span *ngIf="coverConfig.caption?.enable && data.caption" 
+                    class="caption {{coverConfig.caption?.colorClass}}" [ngStyle]="coverConfig.caption?.styles">
+                    <span *ngIf="caption" [innerHtml]="caption | safeHtml" class="txt"></span>
+                    <span *ngIf="!caption" [innerHtml]="data.caption | safeHtml" class="txt"></span>
+                </span>
+        
+                <ng-container *ngIf="data.contentData.actButton">
+                    <app-button-template *ngIf="data.contentData.actButton.enable && coverConfig.button?.enable" 
+                        [data]="data.contentData.actButton" 
+                        [styles]="coverConfig.button?.styles"></app-button-template>
+                </ng-container>
+            </div>
+
+            <div *ngIf="coverConfig.avatar?.enable" class="pictures" [ngStyle]="coverConfig.picturesStyles">
+                <app-avatar-template [ngStyle]="coverConfig.avatar?.styles" 
+                    [dataSource]="data.avatarImages" 
+                    [alt]="data.name"  
+                    [isBrowser]="isBrowser" 
+                    [heightStyles]="coverConfig.avatar?.heightStyles"
+                    [marginTop]="coverConfig.avatar?.marginTop"></app-avatar-template>
+            </div>
+        </div>
+    </div>
+</div>

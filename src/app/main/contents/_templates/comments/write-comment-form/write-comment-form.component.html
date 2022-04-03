@@ -1,0 +1,25 @@
+<div class="write-comment-form">
+    <div class="avatar">
+        <img [src]="userData.avatarUrl ? userData.avatarUrl : 'assets/imgs/profile.jpg'" alt="" width="100%">
+    </div>
+    
+    <form (ngSubmit)="submit()">
+        <mat-form-field [appearance]="config?.appearance" [floatLabel]="config?.floatLabel" [class.empty]="!content">
+            <textarea [(ngModel)]="content" name="content" matInput [placeholder]="langContent?.writeComment?.placeholder" autosize></textarea>
+        </mat-form-field>
+    
+        <div class="buttons">
+            <div class="tools">
+                <a mat-icon-button [matTooltip]="langContent?.writeComment?.upload?.tooltip" matTooltipPosition="above"><i class="fas fa-photo-video"></i></a>
+                <a mat-icon-button [matTooltip]="langContent?.writeComment?.link?.tooltip" matTooltipPosition="above"><i class="fas fa-link"></i></a>
+            </div>
+
+            <div class="submit">
+                <button mat-button [disabled]="!content" [ngStyle]="config?.submit?.styles">
+                    <span *ngIf="config?.submit?.icon" class="icon" [innerHtml]="config?.submit?.icon | safeHtml"></span>
+                    <span class="txt" *ngIf="!config?.submit?.iconOnly">{{langContent?.writeComment?.send}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

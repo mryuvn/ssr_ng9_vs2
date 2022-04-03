@@ -1,4 +1,4 @@
-<ul class="menu on-{{position}}">
+<ul class="menu on-{{position}}" [class.navIsFixed]="navIsFixed">
     <ng-container *ngFor="let menu of menuData">
         <li>
             <span class="menu-item">
@@ -9,9 +9,13 @@
                 <a *ngIf="menu.destination.type==='href'" [href]="menu.destination.value" target="_blank">
                     <span class="txt">{{menu.title}}</span>
                 </a>
+
+                <a *ngIf="menu.destination.type==='scrollTo'" (click)="scrollTo(menu.destination.value)">
+                    <span class="txt">{{menu.title}}</span>
+                </a>
             </span>
 
-            <ul class="childs">
+            <ul *ngIf="menu.childs.length>0" class="childs">
                 <ng-container *ngFor="let child of menu.childs">
                     <li class="menu-child">
                         <a *ngIf="child.destination.type==='route'" [routerLink]="child.destination.value">
@@ -19,6 +23,10 @@
                         </a>
 
                         <a *ngIf="child.destination.type==='href'" [href]="child.destination.value" target="_blank">
+                            <span class="txt">{{child.title}}</span>
+                        </a>
+
+                        <a *ngIf="child.destination.type==='scrollTo'" (click)="scrollTo(child.destination.value)">
                             <span class="txt">{{child.title}}</span>
                         </a>
                     </li>

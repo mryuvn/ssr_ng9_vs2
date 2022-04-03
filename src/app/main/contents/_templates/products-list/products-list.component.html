@@ -1,0 +1,9 @@
+<div class="products-list" [ngStyle]="config.mainStyles">
+    <div class="row" [ngStyle]="config.rowStyles">
+        <ng-container *ngFor="let item of DATA">
+            <div *ngIf="!item.id || item.id!==postID" class="{{config.dataCols}}" [ngStyle]="config.colStyles">
+                <app-product-item [data]="item" [config]="config" [isBrowser]="isBrowser" [activeID]="activeID"></app-product-item>
+            </div>
+        </ng-container>
+    </div>
+</div>

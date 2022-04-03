@@ -11,9 +11,11 @@ import 'rxjs/add/operator/toPromise';
 })
 export class AppService {
 
-  public domain = 'ssr-ng9.vfl-admin.com';
-  public siteName = 'NG9 SSR WEB DEMO';
-  public webAvatar: string = 'assets/imgs/web_avatar.jpg';
+  public domain: string;
+  public hostname: string;
+
+  public siteName = '';
+  public webAvatar: string = 'assets/imgs/logo/web_avatar.jpg';
 
   public api = {
     password: '32727a5ebaac9326f075f6804c0733e3',
@@ -27,6 +29,8 @@ export class AppService {
     edit: '/edit-data',
     delete: '/delete-data'
   }
+  
+  public uploadPath: string = 'wp';
 
   public vflApi = {
     server: 'https://api.vfl-admin.com',
@@ -35,8 +39,23 @@ export class AppService {
   public publicApi!: string;
 
   public tables = {
-    categories: 'posts_cats'
+    categories: 'categories',
+    posts: {
+      manager: 'manager',
+      list: 'list'
+    },
+    forms: 'forms',
+    adsBanners: 'ads_banners'
   }
+
+  public postAlias = {
+    general: 'general',
+    post: 'post',
+    article: 'article'
+  }
+  
+  public userData: any = {};
+  public userAgent: any;
 
   public domainData: any;
 
@@ -85,14 +104,26 @@ export class AppService {
   ) {
     this.isServer = isPlatformServer(this.platformId);
     this.isBrowser = isPlatformBrowser(this.platformId);
-    const domain = this.isServer ? this.request.hostname :  document.location.hostname;
-    if (domain !== 'localhost') {
-      this.domain = domain;
+    this.hostname = this.isServer ? this.request.hostname :  document.location.hostname;
+    if (this.hostname !== 'localhost') {
+      this.domain = this.hostname;
       this.api.base = this.api.server;
       this.publicApi = this.vflApi.server;
     } else {
+      this.getDomainName();
       this.api.base = this.api.local;
       this.publicApi = this.vflApi.local;
+    }
+    this.api.filesStorage = this.api.base + '/uploads';
+  }
+
+  getDomainName() {
+    if (typeof (Storage) !== "undefined") {
+      this.domain = localStorage.getItem("domain");
+      if (!this.domain) {
+        this.domain = 'ssr-ng9.vfl-admin.com';
+        localStorage.setItem("domain", this.domain);
+      };
     }
   }
 
@@ -117,14 +148,8 @@ export class AppService {
     return this.http.get<any>(url);
   }
 
-  getLanguages() {
-    const url = this.publicApi + '/locations/get-languages';
-    return this.http.get<any>(url).toPromise().then(res => {
-      if (res.data) {
-        this.languages = res.data;
-      }
-      return res;
-    }).catch(err => err);
+  getPostsTable(catData: any, type: string) {
+    return catData.table_name + type;
   }
 
   getSqlData(queryData: any) {
@@ -142,15 +167,82 @@ export class AppService {
     return this.http.get<any>(url);
   }
 
-  getErr(err: any, funtion: string, component: string) {
+  addSqlData(postData: any) {
+    const data = {
+      api_key: this.api.password,
+      domain: this.domain,
+      table: postData.table,
+      fields: postData.fields,
+      options: postData.options
+    }
+    const url = this.api.base + this.api.apiRoute + this.api.add;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' });
+    let body = new URLSearchParams();
+    body.set('data', JSON.stringify(data));
+    return this.http.post<any>(url, body.toString(), { headers: headers });
+  }
+
+  getLanguages() {
+    const url = this.publicApi + '/locations/get-languages';
+    return this.http.get<any>(url).toPromise().then(res => {
+      if (res.data) {
+        this.languages = res.data;
+      }
+      return res;
+    }).catch(err => err);
+  }
+
+  getLocations(lang: string) {
+    let query = lang ? ('?lang=' + lang) : '';
+    const url = this.publicApi + '/locations' + query;
+    return this.http.get<any>(url);
+  }
+
+  getCurrencies() {
+    const url = this.api.base + '/currency/get-data';
+    return this.http.get<any>(url);
+  }
+
+  getAnyApi(apiUrl: string) {
+    return this.http.get<any>(apiUrl);
+  }
+
+  sendMail(mailData: any) {
+    const url = this.publicApi + '/nodemailer/send-mail';
+    const headers = new HttpHeaders({ 'Accept': 'application/json', });
+    const params = new HttpParams().set('data', JSON.stringify(mailData));
+    return this.http.post<any>(url, null, { headers: headers, params: params });
+  }
+
+  logErr(err: any, funtion: string, component: string) {
     const data = {
       err: err,
       time: new Date(),
       note: 'Error on ' + funtion + ' of ' + component
     }
-    return data;
+    console.log(data);
   }
 
+  sortArray(array: any[], sortBy?: string) {
+    if (sortBy === undefined) { sortBy = 'sortNum' };
+    const compare = (a: any, b: any) => {
+      if (sortBy === 'sortNum') {
+        var A = a.sortNum;
+        var B = b.sortNum;
+      } else {
+        var A = a.id;
+        var B = b.id;
+      }
+      let comparison = 0;
+      if (A > B) {
+        comparison = 1;
+      } else if (A < B) {
+        comparison = -1;
+      }
+      return comparison;
+    }
+    return array.sort(compare);
+  }
 
   isJSON(value: any) {
     if (typeof value === 'string') {
@@ -240,5 +332,16 @@ export class AppService {
     return '';
   }
 
+  getFileSrc(data: any) {
+    if (data) {
+      if (data.type === 'file') {
+        return this.api.filesStorage + '/' + this.uploadPath + '/' + data.value;
+      } else if (data.type === 'href' || data.type === 'iframe') {
+        return data.value;
+      } else {
+        return null;
+      }
+    } return null;
+  }
 
 }

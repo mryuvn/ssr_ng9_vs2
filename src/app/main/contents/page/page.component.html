@@ -1,22 +1,163 @@
 <div id="page-layout" [class.loaded]="routerLoaded">
-    <div class="page-cover">
+    <div class="page-cover" [style.color]="coverConfig.color ? coverConfig.color.rgba : ''">
+        <div class="cover-image">
+            <img [src]="mainCover" [alt]="data.name" class="cover-img">
+        </div>
 
+        <ng-container *ngIf="data.coverImages">
+            <ng-container *ngIf="coverConfig.animation">
+                <div *ngIf="data.coverImages.length>1" class="slider">
+                    <ng-container *ngIf="coverConfig.loadingData">
+                        <img src="assets/imgs/loading_nice.gif" alt="" width="100" class="loading-cover">
+                    </ng-container>
+    
+                    <ng-container *ngIf="coverConfig.loadingData===false">
+                        <mdb-carousel [class]="coverConfig.animation ? 'carousel slide carousel-fade' : ''" 
+                            [animation]="coverConfig.animation" [class.show]="routerLoaded">
+                            <ng-container *ngFor="let item of data.coverImages">
+                                <mdb-carousel-item>
+                                    <div class="view w-100">
+                                        <img class="d-block w-100 cover-img" [src]="item.src" [alt]="item.title">
+                                    </div>
+                                  
+                                    <ng-container *ngIf="!coverConfig.imageOnly">
+                                        <app-cover-data [title]="pageTitle" [caption]="pageCaption" [data]="data" [coverConfig]="coverConfig"></app-cover-data>
+                                    </ng-container>
+                                </mdb-carousel-item>
+                            </ng-container>
+                        </mdb-carousel>
+                    </ng-container>
+                </div>
+            </ng-container>
+    
+            <ng-container *ngIf="coverConfig.imageOnly || data.coverImages.length<2">
+                <app-cover-data [title]="pageTitle" [caption]="pageCaption" [data]="data" [coverConfig]="coverConfig"></app-cover-data>
+            </ng-container>
+        </ng-container>
     </div>
 
-    <div class="page-content">
-        <div class="container">
-            <h2>{{moduleData.nameValue}}</h2>
+    <div *ngIf="data.mess" class="error-message"><em>{{data.mess}}</em></div>
+
+    <ng-container *ngIf="data.cat!=='home_page'">
+        <div class="page-content" [class.hidden]="data.mess" [ngStyle]="contentConfig?.styles">
+            <div class="page-container" [class.container]="contentConfig?.container">
+                <div class="row sidebar-{{contentConfig?.sidebar}}">
+                    <div class="content {{contentConfig?.contentCol}}">
+                        <div class="content-data {{FAQs.length>0 ? 'faqs-'+contentConfig?.faqs?.position : ''}}">
+                            <div class="page-data">
+                                <ng-container *ngIf="routerLoaded && data.avatarImages">
+                                    <div *ngIf="data.avatarImages.length>0" class="product-images float-{{contentConfig?.avatar?.position}}" 
+                                        [ngStyle]="contentConfig?.avatar?.pictureStyles">
+                                        <app-avatar-template [ngStyle]="contentConfig?.avatar?.styles" 
+                                            [dataSource]="data.avatarImages" 
+                                            [alt]="data.name"  
+                                            [isBrowser]="isBrowser" 
+                                            [heightStyles]="contentConfig?.avatar?.heightStyles" 
+                                            [circle]="contentConfig?.avatar?.circle"></app-avatar-template>
+                                    </div>
+                                </ng-container>
         
-            <div *ngIf="data.mess" class="message"><em>{{data.mess}}</em></div>
+                                <h2 *ngIf="data.name!==pageTitle" [innerHtml]="data.name | safeHtml"></h2>
+                                <p *ngIf="data.caption && data.caption!==pageCaption" [innerHtml]="data.caption | safeHtml"></p>
         
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam illo provident sint nulla ut consequuntur id natus quisquam quos illum reprehenderit exercitationem voluptate impedit, sunt et architecto magnam maiores necessitatibus.</p>
+                                <ng-container *ngFor="let content of data.contents">
+                                    <h2 *ngIf="content.title!==data.name" [innerHtml]="content.title | safeHtml"></h2>
+                                    <p *ngIf="content.caption" class="caption" [innerHtml]="content.caption | safeHtml"></p>
+                
+                                    <div *ngIf="content.content" class="text" [innerHtml]="content.content | safeHtml"></div>
+                                </ng-container>
+                            </div>
+
+                            <div *ngIf="contentConfig?.faqs?.position && contentConfig?.faqs?.position!=='none' && FAQs.length>0" class="page-faqs">
+                                <app-faqs [dataSource]="FAQs" [langContent]="langContent.faqs"></app-faqs>
+                            </div>
+                        </div>
+
+                        <ng-container *ngIf="routerLoaded">
+                            <div *ngIf="childCats.length>0 && childCatStyles.position==='afterContent'" class="child-cats">
+                                <h4 *ngIf="contentData.childCatsTitle" [ngStyle]="contentData.childCats.styles">{{contentData.childCatsTitle}}</h4>
+                                <app-cats-list [catArr]="childCats" [config]="childCatStyles" 
+                                    className="child-cats-list after-content"></app-cats-list>
+                            </div>
+
+                            <div *ngIf="data.id" class="page-comments">
+                                <h4 class="title">{{langContent.pageComments.title}}</h4>
+                                <app-comments [lang]="lang" [pageData]="data"></app-comments>
+                            </div>
+
+                            <div *ngIf="posts.length>0 && postStyles.position==='afterContent'" class="posts">
+                                <h4 *ngIf="contentData.samePostsTitle" [ngStyle]="contentData.samePosts.styles">{{contentData.samePostsTitle}}</h4>
+                                <app-products-list [dataSource]="posts" [config]="postStyles" [postID]="data.id"></app-products-list>
+                            </div>
+
+                            <div *ngIf="sameCats.length>0 && sameCatStyles.position==='afterContent'" class="same-cats">
+                                <h4 *ngIf="contentData.sameCatsTitle" [ngStyle]="contentData.sameCats.styles">{{contentData.sameCatsTitle}}</h4>
+                                <app-cats-list [catArr]="sameCats" [config]="sameCatStyles" 
+                                    className="same-cats-list after-content"></app-cats-list>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div *ngIf="contentConfig?.sidebar!=='none'" class="sidebar {{contentConfig?.sidebarCols}}">
+                        <ng-container *ngIf="routerLoaded">
+                            <ng-container *ngIf="posts.length>0 && postStyles.position==='onSidebar'">
+                                <div class="posts">
+                                    <h4 class="cat-name">{{moduleData.nameValue}}</h4>
+                                    <app-products-list [dataSource]="posts" [config]="postStyles" [activeID]="data.id"></app-products-list>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="parentCatPosts.length>0">
+                                <app-cats-list [catArr]="parentCatPosts" [config]="parentCatPostsStypes" 
+                                    className="parent-cats-posts-list on-sidebar"></app-cats-list>
+                            </ng-container>
+    
+                            <div *ngIf="childCats.length>0 && childCatStyles.position==='onSidebar'" class="child-cats">
+                                <app-cats-list [catArr]="childCats" [config]="childCatStyles" 
+                                    className="child-cats-list on-sidebar"></app-cats-list>
+                            </div>
+    
+                            <div *ngIf="sameCats.length>0 && sameCatStyles.position==='onSidebar'" class="same-cats">
+                                <app-cats-list [catArr]="sameCats" [config]="sameCatStyles" 
+                                    [activeID]="data.id" className="same-cats-list on-sidebar"></app-cats-list>
+                            </div>
+
+                            <ng-container *ngIf="moduleConfig.sidebar">
+                                <div *ngIf="moduleConfig.sidebar.forms" class="contact-form">
+                                    <ng-container *ngFor="let form of moduleConfig.sidebar.forms">
+                                        <app-form-data [lang]="lang" [formID]="form" [title]="true"></app-form-data>
+                                    </ng-container>
+                                </div>
+        
+                                <div *ngIf="moduleConfig.sidebar.banners" class="banners">
+                                    <app-ads-banners [enables]="moduleConfig.sidebar.banners" [config]="null"></app-ads-banners>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
         </div>
+    </ng-container>
+
+    <ng-container *ngIf="!data.mess">
+        <ng-container *ngFor="let article of articles">
+            <app-article [id]="article.elementID" [article]="article"></app-article>
+        </ng-container>
+    </ng-container>
+
+    <div id="contact">
+        <ng-container *ngIf="moduleData.id">
+            <app-contact [lang]="lang" [siteValues]="siteValues"></app-contact>
+        </ng-container>
     </div>
 </div>
 
 <div *ngIf="routerLoading" class="router-loading">
     <img src="assets/imgs/loading_nice.gif" alt="" width="200" class="loading-icon">
 </div>
+
+<ng-container *ngIf="hostname==='localhost' && isBrowser">
+    <a mat-fab class="change-domain" (click)="webDomains.getData()"><mat-icon>http</mat-icon></a>
+    <app-web-domains #webDomains></app-web-domains>
+</ng-container>

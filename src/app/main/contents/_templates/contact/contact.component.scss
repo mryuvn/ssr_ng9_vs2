@@ -1,0 +1,52 @@
+.contact-us {
+    .contacts-info {
+        a {
+            color: inherit;
+        }
+
+        .socials {
+            .mat-button {
+                background: var(--warnColor);
+                color: var(--accentColor);
+                min-width: auto;
+                width: 40px;
+                height: 40px;
+                margin-right: .5rem;
+            }
+        }
+    }
+
+    .content {
+        .data-col {
+            flex-direction: column;
+            display: flex;
+            // place-content: center;
+            margin-bottom: 2rem;
+        }
+    }
+
+    .map {
+        background: #fff;
+        height: 200px;
+        max-width: 350px;
+        padding: 3px;
+        margin-top: 1.5rem;
+        box-shadow: 0 2px 5px -3px #000;
+
+        iframe {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    }
+
+    .form-data {
+        background-color: rgba($color: #ffffff, $alpha: 0.1);
+        padding: 1rem 1.5rem 1.5rem;
+        border-radius: 7px;
+
+        span.label {
+            display: block;
+            margin-bottom: .5rem
+        }
+    }
+}

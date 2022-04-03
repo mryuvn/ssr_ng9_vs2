@@ -64,8 +64,6 @@
         width: 100%;
         font-size: 90%;
 
-        
-
         .data-length {
             position: absolute;
             right: 1.3rem;
@@ -76,11 +74,8 @@
         .mat-error {
             font-size: 12px;
             display: block;
-            margin-top: 1rem;
-            background: #fff;
-            box-shadow: 0 1px 2px -1px #000;
-            padding: 5px 9px;
-            margin-left: -9px;
+            margin-top: 15px;
+            margin-left: -10px;
             margin-right: -10px;
         }
 
@@ -91,9 +86,16 @@
         }
     }
 
-    .mat-form-field-appearance-outline .mat-form-field-infix {
-        padding: .7em 0 1em 0 !important;
-        height: 56px !important;
+    mat-form-field.with-prefix-icon {
+        .mat-form-field-infix {
+            padding-left: 27px;
+        }
+    }
+
+    .mat-form-field-appearance-outline:not(.textarea) .mat-form-field-infix {
+        padding-top: .7em;
+        padding-bottom: 1em;
+        height: 56px;
     }
 
     .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
@@ -105,6 +107,14 @@
             position: absolute;
             right: 25px;
             bottom: 29px;
+            top: unset;
+
+        }
+        .mat-form-field-appearance-outline {
+            .mat-form-field-suffix {
+                right: 35px;
+                bottom: 17px;
+            }
         }
     }
 
@@ -146,7 +156,8 @@
         right: 0;
 
         .mat-raised-button, .mat-button {
-            height: 57px;
+            height: 52px;
+            min-width: auto;
 
             .mat-button-wrapper {
                 flex-direction: row;

@@ -1,0 +1,227 @@
+.web-comments {
+    .avatar {
+        overflow: hidden;
+        border-radius: 50%;
+    }
+
+    .write-comment {
+        .write-comment-form {
+            background-color: var(--whiteColor);
+            padding-left: 70px;
+            padding-top: 1rem;
+            padding-right: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 7px -5px rgba($color: #000000, $alpha: 1.0);
+        
+            .avatar {
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .buttons {
+                height: 60px;
+                margin-top: -10px;
+    
+                .tools {
+                    float: left;
+                    margin-left: -10px;
+                }
+        
+                .submit {
+                    float: right;
+                }
+            }
+        }
+    }
+
+    .comments-list {
+        .cm-item {
+            background-color: var(--whiteColor);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 7px -5px rgba($color: #000000, $alpha: 1.0);
+
+            .cm-head {
+                position: relative;
+                flex-direction: column;
+                display: flex;
+                place-content: center;
+
+                .user-data {
+                    flex-direction: column;
+                    display: flex;
+                    place-content: center;
+                    padding-left: 50px;
+    
+                    .avatar {
+                        position: absolute;
+                        left: 0;
+                    }
+    
+                    .user-name {
+                        font-weight: 400;
+                        font-size: 90%;
+                    }
+    
+                    .time {
+                        font-size: 12px;
+                        opacity: .7
+                    }
+                }
+    
+                .cm-user {
+                    .avatar {
+                        width: 40px;
+                        height: 40px;
+                    }
+                }
+
+                .cm-tools {
+                    position: absolute;
+                    right: -1rem;
+                }
+            }
+
+            .cm-content {
+                font-size: 14px;
+                margin-top: .5rem;
+                padding-left: 50px;
+            }
+
+            .txt {
+                white-space: pre-wrap;
+
+                a:hover {
+                    color: var(--warnColor);
+                }
+
+                .read-more {
+                    margin-left: 0.5rem;
+
+                    a {
+                        white-space: nowrap;
+
+                        i {
+                            font-size: 90%;
+                            margin-right: -3px;
+                        }
+                    }
+                }
+            }
+
+            .btns {
+                flex-direction: row;
+                display: flex;
+
+                .fellings {
+                    position: relative;
+
+                    .emojis {
+                        position: absolute;
+                        left: 0;
+                        bottom: 24px;
+                        display: flex;
+                        background-color: var(--whiteColor);
+                        border-radius: 4px;
+                        box-shadow: 0 2px 3px -2px rgba(0,0,0,0.5);
+                        padding: 1px 7px;
+                        visibility: hidden;
+                        opacity: 0;
+
+                        .mat-icon-button {
+                            i {
+                                font-size: 22px;
+                            }
+                        }
+                        .mat-icon-button:hover {
+                            color: var(--warnColor)
+                        }
+                    }
+                    .emojis.open {
+                        visibility: visible;
+                        opacity: 1;
+                        bottom: 34px;
+                    }
+                }
+
+                .btn-item {
+                    display: flex;
+                    margin-right: 1rem;
+                    height: 34px;
+                    flex-direction: row;
+                    align-items: flex-end;
+
+                    i {
+                        font-size: 20px;
+                        margin-right: 3px;
+                        margin-bottom: 3px;
+                    }
+                }
+
+                .btn-item:hover, .btn-item.active {
+                    color: var(--warnColor) !important;
+                }
+            }
+
+            .replies {
+                padding-left: 50px;
+                margin-top: 1rem;
+
+                .avatar {
+                    width: 30px;
+                    height: 30px;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+
+                .write-comment-form {
+                    padding-left: 40px;
+
+                    .mat-form-field-infix {
+                        margin-bottom: 26px;
+                        padding-top: 3px;
+                        padding-bottom: 10px;
+                    }
+
+                    mat-form-field.empty {
+                        // .mat-form-field-infix {
+                        //     padding-top: 3px;
+                        //     padding-bottom: 10px;
+                        // }
+
+                        textarea {
+                            height: 20px !important;
+                        }
+                    }
+
+                    .buttons {
+                        position: absolute;
+                        right: 0;
+                        bottom: 24px;
+                        display: flex;
+                        flex-direction: row;
+                        place-content: flex-end;
+
+                        .submit {
+                            .mat-button {
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 50%;
+                                color: var(--accentColor) !important;
+                                background-color: initial !important;
+
+                                .txt {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

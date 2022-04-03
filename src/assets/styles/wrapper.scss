@@ -1,11 +1,39 @@
+#preloading {
+    position: fixed;
+    background-color: white;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+    place-content: center;
+    align-items: center;
+    z-index: 1;
+
+    img {
+        position: absolute;
+    }
+
+    .logo {
+        z-index: 2;
+    }
+
+    .loading-icon {
+        z-index: 1;
+        opacity: .1;
+        max-width: 80%;
+    }
+}
+
 #wrapper {
     position: relative;
     background-color: white;
     font-family: var(--fontFamily);
     font-size: var(--fontSize);
     font-weight: var(--fontWeight);
-    z-index: 1;
     opacity: 0;
+    z-index: 0;
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
@@ -37,9 +65,72 @@
     .wrapper-content {
         position: relative;
         z-index: 1;
+
+        app-toolbar {
+            position: relative;
+            z-index: 99;
+        }
+
+        .toolbar {
+            margin-top: -200px;
+        }
+    }
+
+    .scroll-top {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        flex-direction: row;
+        display: flex;
+        place-content: center;
+        height: 0;
+        align-items: flex-start;
+        z-index: 10;
+
+        .mat-button {
+            position: relative;
+            color: #fff;
+            min-width: auto;
+            width: 40px;
+            height: 34px;
+
+            .mat-button-wrapper {
+                position: relative;
+            }
+        }
+        .mat-button:before {
+            position: absolute;
+            background-color: var(--accentColor);
+            content: '';
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            opacity: .3;
+        }
+        .mat-button:hover {
+            color: #fff;
+        }
+        .mat-button:hover:before {
+            opacity: .7;
+        }
     }
 }
 
 #wrapper.loaded {
+    z-index: 2;
     opacity: 1;
+
+    .toolbar {
+        margin-top: 0;
+    }
+}
+
+#wrapper.navIsFixed {
+    .scroll-top {
+        .mat-button {
+            margin-top: -40px;
+        }
+    }
 }

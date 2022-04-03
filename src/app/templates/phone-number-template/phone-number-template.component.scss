@@ -1,0 +1,41 @@
+.phone-number-template {
+    position: relative;
+
+    .code {
+        position: absolute;
+        left: 0;
+
+        input {
+            position: relative;
+            width: 50px;
+            z-index: 99;
+        }
+
+        .mat-form-field-prefix {
+            top: .25em;
+
+            .mat-prefix {
+                position: relative;
+                width: 20px;
+                display: flex;
+                height: 100%;
+                margin-right: 5px;
+    
+                .flag-icon {
+                    position: absolute;
+                    top: -20px;
+                }
+            }
+        }
+
+        .mat-form-field-outline, .mat-form-field-outline-thick {
+            opacity: 0 !important;
+        }
+    }
+
+    .number {
+        input {
+            padding-left: 80px;
+        }
+    }
+}

@@ -11,9 +11,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   @Input() position: string;
-
-  siteValues: any = {};
-  menuData: any = [];
+  @Input() navIsFixed: boolean;
+  @Input() siteValues: any = {};
+  @Input() menuData: any = [];
+  @Input() isBrowser!: boolean;
 
   constructor(
     private messageService: MessageService
@@ -27,6 +28,13 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  scrollTo(ID: string) {
+    if (this.isBrowser) {
+      const el = document.getElementById(ID);
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   ngOnDestroy(): void {

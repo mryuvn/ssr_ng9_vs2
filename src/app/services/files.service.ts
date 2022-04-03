@@ -224,6 +224,24 @@ export class FilesService {
     }
   }
 
+  public checkImage(image: any) {
+    if (image) {
+      const img = new Image();
+      if (image.src) {
+        img.src = image.src;
+        img.onload = () => {
+          if (img.naturalWidth > img.naturalHeight) {
+            image.landscape = true;
+          } else {
+            image.landscape = false;
+          }
+    
+          image.viewImage = true;
+        }
+      }
+    }
+  }
+
   public uploadFile(file: File, options: any) {
     var formData = new FormData();
     formData.append('file', file);

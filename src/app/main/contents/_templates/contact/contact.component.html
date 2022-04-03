@@ -1,0 +1,57 @@
+<article *ngIf="data && siteValues" class="contact-us" [style.color]="coverConfig.color ? coverConfig.color.rgba : ''">
+    <div *ngIf="data.mainCover" class="cover-image">
+        <img [src]="data.mainCover" [alt]="data.name" class="cover-img">
+    </div>
+
+    <app-cover-data [data]="data" [coverConfig]="coverConfig"></app-cover-data>
+
+    <div class="content" [class.container]="contentConfig.container" [style.padding-bottom]="contentConfig.paddingBottom">
+        <div class="row">
+            <div class="col-lg-6 info data-col">
+                <h4 class="name">{{siteValues.name}}</h4>
+
+                <ul class="contacts-info">
+                    <li *ngIf="siteValues.address" class="contact-item">
+                        <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                        <span class="values">
+                            <a [href]="siteValues.mapLink" target="_blank">{{siteValues.address}}</a>
+                        </span>
+                    </li>
+    
+                    <li *ngIf="siteValues.tels.length>0" class="contact-item">
+                        <span class="icon"><i class="fas fa-phone-alt"></i></span>
+                        <span class="values">
+                            <ng-container *ngFor="let item of siteValues.tels">
+                                <a [href]="'tel:'+item.value">{{item.viewValue}}</a>
+                            </ng-container>
+                        </span>
+                    </li>
+    
+                    <li *ngIf="siteValues.emails.length>0" class="contact-item">
+                        <span class="icon"><i class="fas fa-envelope"></i></span>
+                        <span class="values">
+                            <ng-container *ngFor="let item of siteValues.emails">
+                                <a [href]="'mailto:'+item.mail">{{item.mail}}</a>
+                            </ng-container>
+                        </span>
+                    </li>
+    
+                    <!-- <li *ngIf="siteValues.socials.length>0" class="contact-item socials">
+                        <ng-container *ngFor="let item of siteValues.socials">
+                            <a mat-button class="social-item" [href]="item.href" [target]="item.target">
+                                <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
+                                <img *ngIf="item.imgIcon && !item.faIcon" [src]="'assets/imgs/icons/'+item.imgIcon" alt="" width="18">
+                            </a>
+                        </ng-container>
+                    </li> -->
+                </ul>
+
+                <div *ngIf="siteValues.mapCode" class="map" [innerHtml]="siteValues.mapCode | safeHtml"></div>
+            </div>
+    
+            <div class="col-lg-6 form data-col">
+                <app-form-data [lang]="lang" [formID]="1"></app-form-data>
+            </div>
+        </div>
+    </div>
+</article>

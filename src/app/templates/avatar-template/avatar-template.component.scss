@@ -1,0 +1,53 @@
+.avatar-template {
+    position: relative;
+    width: 100%;
+    height: 0;
+    flex-direction: column;
+    display: flex;
+    place-content: center;
+    overflow: hidden;
+
+    .image-item {
+        .image, .no-image {
+            position: absolute;
+            top: 0;
+        }
+        .image:not(.landscape) {
+            width: 100%;
+        }
+          
+        .image.landscape {
+            height: 100%;
+        }
+
+        .iframe {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+
+            iframe {
+                height: 100% !important;
+                width: 100% !important;
+            }
+        }
+    }
+
+    .image-item:not(.iframe) {
+        position: absolute;
+        width: 100%;
+        padding-top: 100%;
+        top: 0;
+        flex-direction: column;
+        display: flex;
+        place-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+}
+
+.avatar-template.circle {
+    .main-image {
+        border-radius: 50%;
+    }
+}

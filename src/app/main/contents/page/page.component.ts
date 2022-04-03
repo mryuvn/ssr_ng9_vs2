@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy, ViewEncapsulation, HostListener } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute, RoutesRecognized } from '@angular/router';
-import { DOCUMENT } from '@angular/common';
 import { Subscription, of } from 'rxjs';
 
 import { SetTagsService } from 'src/app/services/set-tags.service';
@@ -9,6 +9,8 @@ import { MessageService } from 'src/app/services/message.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { PageService } from './page.service';
+import { LayoutService } from 'src/app/services/layout.service';
+import { FilesService } from 'src/app/services/files.service';
 
 @Component({
   selector: 'app-page',
@@ -25,14 +27,25 @@ export class PageComponent implements OnInit, OnDestroy {
   params: any = {};
 
   lang: string;
-  
   langData: any = {};
   langsData: any = [
     {
       lang: 'vi',
+      pageComments: {
+        title: 'Bình luận'
+      },
+      faqs: {
+        title: 'Câu hỏi thường gặp'
+      }
     },
     {
       lang: 'en',
+      pageComments: {
+        title: 'Comments'
+      },
+      faqs: {
+        title: 'Frequently asked questions'
+      }
     }
   ];
   langContent: any = {};
@@ -51,14 +64,37 @@ export class PageComponent implements OnInit, OnDestroy {
 
   moduleRoute: string;
   moduleData: any = {};
+  mainModule: any = {};
+  moduleConfig: any = {};
+  contentData: any = {};
 
-  parentCats: any = {};
+  parentCat: any = {};
   sameCats: any = [];
   childCats: any = [];
+  parentCatPosts: any = [];
 
-  POSTS: any = [];
+  alias = {
+    general: 'general',
+    article: 'article',
+    post: 'post'
+  }
+  dataSource: any = [];
+  
+  mainCover: string = 'assets/imgs/main_cover.jpg';
+  pageTitle!: string;
+  pageCaption!: string;
+  general: any = {};
   data: any = {};
+  posts: any = [];
   articles: any = [];
+  FAQs: any = [];
+
+  coverConfig: any = {};
+  contentConfig: any = {};
+  postStyles: any = {};
+  childCatStyles: any = {};
+  sameCatStyles: any = {};
+  parentCatPostsStypes: any = {};
 
   imageSource: any = [];
   isBrowser: boolean;
@@ -66,9 +102,12 @@ export class PageComponent implements OnInit, OnDestroy {
   routerLoading: boolean;
   routerLoaded: boolean;
 
+  hostname: string;
+
+  //Create component: npm run ng g c main/contents/page
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(DOCUMENT) private document: Document,
     private router: Router,
     private route: ActivatedRoute,
     private setTagsService: SetTagsService,
@@ -76,30 +115,33 @@ export class PageComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private messageService: MessageService,
     private socketioService: SocketioService,
-    private pageService: PageService
+    private pageService: PageService,
+    private layoutService: LayoutService,
+    private filesService: FilesService
   ) { 
     this.subscription = messageService.getMessage().subscribe(message => {
       if (message.text === messageService.messages.emitDataSearchResult) {
         this.data.mess = message.data.mess;
-        this.articles = message.data.articles;
+        this.posts = message.data.posts;
       }
 
       if (message.text === messageService.messages.changeLanguage) {
         const newLang = message.data;
         if (this.moduleData.id) {
           this.renderModuleData(this.moduleData, newLang);
-
-          let route = '/' + message.data;
+          let route = '/' + newLang;
           if (this.params.moduleRoute) {
             const moduleRoute = this.findModuleRoute(this.moduleData);
             if (moduleRoute) {
               route = route + '/' + moduleRoute;
               if (this.params.pageID && this.data.id) {
-                const data = this.POSTS.find((item: any) => item.managerID === this.data.managerID && item.lang === newLang);
+                const data = this.dataSource.find((item: any) => item.managerID === this.data.managerID && item.lang === newLang);
                 if (data) {
-                  const pageID = this.moduleData.config.getDataByPath ? data.path : data.id;
+                  const aliasData = this.moduleData.aliasData.find((item: any) => item.name === data.alias);
+                  const getDataBy = aliasData?.pageConfig?.getData?.where;
+                  const pageID = getDataBy==='path' ? data.path : data.id;
                   route = route + '/' + pageID;
-                  if (!this.moduleData.config.getDataByPath) {
+                  if (getDataBy !== 'path') {
                     const path = data.path ? data.path : appService.getLink(data.name);
                     route = route + '/' + path;
                   }
@@ -114,7 +156,9 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isBrowser = this.appService.isBrowser;
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.hostname = this.appService.hostname;
+
     this.params = this.route.snapshot.params;
     this.lang = this.route.snapshot.params.lang;
     this.appService.sitelang = this.lang;
@@ -132,10 +176,13 @@ export class PageComponent implements OnInit, OnDestroy {
         this.messageService.sendMessage(this.messageService.messages.routerLoading, this.routerLoading);
         this.routerLoaded = false;
 
-        
-            
         const params = val.state.root.firstChild?.firstChild?.params;
         if (params) {
+          this.posts = [];
+          this.childCats = [];
+          this.sameCats = [];
+          this.parentCatPosts = [];
+
           const noChangeModuleRoute = params.moduleRoute && this.params.moduleRoute || !params.moduleRoute && !this.params.moduleRoute;
           const noChangePageID = params.pageID && this.params.pageID || !params.pageID && !this.params.pageID;
           const noChangePath = params.path && this.params.path || !params.path && !this.params.path;
@@ -143,7 +190,12 @@ export class PageComponent implements OnInit, OnDestroy {
             this.params = params;
             if (params.moduleRoute === this.moduleRoute) {
               if (this.moduleData.id) {
-                this.getPageData();
+                // console.log('getPageData');
+                // this.getPageData();
+                this.renderData();
+                this.renderChildCats();
+                this.renderSameCats();
+                this.renderParentPosts();
               } else {
                 this.findModuleData();
               }
@@ -164,6 +216,15 @@ export class PageComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    if (this.isBrowser) {
+      this.socketioService.emit('client_emit', { message: 'hello' });
+
+      this.socket = this.socketioService.on('updateCatData').subscribe((data: any) => {
+        console.log(data);
+        
+      }, err => this.appService.logErr(err, 'Socket on updateCatData', 'PageComponent'));
+    }
   }
 
   getLangData() {
@@ -175,42 +236,47 @@ export class PageComponent implements OnInit, OnDestroy {
   setGlobalStyles() {
     if (this.isBrowser) {
       const layoutSettings = this.appService.domainData.layoutSettings;
-      
-      const colors = layoutSettings.colors;
+      const colors = layoutSettings?.colors;
+      if (colors) {
+        this.layoutService.globalColors = colors;
+        const findColor = (type: string) => {
+          return colors.find((item: any) => item.type === type);
+        }
+        
+        let primary = findColor('primary');
+        if (!primary) { primary = { hex: '#263238' } };
+        const primaryColor = primary.rgba ? primary.rgba : primary.hex;
+    
+        let accent = findColor('accent');
+        if (!accent) { accent = { hex: '#0288d1' } };
+        const accentColor = accent.rgba ? accent.rgba : accent.hex;
+    
+        let warn = findColor('warn');
+        if (!warn) { warn = { hex: '#c62828' } };
+        const warnColor = warn.rgba ? warn.rgba : warn.hex;
+    
+        let white = findColor('white');
+        if (!white) { white = { hex: '#e3f2fd' } };
+        const whiteColor = white.rgba ? white.rgba : white.hex;
+    
+        let background = findColor('background');
+        if (!background) { background = { hex: '#bbdefb' } };
+        const backgroundColor = background.rgba ? background.rgba : background.hex;
   
-      let primary = colors?.primary;
-      if (!primary) { primary = { hex: '#263238' } };
-      const primaryColor = primary.rgba ? primary.rgba : primary.hex;
+        let fontFamily = layoutSettings.fontFamily ? layoutSettings.fontFamily : 'Mitr';
+        let fontSize = layoutSettings.fontSize ? layoutSettings.fontSize : '16 px';
+        let fontWeight = layoutSettings.fontSize ? layoutSettings.fontSize : 300;
   
-      let accent = colors?.accent;
-      if (!accent) { accent = { hex: '#0288d1' } };
-      const accentColor = accent.rgba ? accent.rgba : accent.hex;
-  
-      let warn = colors?.warn;
-      if (!warn) { warn = { hex: '#c62828' } };
-      const warnColor = warn.rgba ? warn.rgba : warn.hex;
-  
-      let light = colors?.light;
-      if (!light) { light = { hex: '#e3f2fd' } };
-      const lightColor = light.rgba ? light.rgba : light.hex;
-  
-      let background = colors?.background;
-      if (!background) { background = { hex: '#bbdefb' } };
-      const backgroundColor = background.rgba ? background.rgba : background.hex;
-
-      let fontFamily = layoutSettings.fontFamily ? layoutSettings.fontFamily : 'Mitr';
-      let fontSize = layoutSettings.fontSize ? layoutSettings.fontSize : '16 px';
-      let fontWeight = layoutSettings.fontSize ? layoutSettings.fontSize : 300;
-
-      const wrapper = document.getElementById('wrapper') as HTMLElement;
-      wrapper?.style.setProperty('--primaryColor', primaryColor);
-      wrapper?.style.setProperty('--accentColor', accentColor);
-      wrapper?.style.setProperty('--warnColor', warnColor);
-      wrapper?.style.setProperty('--lightColor', lightColor);
-      wrapper?.style.setProperty('--backgroundColor', backgroundColor);
-      wrapper?.style.setProperty('--fontFamily', fontFamily);
-      wrapper?.style.setProperty('--fontSize', fontSize);
-      wrapper?.style.setProperty('--fontWeight', fontWeight);
+        const wrapper = document.getElementById('wrapper') as HTMLElement;
+        wrapper?.style.setProperty('--primaryColor', primaryColor);
+        wrapper?.style.setProperty('--accentColor', accentColor);
+        wrapper?.style.setProperty('--warnColor', warnColor);
+        wrapper?.style.setProperty('--whiteColor', whiteColor);
+        wrapper?.style.setProperty('--backgroundColor', backgroundColor);
+        wrapper?.style.setProperty('--fontFamily', fontFamily);
+        wrapper?.style.setProperty('--fontSize', fontSize);
+        wrapper?.style.setProperty('--fontWeight', fontWeight);
+      }
     }
   }
 
@@ -219,12 +285,37 @@ export class PageComponent implements OnInit, OnDestroy {
       return data.find((item: any) => item.lang === this.lang);
     }
     const domainData = this.appService.domainData;
+    const covers = this.appService.isArray(domainData?.layoutSettings?.covers).data;
+    const mainCover = covers[0];
+    if (mainCover) {
+      mainCover.src = this.appService.getFileSrc(mainCover);
+      this.mainCover = mainCover.src;
+    }
+    
     const language = getData(domainData.languages);
     if (language) { this.siteValues = language };
+    
+    if (this.siteValues.tels) {
+      this.siteValues.tels.forEach((tel: any) => {
+        tel.value = tel.code + tel.number;
+        tel.viewValue = tel.code + ' ' + tel.number;
+      });
+    }
+
+    if (this.siteValues.socials) {
+      this.siteValues.socials.forEach((item: any) => {
+        const socialData = this.appService.socialBtns.find((i: any) => i.alias === item.type);
+        item.name = socialData?.alias;
+        item.href = socialData?.href + item.value;
+        item.faIcon = socialData?.faIcon;
+        item.imgIcon = socialData?.imgIcon;
+      });
+    }
 
     const menu = getData(domainData.menu);
 
     const data = {
+      domainData: domainData,
       siteValues: language,
       menu: menu?.data
     }
@@ -238,16 +329,17 @@ export class PageComponent implements OnInit, OnDestroy {
     } else {
       this.appService.getDomainData().subscribe(res => {
         if (res.mess === 'ok') {
+          // console.log(res);
+          this.appService.userAgent = res.userAgent;
           this.appService.domainData = res.data;
+          this.appService.uploadPath = this.appService.uploadPath + res.data.id;
           this.setGlobalStyles();
           this.getSiteData();
           this.getModuleData();
         } else {
-          console.log(this.appService.getErr(res.err, 'getDomainData()', 'PageComponent'));
+          this.appService.logErr(res.err, 'getDomainData()', 'PageComponent');
         }
-      }, err => {
-        console.log(this.appService.getErr(err, 'getDomainData()', 'PageComponent'));
-      });
+      }, err => this.appService.logErr(err, 'getDomainData()', 'PageComponent'));
     }
   }
 
@@ -266,13 +358,15 @@ export class PageComponent implements OnInit, OnDestroy {
           this.pageService.MODULES = res.data;
           this.findModuleData();
         } else {
-          console.log(this.appService.getErr(res.err, 'getModuleData()', 'PageComponent'));
+          this.appService.logErr(res.err, 'getModuleData()', 'PageComponent');
           this.data = this.languageService.getLoadingErr(this.lang);
+          this.articles = [];
           this.dataLoaded();
         }
       }, err => {
-        console.log(this.appService.getErr(err, 'getModuleData()', 'PageComponent'));
+        this.appService.logErr(err, 'getModuleData()', 'PageComponent');
         this.data = this.languageService.getLoadingErr(this.lang);
+        this.articles = [];
         this.dataLoaded();
       });
     }
@@ -280,7 +374,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
   renderModuleData(e: any, lang: string) {
     e.nameValue = this.languageService.getLangValue(e.name, lang);
-    e.config = this.appService.isObject(e.moduleConfig).data;
+    e.aliasData = this.appService.isArray(e.aliasData).data;
     const langContent = this.languageService.getLangValue(e.moduleData, lang);
     e.langContent = this.appService.isObject(langContent).data;
     e.moduleRoutes = this.appService.isArray(e.moduleRoutes).data;
@@ -302,64 +396,378 @@ export class PageComponent implements OnInit, OnDestroy {
 
     if (e) {
       this.moduleData = e;
-      // console.log(this.moduleData);
+      const parentCat = this.pageService.MODULES.find((item: any) => item.id === this.moduleData.cat);
+      if (parentCat) {
+        this.parentCat = parentCat;
+      }
 
-      this.tables.manager = e.db_table_basename + 'manager';
-      this.tables.posts = e.db_table_basename + 'list';
+      if (this.moduleData.level > 0) {
+        const mainModule = this.pageService.MODULES.find((item: any) => item.alias === this.moduleData.moduleGroup);
+        if (mainModule) { this.mainModule = mainModule };
+      }
+
+      this.moduleConfig = this.findMainModuleConfig();
+      if (this.moduleConfig.contentData) { this.contentData = this.moduleConfig.contentData };
+      // console.log('----this.moduleConfig');
+      // console.log(this.moduleConfig);
+
+      this.renderChildCats();
+      this.renderSameCats();
+      this.renderParentPosts();
+
+      this.tables.manager = this.appService.getPostsTable(e, this.appService.tables.posts.manager);
+      this.tables.posts = this.appService.getPostsTable(e, this.appService.tables.posts.list);
       this.getPageData();
     } else {
       this.moduleData = {};
       this.data = this.languageService.getPageNotFound(this.lang);
+      this.articles = [];
       this.dataLoaded();
     }
   }
 
   getPageData() {
+    const orderBy = this.moduleConfig?.contentData?.samePosts?.orderBy;
+    
     const catData = {
       id: this.moduleData.id,
       alias: this.moduleData.alias,
       manager: this.tables.manager,
-      posts: this.tables.posts
+      posts: this.tables.posts,
+      orderBy: orderBy
     };
     this.appService.getPageData(catData).subscribe(res => {
       if (res.mess === 'ok') {
-        this.POSTS = res.data;
+        this.pageService.POSTS = res.data;
+        this.dataSource = res.data;
         this.renderData();
-
-        const postsData = {
-          cat: this.moduleData.cat,
-          data: res.data
-        }
-        this.pageService.POSTS.push(postsData);
       } else {
-        console.log(this.appService.getErr(res.err, 'getDomainData()', 'PageComponent'));
+        this.appService.logErr(res.err, 'getDomainData()', 'PageComponent');
         this.data = this.languageService.getLoadingErr(this.lang);
+        this.articles = [];
         this.dataLoaded();
       }
     }, err => {
-      console.log(this.appService.getErr(err, 'getDomainData()', 'PageComponent'));
+      this.appService.logErr(err, 'getDomainData()', 'PageComponent');
       this.data = this.languageService.getLoadingErr(this.lang);
+      this.articles = [];
       this.dataLoaded();
     });
   }
 
+  renderPost(data: any) {
+    this.layoutService.renderDataImages(data);
+  }
+
   renderData() {
-    const general = this.POSTS.find((item: any) => item.alias === 'general' && item.lang === this.lang);
+    const general = this.dataSource.find((item: any) => item.alias === this.alias.general && item.lang === this.lang);
     if (general) {
-      if (this.params.pageID) {
-        const post = this.POSTS.find((item: any) => item.id == this.params.pageID && item.lang === this.lang);
-        if (post) {
-          this.data = post;
+      this.general = general;
+      if (this.moduleData.level > 1) {
+        const parentCat = this.pageService.MODULES.find((item: any) => item.id === this.moduleData.cat);
+        if (parentCat) {
+          this.pageTitle = parentCat.nameValue;
+          this.pageCaption = null;
         } else {
-          this.data = this.languageService.getPageNotFound(this.lang);
+          this.pageTitle = general.name;
+          this.pageCaption = general.caption;
         }
       } else {
+        this.pageTitle = general.name;
+        this.pageCaption = general.caption;
+      }
+
+      if (this.params.pageID) {
+        const aliasData = this.moduleData.aliasData.find((item: any) => item.name === this.alias.post);
+        const getDataBy = aliasData?.pageConfig?.getData?.where;
+        if (getDataBy==='path') {
+          var post = this.dataSource.find((item: any) => item.path == this.params.pageID && item.lang === this.lang);
+        } else {
+          var post = this.dataSource.find((item: any) => item.id == this.params.pageID && item.lang === this.lang);
+        }
+        if (post) {
+          this.renderPost(post);
+          this.data = post;
+          this.FAQs = general.faqs.concat(post.faqs);
+          this.getPageConfig();
+          this.renderArticles();
+          this.renderSamePosts();
+        } else {
+          this.data = this.languageService.getPageNotFound(this.lang);
+          this.articles = [];
+        }
+      } else {
+        this.renderPost(general);
         this.data = general;
+        this.FAQs = this.data.faqs;
+        this.getPageConfig();
+        this.renderArticles();
+        this.renderSamePosts();
       }
     } else {
       this.data = this.languageService.getPageNotFound(this.lang);
+      this.articles = [];
     }
+    // console.log('---data')
+    // console.log(this.data);
+
     this.dataLoaded();
+  }
+
+  getPageConfig() {
+    let alias = this.moduleData.aliasData.find((item: any) => item.name === this.data.alias);
+
+    if (this.moduleData.level > 0) {
+      alias = this.mainModule.aliasData.find((item: any) => item.name === this.data.alias);
+    }
+    const aliasConfig = alias?.pageConfig;
+
+    let cover = aliasConfig?.layout?.cover;
+    let content = aliasConfig?.layout?.content;
+    // let postStyles = aliasConfig?.layout?.postStyles;
+    
+    // let childCatStyles = aliasConfig?.layout?.childCatStyles;
+    // let sameCatStyles = aliasConfig?.layout?.sameCatStyles;
+    if (alias?.config) {
+      cover = this.data.config.cover;
+      content = this.data.config.content;
+      // postStyles = this.data.config.postStyles;
+      // childCatStyles = this.data.config.childCatStyles;
+      // sameCatStyles = this.data.config.sameCatStyles;
+      if (!cover) { cover = aliasConfig?.layout?.cover };
+      if (!content) { content = aliasConfig?.layout?.content };
+      // if (!postStyles) { postStyles = aliasConfig?.layout?.postStyles };
+      // if (!childCatStyles) { childCatStyles = aliasConfig?.layout?.childCatStyles };
+      // if (!sameCatStyles) { sameCatStyles = aliasConfig?.layout?.sameCatStyles };
+    }
+    
+    if (cover) { 
+      this.layoutService.getCoverConfig(this.data, cover);
+      
+      this.coverConfig = cover;
+      setTimeout(() => {
+        this.coverConfig.loadingData = false;
+      }, 1);
+    };
+    // console.log('---coverConfig');
+    // console.log(this.coverConfig);
+
+    this.getContentConfig(content);
+    // this.postStyles = postStyles;
+    // this.postStyles = this.getPostsStyles(true);
+    
+    // this.childCatStyles = childCatStyles;
+    // this.sameCatStyles = sameCatStyles;
+    
+    if (this.isBrowser) {
+      const pageLayout = document.getElementById("page-layout") as HTMLElement;
+      setTimeout(() => {
+        const coverheight = this.coverConfig.height ? (this.coverConfig.height + 'px') : 'auto';
+        pageLayout?.style.setProperty('--coverheight', coverheight);
+        const coverImageBlur = this.coverConfig.imageBlur ? this.coverConfig.imageBlur + 'px' : 'none';
+        pageLayout?.style.setProperty('--coverImageBlur', coverImageBlur);
+      }, 1);
+    }
+  }
+
+  getContentConfig(content: any) {
+    //Set content config by mainModule
+    content = this.moduleConfig.content;
+
+    if (!content) { content = {} };
+    if (content.sidebar && content.sidebar !== 'none') {
+      if(!content.cols) { content.cols = { xl: 3, lg: 4, md: 4, sm: 12, xs: 12 } };
+      const sidebarXl = content.cols.xl;
+      const sidebarLg = content.cols.lg;
+      const sidebarMd = content.cols.md;
+      const sidebarSm = content.cols.sm;
+      const sidebarXs = content.cols.xs;
+      content.sidebarCols = 'col-xl-' + sidebarXl + ' col-lg-' + sidebarLg + ' col-md-' + sidebarMd + ' col-sm-' + sidebarSm + ' col-' + sidebarXs;
+
+      const contentXl = sidebarXl === 12 ? 12 : 12 - sidebarXl;
+      const contentLg = sidebarLg === 12 ? 12 : 12 - sidebarLg;
+      const contentMd = sidebarMd === 12 ? 12 : 12 - sidebarMd;
+      const contentSm = sidebarSm === 12 ? 12 : 12 - sidebarSm;
+      const contentXs = sidebarXs === 12 ? 12 : 12 - sidebarXs;
+      content.contentCol = 'col-xl-' + contentXl + ' col-lg-' + contentLg + ' col-md-' + contentMd + ' col-sm-' + contentSm + ' col-' + contentXs;
+    } else {
+      content.sidebarCols = 'col-12';
+      content.contentCol = 'col-12';
+    }
+
+    this.layoutService.getElementStyles(content);
+    if (content.padding) {
+      if (content.padding.value && content.padding.unit) {
+        const paddingValue = content.padding.value + content.padding.unit;
+        content.styles.padding = paddingValue + ' 0';
+      }
+    }
+
+    const defaultAvatar = {
+      position: 'left',
+        width: { value: 50, unit: '%' },
+        height: { value: 70, unit: '%' },
+        background: { type: 'white' },
+        styles: {
+          padding: '7px',
+          boxShadow: '0 2px 5px -3px'
+      }
+    }
+
+    if (!content.avatar) { content.avatar = defaultAvatar };
+    let avatar = content.avatar;
+    if (!avatar.pictureStyles) { avatar.pictureStyles = {} };
+    const avatarWidth = avatar.width?.value;
+    if (avatarWidth) {
+      avatar.pictureStyles.width = avatarWidth + avatar.width.unit;
+    }
+    if (!avatar.heightStyles) { avatar.heightStyles = {} };
+    if (!avatar.height) { avatar.height = { value: 70, unit: '%' } };
+    const avatarHeight = avatar.height.value;
+    avatar.heightStyles.paddingTop = avatarHeight + avatar.height.unit;
+
+    avatar.styles = this.appService.isObject(avatar.styles).data;
+    if (avatar.background) {
+      this.layoutService.findColor(avatar.background);
+      avatar.styles.backgroundColor = avatar.background.rgba;
+    }
+
+    this.contentConfig = content;
+    // console.log('--contentConfig');
+    // console.log(this.contentConfig);
+  }
+
+  renderArticles() {
+    const articles: any = this.dataSource.filter((item: any) => item.alias === this.alias.article);
+    articles.forEach((e: any) => {
+      if(!e.config.cover) { e.config.cover = {} };
+      this.layoutService.getCoverConfig(e, e.config.cover);
+    });
+    this.articles = articles;
+    this.articles.forEach((e) => {
+      this.renderPost(e);
+      e.elementID = e.cat + '_' + e.id;
+    });
+  }
+
+  renderSamePosts() {
+    const mainModuleConfig = this.findMainModuleConfig();
+    const onSidebar = mainModuleConfig.childModulesDependence === true;
+    this.postStyles = this.getPostsStyles(onSidebar);
+    if (this.postStyles) { 
+      this.postStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
+    }
+    // console.log('this.postStyles');
+    // console.log(this.postStyles);
+    
+    const postsList = this.dataSource.filter((item: any) => item.alias === this.alias.post && item.lang === this.data.lang);
+    postsList.forEach((e: any) => {
+      this.renderPost(e);
+      e.prodItemID = this.moduleData.table_name + e.id;
+
+      let route = '/' + e.lang + '/' + this.moduleData.route;
+      const aliasData = this.moduleData.aliasData.find((item: any) => item.name === e.alias);
+      const getDataBy = aliasData?.pageConfig?.getData?.where;
+      const pageID = getDataBy==='path' ? e.path : e.id;
+      route = route + '/' + pageID;
+      if (getDataBy !== 'path') {
+        const path = e.path ? e.path : this.appService.getLink(e.name);
+        route = route + '/' + path;
+      }
+      e.route = route;
+    });
+    this.posts = postsList;
+    // console.log('--Posts');
+    // console.log(this.posts);
+  }
+
+  renderChildCats() {
+    const childCats = this.pageService.MODULES.filter((item: any) => item.cat === this.moduleData.id);
+    this.childCats = childCats;
+
+    const childCatStyles: any = {};
+
+    const mainModuleConfig = this.findMainModuleConfig();
+    if (this.moduleData.level === 0) {
+      childCatStyles.position = 'afterContent';
+      childCatStyles.type = 'product';
+      childCatStyles.postStyles = this.getPostsStyles(false);
+    } else {
+      const childModulesDependence = mainModuleConfig.childModulesDependence;
+      const onSidebar = childModulesDependence && this.moduleData.level === 1;
+      childCatStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
+      childCatStyles.type = onSidebar ? 'menu' : 'product';
+      childCatStyles.postStyles = this.getPostsStyles(onSidebar);
+    }
+    
+    this.childCatStyles = childCatStyles;
+  }
+
+  renderSameCats() {
+    if (this.moduleData.cat !== 0) {
+      const mainModuleConfig = this.findMainModuleConfig();
+
+      const sameCatStyles: any = {};
+      const onSidebar = mainModuleConfig.childModulesDependence && this.moduleData.level > 1;
+      sameCatStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
+      sameCatStyles.type = onSidebar ? 'menu' : 'product';
+
+      sameCatStyles.postStyles = this.getPostsStyles(onSidebar);
+      this.sameCatStyles = sameCatStyles;
+
+
+      if (this.moduleData.level === 1) {
+        this.sameCats = this.pageService.MODULES.filter((item: any) => item.cat === this.moduleData.cat && item.id !== this.moduleData.id);
+      } else {
+        if (mainModuleConfig.childModulesDependence) {
+          this.sameCats = this.pageService.MODULES.filter((item: any) => item.cat === this.moduleData.cat);
+        } else {
+          this.sameCats = this.pageService.MODULES.filter((item: any) => item.cat === this.moduleData.cat && item.id !== this.moduleData.id);
+        }
+      }
+    }
+  }
+
+  renderParentPosts() {
+    const mainModuleConfig = this.findMainModuleConfig();
+    if (this.moduleData.level > 1 && mainModuleConfig.childModulesDependence) {
+      this.parentCatPosts = [ this.parentCat ];
+      
+      const parentCatPostsStypes: any = {};
+      const onSidebar = true;
+      parentCatPostsStypes.position = onSidebar ? 'onSidebar' : 'afterContent';
+      parentCatPostsStypes.type = onSidebar ? 'menu' : 'product';
+      parentCatPostsStypes.postStyles = this.getPostsStyles(onSidebar);
+      this.parentCatPostsStypes = parentCatPostsStypes;
+    }
+  }
+
+  findMainModuleConfig() {
+    let module = this.moduleData;
+    if (this.moduleData.level > 0) {
+      module = this.pageService.MODULES.find((item: any) => item.alias === this.moduleData.moduleGroup);
+    }
+    const config = this.appService.isObject(module?.moduleConfig).data;
+    const contentData = this.appService.isObject(module?.contentData).data;
+
+    if (!contentData.samePosts) { contentData.samePosts = {} };
+    if (!contentData.sameCats) { contentData.sameCats = {} };
+    if (!contentData.childCats) { contentData.childCats = {} };
+    contentData.samePostsTitle = this.languageService.getLangValue(contentData.samePosts.data, this.lang);
+    contentData.sameCatsTitle = this.languageService.getLangValue(contentData.sameCats.data, this.lang);
+    contentData.childCatsTitle = this.languageService.getLangValue(contentData.childCats.data, this.lang);
+    this.layoutService.getElementStyles(contentData.samePosts);
+    this.layoutService.getElementStyles(contentData.sameCats);
+    this.layoutService.getElementStyles(contentData.childCats);
+
+    config.contentData = contentData;
+    return config;
+  }
+
+  getPostsStyles(onSidebar: boolean) {
+    const moduleConfig = this.findMainModuleConfig();
+    const postStyles = onSidebar ? moduleConfig.postStylesOnSisebar : moduleConfig.postStylesAfterContent;
+    return postStyles;
   }
 
   dataLoaded() {
@@ -368,11 +776,10 @@ export class PageComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.routerLoading = false;
       this.routerLoaded = true;
-      this.messageService.sendMessage(this.messageService.messages.layoutLoaded, null);
+      this.messageService.sendMessage(this.messageService.messages.layoutLoaded, true);
       this.messageService.sendMessage(this.messageService.messages.routerLoading, this.routerLoading);
     }, 300);
   }
-  
 
   updateTags() {
     let seoTags = this.siteValues.seoTags;
@@ -389,10 +796,12 @@ export class PageComponent implements OnInit, OnDestroy {
     var description = this.data.description;
     if (!description) { description = seoTags.description };
 
-    var image = this.data.avatarUrl;
-    if (!image) {
-      image = 'https://' + this.appService.domain + '/' + this.appService.webAvatar;
+    const avatar = this.data.avatarImages?.find((item: any) => item.isImage);
+    let logo = this.appService.domainData?.layoutSettings?.webAvatar;
+    if (logo) {
+      logo.src = this.appService.getFileSrc(logo);
     }
+    const image = avatar ? avatar.src : (logo ? logo.src : 'https://' + this.appService.domain + '/' + this.appService.webAvatar);
 
     const data = {
       title: title,

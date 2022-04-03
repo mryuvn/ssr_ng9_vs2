@@ -236,9 +236,7 @@ export class LanguageService {
   }
 
   public getLangValue(data: any, lang: string) {
-    if (!lang) {
-      lang = 'vi';
-    }
+    if (!lang) { lang = 'vi' };
     if (data) {
       const arr = this.isArray(data).data;
       if (arr) {
@@ -246,7 +244,11 @@ export class LanguageService {
         if (rs) {
           return rs.content;
         } else {
-          return 'No data for language = ' + lang + '!';
+          console.log({
+            message: 'No data for language = ' + lang + '!',
+            value: data
+          })
+          return null;
         }
       } else {
         return data;

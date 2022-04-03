@@ -1,0 +1,9 @@
+<div class="email-template">
+    <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel">
+        <mat-label *ngIf="label">{{langContent.label}}</mat-label>
+        <input type="text" [(ngModel)]="email" name="email" matInput [required]="required" 
+            (ngModelChange)="checkEmail(email)" [placeholder]="langContent.placeholder" autocomplete="off">
+        <span *ngIf="matError" class="mat-error">{{ matError }}</span>
+    </mat-form-field>
+</div>
+

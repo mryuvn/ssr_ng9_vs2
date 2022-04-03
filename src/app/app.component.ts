@@ -38,7 +38,7 @@ export class AppComponent {
 
     messageService.getMessage().subscribe(message => {
       if (message.text === messageService.messages.layoutLoaded) {
-        this.layoutLoaded = true;
+        this.layoutLoaded = message.data;
       }
       if (message.text === messageService.messages.routerLoading) {
         this.routerLoading = message.data;
@@ -59,7 +59,7 @@ export class AppComponent {
   onWindowScroll() {
     const number = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     let fixedNumber = 50;
-    fixedNumber = 500;
+    fixedNumber = 100;
     if (number > fixedNumber) {
       this.navIsFixed = true;
     } else if (this.navIsFixed && number < fixedNumber) {

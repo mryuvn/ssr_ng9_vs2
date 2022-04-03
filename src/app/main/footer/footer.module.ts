@@ -5,11 +5,14 @@ import { FooterComponent } from './footer.component';
 import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [];
 
+import { SafeHtmlModule } from 'src/app/safe-html';
+
 @NgModule({
   declarations: [FooterComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SafeHtmlModule
   ],
   exports: [FooterComponent]
 })

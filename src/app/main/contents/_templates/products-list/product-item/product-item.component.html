@@ -1,0 +1,31 @@
+<div [id]="data.prodItemID" 
+    class="product-item avatar-{{config.avatar.position}} {{data.id===activeID ? 'active' : ''}} {{config.itemStylesOnHover.transitionEffect ? 'transition' : ''}}" [ngStyle]="data.itemStyles">
+    <div *ngIf="config.avatar.enable && data.image" 
+        class="picture" 
+            [class.zoom-image]="config.itemStylesOnHover.zoomImage" 
+            [ngStyle]="config.pictureStyles">
+        <app-avatar-template [ngStyle]="config.avatar.styles" 
+            [dataSource]="[data.image]" 
+            [alt]="data.name"  
+            [isBrowser]="isBrowser" 
+            [heightStyles]="config.avatar.heightStyles" 
+            [marginTop]="config.avatar.marginTop"
+            [circle]="config.avatar.circle"></app-avatar-template>
+    </div>
+
+    <div class="data">
+        <ng-container *ngIf="config.title.enable">
+            <span class="name" [ngStyle]="data.titleStyles">
+                <span *ngIf="!config.avatar.enable || config.avatar.enable && activeID && activeID===data.id && config.avatar.enable"
+                    class="icon"><mat-icon>{{activeID && activeID===data.id ? 'play_circle' : 'play_circle_outline'}}</mat-icon></span>
+
+                <a *ngIf="data.route" [routerLink]="data.route" [innerHtml]="data.name | safeHtml"></a>
+                <span *ngIf="!data.route" [innerHtml]="data.name | safeHtml" [ngStyle]="data.titleStyles"></span>
+            </span>
+    
+            <span *ngIf="data.summary && config.caption.enable" class="summary" [innerHtml]="data.summary | safeHtml"></span>
+        </ng-container>
+    </div>
+
+    <a *ngIf="data.route && config.coverLink==='cover'" [routerLink]="data.route" class="cover-link"></a>
+</div>

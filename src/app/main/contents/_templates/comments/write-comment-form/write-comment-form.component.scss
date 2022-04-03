@@ -1,0 +1,46 @@
+.write-comment-form {
+    position: relative;
+    
+    form {
+        position: relative;
+
+        mat-form-field {
+            width: 100%;
+            font-size: 90%;
+        }
+
+        .mat-form-field-appearance-outline .mat-form-field-outline {
+            color: rgba($color: #000000, $alpha: 0.1);
+        }
+
+        ::placeholder  {
+            color: inherit;
+        }
+        :-ms-input-placeholder  {
+            color: inherit;
+        }
+        ::-ms-input-placeholder  {
+            color: inherit;
+        }
+    
+        .mat-input-element {
+            caret-color: inherit;
+        }
+
+        .buttons {
+            .mat-icon-button:hover {
+                color: var(--warnColor);
+            }
+
+            .mat-button {
+                min-width: auto;
+            }
+    
+            .mat-button[disabled] {
+                .mat-button-wrapper {
+                    opacity: .5;
+                }
+            }
+        }
+    }
+}

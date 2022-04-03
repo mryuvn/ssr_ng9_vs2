@@ -1,29 +1,22 @@
-<div class="toolbar">
-    <div class="toolbar-content" [class.container]="toolbarSettings.container">
-        <a *ngIf="isBrowser" class="toggle-sidenav" (click)="toggleSidenav.emit(true)"><i class="fas fa-bars"></i></a>
+<div *ngIf="toolbarSettings" class="toolbar" [class.fixed]="toolbarSettings.fixed" [class.navIsFixed]="navIsFixed">
+    <div class="toolbar-content" [class.container]="toolbarSettings.container" 
+        [ngStyle]="navIsFixed ? toolbarSettings.onFixed.styles : toolbarSettings.main.styles">
+        <span *ngIf="isBrowser" class="toggle-sidenav">
+            <a (click)="toggleSidenav.emit(true)"><i class="fas fa-bars"></i></a>
+        </span>
 
-        <a class="logo" [routerLink]="'/'+selectedLang.lang">
-            <img src="assets/imgs/logo/favicon.png" alt="" width="20">
+        <a class="logo {{toolbarSettings.logo.position}}" [ngStyle]="toolbarSettings.logo.styles"
+            [routerLink]="'/'+selectedLang.lang"><img [src]="toolbarSettings.logo.src" alt="" width="100%">
         </a>
 
-        <span *ngIf="siteValues.name" class="site-name" [innerHtml]="siteValues.name | safeHtml"></span>
+        <span *ngIf="siteValues.name" class="site-name {{toolbarSettings.siteName.position}}" 
+            [ngStyle]="toolbarSettings.siteName.styles" [innerHtml]="siteValues.name | safeHtml"></span>
     
-        <ng-container *ngIf="isBrowser">
-            <app-menu position="toolbar"></app-menu>
-        </ng-container>
-
-        <div class="socials">
-            <ng-container *ngFor="let item of siteSocials">
-                <a [href]="item.href" mat-button [target]="item.target">
-                    <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
-                    <img *ngIf="item.imgIcon && !item.faIcon" [src]="'assets/imgs/icons/'+item.imgIcon" alt="" width="18">
-                </a>
-            </ng-container>
-        </div>
-    
-        <div *ngIf="isBrowser && siteLangs.length>0" class="langs">
+        <div *ngIf="isBrowser && siteLangs.length>0" 
+            class="langs {{toolbarSettings.langs.position}}" [ngStyle]="toolbarSettings.langs.styles">
             <a class="selected-lang" [matMenuTriggerFor]="langsMenu">
-                <span class="flag-icon flag-icon-{{selectedLang.flagCode}}"></span> {{selectedLang.lang | uppercase}}
+                <span class="flag-icon flag-icon-{{selectedLang.flagCode}}"></span>
+                <span *ngIf="!toolbarSettings.langs.iconOnly" class="lang-name">{{selectedLang.lang | uppercase}}</span>
             </a>
     
             <mat-menu #langsMenu="matMenu">
@@ -32,5 +25,46 @@
                 </span>
             </mat-menu>
         </div>
+
+        <div *ngIf="isBrowser" class="tools {{toolbarSettings.tools.position}}">
+            <span class="item user">
+                <span class="item-btn" [ngStyle]="toolbarSettings.tools.btnStyles">
+                    <a mat-icon-button><i class="fas fa-user"></i></a>
+                </span>
+            </span>
+        </div>
+
+        <div *ngIf="siteValues.socials" class="socials {{toolbarSettings.socials.position}}">
+            <ng-container *ngFor="let item of siteValues.socials">
+                <a [href]="item.href" mat-button [target]="item.target" [ngStyle]="toolbarSettings.socials.btnStyles">
+                    <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
+                    <img *ngIf="item.imgIcon && !item.faIcon" [src]="'assets/imgs/icons/'+item.imgIcon" alt="" width="18">
+                </a>
+            </ng-container>
+        </div>
+
+        <div class="contacts {{toolbarSettings.contacts.position}}">
+            <span *ngIf="toolbarSettings.contacts.tel" class="phone item">
+                <a mat-button [href]="'tel:'+toolbarSettings.contacts.tel.value" [ngStyle]="toolbarSettings.contacts.btnStyles"><i class="fas fa-phone-alt"></i></a>
+                <a *ngIf="!toolbarSettings.contacts.tel.iconOnly" class="txt" [href]="'tel:'+toolbarSettings.contacts.tel.value">{{toolbarSettings.contacts.tel.viewValue}}</a>
+            </span>
+
+            <span *ngIf="toolbarSettings.contacts.email" class="email item">
+                <a mat-button [href]="'mailto:'+toolbarSettings.contacts.email.mail" [ngStyle]="toolbarSettings.contacts.btnStyles"><i class="fas fa-envelope"></i></a>
+                <a *ngIf="!toolbarSettings.contacts.email.iconOnly" class="txt" [href]="'mailto:'+toolbarSettings.contacts.email.mail">{{toolbarSettings.contacts.email.mail}}</a>
+            </span>
+        </div>
+
+        <div class="site-menu {{toolbarSettings.menu.position}}">
+            <app-menu 
+                position="toolbar" 
+                [navIsFixed]="navIsFixed" 
+                [siteValues]="siteValues" 
+                [menuData]="menuData" 
+                [isBrowser]="isBrowser" 
+                [style.height]="toolbarSettings.menu.height+'px'"></app-menu>
+        </div>
     </div>
+
+    <div class="toolbar-bg" [ngStyle]="navIsFixed ? toolbarSettings.onFixed.bg.styles : toolbarSettings.main.bg.styles"></div>
 </div>

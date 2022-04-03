@@ -1,0 +1,80 @@
+<ng-container *ngIf="formData && isBrowser">
+    <h4 *ngIf="title" class="title">{{formData.nameValue}}</h4>
+
+    <form class="form-data" (ngSubmit)="submit(formData, dataForm)" #dataForm="ngForm">
+        <div class="row">
+            <ng-container *ngFor="let field of formData.fields; index as i;">
+                <div class="field {{field.colsClass}}">
+                    <span *ngIf="field.labelValue && formData.contentSettings.labelPosition==='block'" class="label">
+                        {{field.labelValue}} 
+                        <span *ngIf="field.required || field.inputType==='email'&&contactRequired==='email' || field.inputType==='phone'&&contactRequired==='phone'">*</span>
+                    </span>
+                    <div class="form-field">
+                        <ng-container *ngIf="!resetForm">
+                            <ng-container *ngIf="field.inputType==='input' || field.inputType==='name'">
+                                <mat-form-field [appearance]="formData.contentSettings.appearance" [floatLabel]="formData.contentSettings.floatLabel">
+                                    <mat-label *ngIf="field.labelValue && formData.contentSettings.labelPosition==='inline'">{{field.labelValue}}</mat-label>
+                                    <input [type]="field.type" [(ngModel)]="field.value" [name]="'field_'+i" matInput 
+                                        [required]="field.required" [placeholder]="field.placeholderValue" autocomplete="off">
+                                </mat-form-field>
+                            </ng-container>
+        
+                            <ng-container *ngIf="field.inputType==='select'">
+                                <mat-form-field [appearance]="formData.contentSettings.appearance" [floatLabel]="formData.contentSettings.floatLabel">
+                                    <mat-label *ngIf="field.labelValue && formData.contentSettings.labelPosition==='inline'">{{field.labelValue}}</mat-label>
+                                    <mat-select [(ngModel)]="field.value" [name]="'field_'+i" [required]="field.required" [placeholder]="field.placeholderValue">
+                                        <mat-option *ngFor="let option of field.options" [value]="option.titleValue">{{option.titleValue}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </ng-container>
+                    
+                            <ng-container *ngIf="field.inputType==='textarea'">
+                                <mat-form-field [appearance]="formData.contentSettings.appearance" [floatLabel]="formData.contentSettings.floatLabel" class="textarea">
+                                    <mat-label *ngIf="field.labelValue && formData.contentSettings.labelPosition==='inline'">{{field.labelValue}}</mat-label>
+                                    <textarea [(ngModel)]="field.value" [name]="'field_'+i" matInput 
+                                        [required]="field.required" [placeholder]="field.placeholderValue" autosize></textarea>
+                                </mat-form-field>
+                            </ng-container>
+        
+                            <ng-container *ngIf="field.inputType==='email'">
+                                <input type="hidden" [(ngModel)]="field.value" [name]="'field_'+i" [required]="field.required || contactRequired==='email'">
+                                <app-email-template 
+                                    [lang]="lang" 
+                                    [data]="{ mail: field.value }" 
+                                    [label]="formData.contentSettings.labelPosition==='inline'" 
+                                    [appearance]="formData.contentSettings.appearance" 
+                                    [floatLabel]="formData.contentSettings.floatLabel" 
+                                    [required]="field.required || contactRequired==='email'" 
+                                    (emitData)="field.value=$event; checkContactRequire($event);"></app-email-template>
+                            </ng-container>
+        
+                            <ng-container *ngIf="field.inputType==='phone'">
+                                <input type="hidden" [(ngModel)]="field.value" [name]="'field_'+i" [required]="field.required || contactRequired==='phone'">
+                                <app-phone-number-template 
+                                    [lang]="lang" 
+                                    [data]="field.value" 
+                                    [label]="formData.contentSettings.labelPosition==='inline'" 
+                                    [appearance]="formData.contentSettings.appearance" 
+                                    [floatLabel]="formData.contentSettings.floatLabel" 
+                                    [required]="field.required || contactRequired==='phone'" 
+                                    [isNumberOnly]="true" 
+                                    (emitData)="getPhoneNumber($event, field); checkContactRequire($event);"></app-phone-number-template>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    
+        <div class="btns text-right" [style.margin-top]="formData.contentSettings.labelPosition==='block' ? '0.5rem' : '0'">
+            <button mat-button [class.disabled]="dataForm.invalid" [ngStyle]="formData.contentSettings.submit.styles">
+                <span *ngIf="formData.contentSettings.submit.icon" class="icon" [innerHtml]="formData.contentSettings.submit.icon | safeHtml"></span>
+                <span *ngIf="formData.contentSettings.submit.titleValue" class="txt">{{formData.contentSettings.submit.titleValue}}</span>
+            </button>
+        </div>
+
+        <ng-container *ngIf="processData">
+            <app-processing-template [lang]="lang" [data]="processData" (close)="closeForm()" (retry)="submit(formData, dataForm)"></app-processing-template>
+        </ng-container>
+    </form>
+</ng-container>

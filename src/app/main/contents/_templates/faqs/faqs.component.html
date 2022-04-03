@@ -1,0 +1,11 @@
+<div *ngIf="dataSource" class="faqs">
+    <h4 class="title">{{langContent?.title}}</h4>
+
+    <div *ngFor="let item of dataSource; index as i;" class="faq-item" [class.open]="item.open">
+        <span class="title" (click)="item.open=!item.open">
+            {{item.title}} <i class="expand-icon fas fa-angle-right"></i>
+        </span>
+
+        <div class="answer" [innerHtml]="item.content | safeHtml"></div>
+    </div>
+</div>

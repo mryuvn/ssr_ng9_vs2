@@ -1,0 +1,31 @@
+<div class="web-domains" [class.open]="open">
+    <form class="form-data" (ngSubmit)="selectDomain()" #domainForm="ngForm">
+        <a mat-icon-button class="close-content" (click)="open=false"><i class="fas fa-times"></i></a>
+        <h4>Web domains</h4>
+
+        <div *ngIf="open" class="inline-form-fields">
+            <mat-form-field appearance="outline">
+                <input type="text"
+                   placeholder="Select a domain!"
+                   matInput
+                   [formControl]="myControl"
+                   [matAutocomplete]="auto" 
+                   [required]="true">
+        
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <ng-container *ngFor="let option of filteredOptions | async">
+                        <mat-option *ngIf="option!==domain" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <div class="buttons">
+                <button mat-button class="submit" [disabled]="domainForm.invalid"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <em *ngIf="domainNotFound" class="text-error">Domain is not exists!</em>
+    </form>
+</div>

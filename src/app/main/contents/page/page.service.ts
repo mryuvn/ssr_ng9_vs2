@@ -7,6 +7,7 @@ export class PageService {
 
   public MODULES: any;
   public POSTS: any = [];
+  public ADS_BANNERS: any;
 
   constructor() { }
 }

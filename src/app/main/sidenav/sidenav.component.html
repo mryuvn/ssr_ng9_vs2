@@ -5,9 +5,9 @@
         <a *ngIf="isBrowser" mat-icon-button (click)="open=false; toggleSidenav.emit(open);"><i class="fas fa-arrow-left"></i></a>
     </header>
 
-    <perfect-scrollbar>
-        <app-menu position="sidenav"></app-menu>
-    </perfect-scrollbar>
+    <!-- <perfect-scrollbar>
+        <app-menu position="sidenav" [isBrowser]="isBrowser"></app-menu>
+    </perfect-scrollbar> -->
 </div>
 
 <div *ngIf="!open && isBrowser" class="toggle-sidenav" (click)="open=true; toggleSidenav.emit(open);"></div>

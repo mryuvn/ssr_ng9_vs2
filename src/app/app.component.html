@@ -1,14 +1,19 @@
-<div id="wrapper" [class.loaded]="layoutLoaded">
+<div id="wrapper" [class.loaded]="layoutLoaded" [class.navIsFixed]="navIsFixed">
     <app-sidenav [isBrowser]="isBrowser" [open]="sidenavOpen" (toggleSidenav)="sidenavOpen=$event"></app-sidenav>
 
     <div class="wrapper-content">
-        <app-toolbar [isBrowser]="isBrowser" (toggleSidenav)="sidenavOpen=$event"></app-toolbar>
+        <app-toolbar [isBrowser]="isBrowser" [navIsFixed]="navIsFixed" (toggleSidenav)="sidenavOpen=$event"></app-toolbar>
         
-        <router-outlet></router-outlet>
+        <div class="page-content">
+            <router-outlet></router-outlet>
+        </div>
     
         <app-footer></app-footer>
-
     </div>
+
+    <span *ngIf="isBrowser && layoutLoaded" class="scroll-top">
+        <a mat-button (click)="scrollToTop()"><i class="fas fa-angle-double-up"></i></a>
+    </span>
 </div>
 
 <div *ngIf="!layoutLoaded && isBrowser" id="preloading">

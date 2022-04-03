@@ -1,0 +1,23 @@
+.cover-data {
+    .cover-content {
+        h2 {
+            span {
+                display: inherit;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            h2 {
+                .txt {
+                    font-size: 80%;
+                }
+            }
+
+            .caption {
+                .txt {
+                    font-size: 90%;
+                }
+            }
+        }
+    }
+}

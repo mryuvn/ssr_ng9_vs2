@@ -1,0 +1,11 @@
+<div class="ads-banners">
+    <ng-container *ngFor="let item of dataSource">
+        <div class="banner {{item.type}}" [ngStyle]="config.bannerStyles.styles">
+            <img *ngIf="item.type!=='iframe'" [src]="item.src" alt="" width="100%">
+            <div *ngIf="item.type==='iframe'" class="iframe" [innerHtml]="item.src | safeHtml"></div>
+
+            <a *ngIf="item.link.type==='href'" [href]="item.link.value" class="cover-link" target="_blank"></a>
+            <a *ngIf="item.link.type==='route'" [routerLink]="item.link.value" class="cover-link"></a>
+        </div>
+    </ng-container>
+</div>

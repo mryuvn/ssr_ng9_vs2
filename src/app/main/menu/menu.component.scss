@@ -4,52 +4,94 @@ ul {
 }
 
 .menu.on-toolbar {
+    height: 100%;
+
     li {
         position: relative;
         display: inline-block;
+        height: 100%;
+    }
 
-        a {
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 0 1rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-
+    li:hover {
         .menu-item {
             a {
-                color: var(--primaryColor);
-                height: 100%;
-                padding-top: 5px;
-                padding-bottom: 5px;
+                // background-color: var(--warnColor);
+                color: var(--warnColor);
+                border-bottom-color: var(--warnColor);
             }
-            a.active {
-                background-color: var(--warnColor);
-                color: var(--lightColor);
+            a::after {
+                height: 4px;
+                opacity: 1;
             }
         }
 
-        ul {
+        ul.childs {
+            padding-top: 0;
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    a {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        text-transform: uppercase;
+    }
+
+    .menu-item {
+        a {
+            color: inherit;
+            font-size: 14px;
+            font-weight: 400;
+            height: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        a::after {
             position: absolute;
+            background-color: var(--warnColor);
+            content: '';
             left: 0;
-            box-shadow: 0 3px 7px -5px #000;
-            visibility: hidden;
+            bottom: 0;
+            width: 100%;
+            height: 0;
             opacity: 0;
+        }
+        a.active {
+            background-color: var(--warnColor);
+            color: var(--whiteColor);
+            border-radius: 4px;
+        }
+    }
 
-            .menu-child {
-                position: relative;
-                border-bottom: 1px solid rgba(255,255,255,0.2);
+    ul.childs {
+        position: absolute;
+        left: 0;
+        min-width: 180px;
+        box-shadow: 0 3px 7px -5px #000;
+        visibility: hidden;
+        opacity: 0;
 
-                a {
-                    color: var(--lightColor);
-                    height: 40px;
-                    white-space: nowrap;
-                    min-width: 180px;
+        .menu-child {
+            position: relative;
+            width: 100%;
+
+            a {
+                color: var(--whiteColor);
+                font-size: 14px;
+                height: 40px;
+                white-space: nowrap;
+
+                .icon, .txt {
+                    position: relative;
                 }
             }
-            .menu-child::before {
+            a::before {
                 position: absolute;
                 background-color: var(--primaryColor);
                 content: '';
@@ -59,11 +101,11 @@ ul {
                 height: 100%;
                 opacity: 0;
             }
-            .menu-child:hover::before {
+            a:hover::before {
                 opacity: .1;
             }
         }
-        ul::before {
+        .menu-child::before {
             position: absolute;
             background-color: var(--warnColor);
             content: '';
@@ -73,19 +115,18 @@ ul {
             height: 100%;
             opacity: .9;
         }
-    }
-
-    li:hover {
-        .menu-item {
-            a {
-                background-color: var(--warnColor);
-                color: var(--lightColor);
-            }
+        .menu-child::after {
+            position: absolute;
+            background-color: #fff;
+            content: '';
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            opacity: .2;
         }
-
-        ul.childs {
-            visibility: visible;
-            opacity: 1;
+        .menu-child:last-child::after {
+            opacity: 0;
         }
     }
 }

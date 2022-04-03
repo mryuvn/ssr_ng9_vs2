@@ -1,0 +1,13 @@
+<div *ngIf="data" class="action-button">
+    <a *ngIf="data.destination==='route'" [routerLink]="data.value" 
+        class="mat-button {{bgColor}} {{color}}" [ngStyle]="styles" matRipple>
+        <span *ngIf="data.icon" class="icon" [innerHtml]="data.icon | safeHtml"></span> {{data.content}}</a>
+
+    <a *ngIf="data.destination==='href' && data.target" [href]="data.value" 
+        class="mat-button {{bgColor}} {{color}}" [target]="data.target" [ngStyle]="styles" matRipple>
+        <span *ngIf="data.icon" class="icon" [innerHtml]="data.icon | safeHtml"></span> {{data.content}}</a>
+
+    <a *ngIf="data.destination!=='route' && data.destination!=='href'" (click)="doAction()" 
+        class="mat-button {{bgColor}} {{color}}" [ngStyle]="styles" matRipple>
+        <span *ngIf="data.icon" class="icon" [innerHtml]="data.icon | safeHtml"></span> {{data.content}}</a>
+</div>

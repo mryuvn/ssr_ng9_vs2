@@ -10,7 +10,11 @@ import { AppService } from './app.service';
 export class SocketioService {
 
   public messages = {
-    
+    webContact: 'clientSendContact',
+    webComment: {
+      write: 'clientWriteComment',
+      reply: 'clientReplyComment'
+    }
   }
 
   socket: SocketIOClient.Socket;

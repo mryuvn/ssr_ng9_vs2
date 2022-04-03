@@ -1,1 +1,22 @@
-<p>footer works!</p>
+<div id="footer" class="footer" [ngStyle]="config.styles">
+    <div class="bottom" [ngStyle]="config.bottom.styles">
+        <div class="bottom-container" [class.container]="config.container">
+            <div class="cols">
+                <div class="col-left">
+                    <a *ngIf="config.bottom.logo.enable" [routerLink]="'/'+appService.sitelang" 
+                        class="logo" [ngStyle]="config.bottom.logo.styles">
+                        <img [src]="config.bottom.logo.src" [alt]="siteValues.name" width="100%">
+                    </a>
+        
+                    <span *ngIf="config.bottom.siteName.enable" class="site-name" 
+                        [innerHtml]="siteValues.name | safeHtml" [ngStyle]="config.bottom.siteName.styles"></span>
+                </div>
+    
+                <div class="col-right">
+                    <a [routerLink]="'/'+appService.sitelang" class="copyright"> &copy; 2022 {{appService.siteName}} </a>
+                    Design by &nbsp; <a href="">Mr.Yu VN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="web-comments">
+    <div *ngIf="isBrowser" class="write-comment">
+        <app-write-comment-form 
+            [commonData]="commonData" 
+            [langContent]="langContent" 
+            [config]="null" 
+            [userData]="userData" 
+            (emitData)="addComment($event)"></app-write-comment-form>
+    </div>
+
+    <div class="comments-list">
+        <ng-container *ngFor="let cm of dataSource; index as commentIndex;">
+            <div class="cm-item">
+                <div class="cm-head">
+                    <div class="user-data cm-user">
+                        <div class="avatar">
+                            <img [src]="cm.userData.avatarUrl ? cm.userData.avatarUrl : 'assets/imgs/profile.jpg'" alt="" width="100%">
+                        </div>
+    
+                        <span class="user-name">{{cm.name}}</span>
+                        <em class="time">{{cm.createdTime | date:dateFormat}}</em>
+                    </div>
+
+                    <div class="cm-tools">
+                        <a mat-icon-button><mat-icon>more_vert</mat-icon></a>
+                    </div>
+                </div>
+    
+                <div class="cm-content">
+                    <div class="txt">
+                        <span *ngIf="cm.contentView" [innerHtml]="cm.contentView"></span>
+                        <span *ngIf="cm.shortContent && isBrowser" class="read-more font-400" 
+                            (click)="expandContent(cm)">
+                            <a>
+                                <i class="{{cm.openContent ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}}"></i>
+                                {{cm.openContent ? langContent.hideAway : langContent.readMore}}
+                            </a>
+                        </span>
+                    </div>
+
+                    <div *ngIf="isBrowser" class="btns">
+                        <span class="fellings" (mouseover)="cm.openEmojis=true" (mouseleave)="cm.openEmojis=false">
+                            <a class="btn-item" [class.active]="cm.fellings.status">
+                                <i *ngIf="cm.fellings.faIcon" class="{{cm.fellings.faIcon}}"></i>
+                                <mat-icon *ngIf="!cm.fellings.faIcon">{{cm.fellings.matIcon}}</mat-icon>
+                                {{cm.fellings.title}}
+                            </a>
+
+                            <span class="emojis" [class.open]="cm.openEmojis">
+                                <ng-container *ngFor="let item of emojis">
+                                    <a mat-icon-button (click)="selectEmoji(item, cm)">
+                                        <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
+                                        <mat-icon *ngIf="!item.faIcon">{{item.matIcon}}</mat-icon>
+                                    </a>
+                                </ng-container>
+                            </span>
+                        </span>
+
+                        <a class="btn-item"><mat-icon>reply</mat-icon> {{langContent.reply}}</a>
+                    </div>
+                </div>
+
+                <div class="replies">
+                    <div class="replies-list">
+                        
+                    </div>
+
+                    <app-write-comment-form *ngIf="isBrowser" 
+                        [commonData]="commonData" 
+                        [langContent]="langContent" 
+                        [config]="null" 
+                        [userData]="userData" 
+                        (emitData)="addReply($event, cm)"></app-write-comment-form>
+                </div>
+
+            </div>
+        </ng-container>
+    </div>
+</div>

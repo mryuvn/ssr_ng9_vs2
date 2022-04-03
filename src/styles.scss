@@ -107,7 +107,7 @@ a:hover {
 }
   
 .hidden {
-    display: none;
+    display: none !important;
 }
   
 .pull-left {
@@ -261,7 +261,7 @@ mat-label,
     }
 
     .txt {
-        margin-left: .3rem;
+        margin-left: .5rem;
     }
 }
 .mat-raised-button.lg, .mat-button.lg {
@@ -286,9 +286,11 @@ mat-label,
     }
 }
   
-.mat-raised-button.disabled {
+.mat-raised-button.disabled, .mat-button.disabled {
     cursor: not-allowed;
-    opacity: .5;
+    .mat-button-wrapper {
+        opacity: .3;
+    }
 }
   
 .mat-icon-button {

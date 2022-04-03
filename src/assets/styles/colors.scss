@@ -1,0 +1,56 @@
+
+.text-error {
+    color: #ff0000;
+}
+a:not([href]).text-error  {
+    color: #ff0000 !important;
+}
+
+// primary
+.text-primary {
+    color: var(--primaryColor);
+}
+a:not([href]).text-primary  {
+    color: var(--primaryColor);
+}
+
+.bg-primary {
+    background-color: var(--primaryColor);
+}
+
+// accent
+.text-accent {
+    color: var(--accentColor);
+}
+a:not([href]).text-accent {
+    color: var(--accentColor) !important;
+}
+
+.bg-accent {
+    background-color: var(--accentColor);
+}
+
+// warn
+.text-warn {
+    color: var(--warnColor);
+}
+a:not([href]).text-warn {
+    color: var(--warnColor) !important;
+}
+
+.bg-warn {
+    background-color: var(--warnColor);
+}
+
+// background
+.bg-background {
+    background-color: var(--backgroundColor);
+}
+
+// white
+.text-white {
+    color: var(--lightColor);
+}
+.bg-white {
+    background-color: var(--lightColor);
+}

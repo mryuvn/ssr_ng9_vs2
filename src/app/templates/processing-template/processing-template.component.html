@@ -1,0 +1,33 @@
+<ng-container *ngIf="data">
+    <div class="processing-template">
+        <div class="data">
+            <span *ngIf="data.status" class="status text-warn">{{ data.status }}</span>
+            <em *ngIf="data.message" class="message">{{ data.message }}</em>
+    
+            <ng-container *ngIf="data.processing">
+                <mat-progress-bar mode="indeterminate" color="warn"></mat-progress-bar>
+            </ng-container>
+    
+            <ng-container *ngIf="data.err">
+                <span class="error">
+                    <em class="text-error">
+                        {{ data.err | json }}
+                    </em>
+                    <a mat-button class="click-to-copy" [class.copied]="data.errCopied" 
+                        (click)="data.errCopied=true" [cdkCopyToClipboard]="data.err | json">{{data.errCopied ? 'Copied' : 'Copy'}}</a>
+                </span>
+        
+                <div class="btns">
+                    <a mat-raised-button class="bg-accent text-white" (click)="retry.emit()">{{ commonData.retry }}</a>
+                    <a mat-raised-button class="bg-warn text-error" (click)="close.emit()">{{ commonData.cancel }}</a>
+                </div>
+            </ng-container>
+    
+            <div *ngIf="data.okBtn" class="btns">
+                <a mat-raised-button class="bg-accent text-white" (click)="close.emit()"> OK </a>
+            </div>
+        </div>
+
+        <div class="backdrop dark"></div>
+    </div>
+</ng-container>

@@ -1,58 +1,187 @@
-.toolbar {
+.toolbar:not(.fixed) {
     position: relative;
-    height: 60px;
-    flex-direction: row;
-    display: flex;
-    align-items: center;
+}
 
+.toolbar.fixed {
+    position: fixed;
+    width: 100%;
+}
+
+.toolbar {
     .toolbar-content {
         position: relative;
-        height: 100%;
-        flex-direction: row;
-        display: flex;
-        align-items: center;
+        z-index: 2;
     }
 
     .toolbar-content:not(.container) {
         padding-left: 15px;
         padding-right: 15px;
-        width: 100%;
     }
 
-    .toggle-sidenav, .site-name, .logo {
+    .toolbar-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .left {
+        float: left;
+        margin-right: .5rem;
+    }
+
+    .right {
+        float: right;
+        margin-left: .5rem;
+    }
+
+    .logo, .site-name, .contacts, .socials, .langs, .tools, .site-menu {
+        height: 100%;
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        z-index: 2;
+    }
+
+    .logo.center {
+        position: absolute;
+        width: 100%;
+        place-content: center;
+        left: 0;
+        float: unset;
+        z-index: 1;
+    }
+
+    .contacts, .socials {
+        .mat-button {
+            min-width: auto;
+
+            i, img {
+                position: relative;
+                z-index: 1;
+            }
+        }
+    }
+
+    .contacts {
+        a {
+            color: var(--warnColor);
+        }
+
+        .item:hover {
+            a {
+                opacity: .7;
+            }
+        }
+
+        .txt {
+            margin-left: -.5rem;
+            margin-right: .5rem;
+            font-size: 90%;
+
+            @media (max-width: 991px) {
+                display: none;
+            }
+        }
+    }
+
+    @media (max-width: 574px) {
+        .contacts, .socials {
+            position: fixed;
+            right: 5px;
+            height: unset;
+            width: 40px;
+            flex-direction: column;
+
+            .mat-button {
+                color: var(--whiteColor);
+                border-radius: 50%;
+                overflow: hidden;
+            }
+            .mat-button:before {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                content: '';
+                background-color: rgba(30, 125, 183, 0.8);
+                left: 0;
+                top: 0;
+                z-index: 0;
+            }
+        }
+        .contacts {
+            top: 90px;
+        }
+        .socials {
+            top: 185px;
+
+            .mat-button {
+                margin-bottom: .5rem;
+            }
+        }
+    }
+
+    .site-menu {
+        app-menu {
+            height: 100%;
+        }
+    }
+    
+    .site-menu.clear {
+        height: auto;
+        clear: both;
+        width: 100%;
+        float: left;
+    }
+    .site-menu.clear.center {
+        place-content: center;
+    }
+    .site-menu.clear.right {
+        place-content: flex-end;
+    }
+
+    .langs {
+        .lang-name {
+            font-weight: 300;
+            margin-left: .3rem
+        }
+    }
+    .langs.right {
+        margin-left: 1rem;
+    }
+}
+
+// .toolbar.navIsFixed {
+//     .toolbar-bg {
+//         opacity: 1;
+//     }
+// }
+
+@media (min-width: 1025px) {
+    .toggle-sidenav {
+        display: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .toolbar-content {
+        .site-menu {
+            display: none;
+        }
+    }
+    
+    .toggle-sidenav {
+        position: absolute;
+        left: 15px;
+        top: 0;
         height: 100%;
         flex-direction: column;
         display: flex;
         place-content: center;
-        margin-right: 1rem;
     }
 
-    .socials {
-        position: absolute;
-        right: 80px;
-        flex-direction: row;
-        display: flex;
-        height: 100%;
-        align-items: center;
-
-        a {
-            background-color: var(--accentColor);
-            color: var(--lightColor);
-            min-width: auto;
-            width: 30px;
-            height: 30px;
-            margin: 0 2.5px;
-        }
-    }
-
-    .langs {
-        position: absolute;
-        right: 15px;
-    }
-
-    @media (min-width: 1025px) {
-        .toggle-sidenav {
-            display: none;
-        }
+    .logo {
+        margin-left: 35px
     }
 }
