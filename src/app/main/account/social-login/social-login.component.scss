@@ -1,0 +1,20 @@
+.social-login {
+    .login-btn {
+        color: #fff;
+
+        .icon {
+            margin-right: .5rem;
+        }
+    }
+    .login-btn:hover {
+        color: #ffff00;
+    }
+
+    .fb-login {
+        background-color: #2867ad;
+    }
+    
+    .gg-login {
+        background-color: #eb4132;
+    }
+}

@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute, RoutesRecognized } from '@angular/router';
 import { AppService } from 'src/app/services/app.service';
 import { MessageService } from 'src/app/services/message.service';
 import { LayoutService } from 'src/app/services/layout.service';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+  styleUrls: ['./toolbar.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
   subscription: Subscription;
@@ -18,6 +20,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   
   @Output() toggleSidenav = new EventEmitter();
   
+  userData: any = {};
+
   domainData: any = {};
   siteValues: any = {};
   menuData: any = [];
@@ -30,37 +34,25 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     container: true,
     fixed: true,
     main: {
-      color: { type: 'white' },
       height: {
         value: 80,
         unit: 'px'
       },
-      bg: {
-        background: { type: 'primary' },
-        styles: {
-          opacity: 0.3
-        }
-      }
+      background: { type: 'primary' }
     },
     onFixed: {
-      color: { type: 'white' },
       height: {
         value: 60,
         unit: 'px'
       },
-      bg: {
-        background: { type: 'primary' },
-        styles: {
-          opacity: 1,
-          boxShadow: '0 2px 5px -5px #000'
-        }
+      background: { type: 'primary' },
+      styles: {
+        boxShadow: '0 2px 5px -5px #000'
       }
     },
     logo: {
       position: 'left',
-      styles: {
-        width: '44px'
-      }
+      height: { value: 80, unit: '%' }
     },
     siteName: {
       position: 'hidden'
@@ -68,21 +60,21 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     socials: {
       position: 'right',
       btnStyles: {
-        width: '40px',
-        height: '40px'
+        width: '34px',
+        height: '34px'
       }
     },
     contacts: {
       position: 'right',
       btnStyles: {
-        width: '40px',
-        height: '40px'
+        width: '34px',
+        height: '34px'
       },
       tel: {
-        iconOnly: false,
+        viewMod: 'icon-only'
       },
       email: {
-        iconOnly: true,
+        viewMod: 'icon-only'
       }
     },
     langs: {
@@ -92,8 +84,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       position: 'right'
     },
     menu: {
-      // position: 'clear right',
       position: 'left',
+      clear: false,
       height: null,
       textAlign: 'center'
     }
@@ -101,12 +93,17 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   toolbarSettings: any;
 
+  toolOpen!: string | null;
+
+  layoutLoaded!: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private appService: AppService,
     private messageService: MessageService,
-    private layoutService: LayoutService
+    private layoutService: LayoutService,
+    private socketioService: SocketioService
   ) { 
     this.subscription = messageService.getMessage().subscribe(message => {
       if (message.text === messageService.messages.emitSiteData) {
@@ -121,29 +118,122 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           this.getContacts();
         };
       }
+
+      if (message.text === messageService.messages.layoutLoaded) {
+        this.layoutLoaded = message.data;
+      }
+
+      if (message.text === messageService.messages.openLogin) {
+        this.toolOpen = 'userMenu';
+      }
     });
   }
 
   ngOnInit(): void {
+    this.userData = this.appService.getUserData();
+
+    if (this.isBrowser) {
+      const userMessages = {
+        login: this.socketioService.messages.user.login + '_' + this.appService.domain,
+        logout: this.socketioService.messages.user.logout + '_' + this.appService.domain
+      }
+
+      this.socketioService.on(userMessages.login).subscribe(content => {
+        if (!this.userData.username || this.userData.alias === content.alias) {
+          this.userData = this.appService.getUserData();
+        };
+      }, err => this.logErr(err, 'socketioService.on(userMessages.login)'));
+
+      this.socketioService.on(userMessages.logout).subscribe(content => {
+        if (this.userData.alias === content.alias) {
+          this.userData = this.appService.getUserData();
+        }
+      }, err => this.logErr(err, 'socketioService.on(userMessages.logout)'));
+    }
   }
 
   getToolbarSettings() {
     let toolbar = this.domainData.layoutSettings.toolbar;
-    if (!toolbar) { toolbar = this.defaultSettings };
     
-    this.layoutService.getElementStyles(toolbar.main);
+    if (!toolbar) { toolbar = this.defaultSettings };
+
+    toolbar.mainStyles = { height: toolbar.main.height }
+    toolbar.main.bg = {
+      background: toolbar.main.background,
+      styles: toolbar.main.styles
+    }
+
+    toolbar.onFixedStyles = { height: toolbar.onFixed.height }
+    toolbar.onFixed.bg = {
+      background: toolbar.onFixed.background,
+      styles: toolbar.onFixed.styles
+    }
+    
+    this.layoutService.getElementStyles(toolbar.mainStyles);
     this.layoutService.getElementStyles(toolbar.main.bg);
-    this.layoutService.getElementStyles(toolbar.onFixed);
+    this.layoutService.getElementStyles(toolbar.onFixedStyles);
     this.layoutService.getElementStyles(toolbar.onFixed.bg);
 
     if (!toolbar.logo) { toolbar.logo = this.defaultSettings.logo };
+
     this.layoutService.getDefaultLogo(this.domainData, toolbar.logo);
     toolbar.logo.src = this.appService.getFileSrc(toolbar.logo);
-    if (!toolbar.logo.src) {
-      toolbar.logo.src = 'assets/imgs/logo/logo.png';
+    if (!toolbar.logo.src) { toolbar.logo.src = 'assets/imgs/logo/logo.png' };
+
+    const logoWidthValue = toolbar.logo.width?.value;
+    if (logoWidthValue) { toolbar.logo.logoWidth = logoWidthValue + toolbar.logo.width?.unit }
+    const logoHeightValue = toolbar.logo.height?.value;
+    if (logoHeightValue) { toolbar.logo.logoHeight = logoHeightValue + toolbar.logo.height?.unit };
+    toolbar.logo.styles = this.appService.isObject(toolbar.logo.styles).data;
+
+    if (!toolbar.menu) { toolbar.menu = this.defaultSettings.menu };
+    const toolbarMenuHeightValue = toolbar.menu.height?.value;
+    if (toolbarMenuHeightValue) { toolbar.menu.menuHeight = toolbarMenuHeightValue + toolbar.menu.height?.unit };
+    if (!toolbar.menu.item) { toolbar.menu.item = {} };
+    this.layoutService.getElementStyles(toolbar.menu.item);
+    if (!toolbar.menu.itemOnHover) { toolbar.menu.itemOnHover = {} };
+    this.layoutService.getElementStyles(toolbar.menu.itemOnHover);
+
+    if (!toolbar.contacts) { toolbar.contacts = this.defaultSettings.contacts };
+    if (!toolbar.contacts.btnStyles) { toolbar.contacts.btnStyles = this.defaultSettings.contacts.btnStyles };
+    if (!toolbar.contacts.tel) { toolbar.contacts.tel = this.defaultSettings.contacts.tel };
+    if (!toolbar.contacts.email) { toolbar.contacts.email = this.defaultSettings.contacts.email };
+
+    if (!toolbar.socials) { toolbar.socials = this.defaultSettings.socials };
+    if (!toolbar.socials.btnStyles) { toolbar.socials.btnStyles = this.defaultSettings.socials.btnStyles };
+
+    if (this.isBrowser) {
+      const toolbarEl = document.getElementById("toolbar") as HTMLElement;
+
+      const mainColor = toolbar.main?.color;
+      if (mainColor) {
+        this.layoutService.findColor(mainColor);
+        const textColor = mainColor.rgba ? mainColor.rgba : ('#' + mainColor.hex);
+        toolbarEl?.style.setProperty("--textColor", textColor);
+      }
+      const mainColorOnHover = toolbar.main?.colorOnHover;
+      if (mainColorOnHover) {
+        this.layoutService.findColor(mainColorOnHover);
+        const textColorOnHover = mainColorOnHover.rgba ? mainColorOnHover.rgba : ('#' + mainColorOnHover.hex);
+        toolbarEl?.style.setProperty('--textColorOnHover', textColorOnHover);
+      }
+
+      const onFixedColor = toolbar.onFixed?.color;
+      if (onFixedColor) {
+        this.layoutService.findColor(onFixedColor);
+        const textColorOnFixed = onFixedColor.rgba ? onFixedColor.rgba : ('#' + onFixedColor.hex);
+        toolbarEl?.style.setProperty('--textColorOnFixed', textColorOnFixed);
+      }
+      const onfixedColorOnHover = toolbar.onFixed?.colorOnHover;
+      if (onfixedColorOnHover) {
+        this.layoutService.findColor(onfixedColorOnHover);
+        const textColorOnFixedOnHover = onfixedColorOnHover.rgba ? onfixedColorOnHover.rgba : ('#' + onfixedColorOnHover.hex);
+        toolbarEl?.style.setProperty('--textColorOnFixedOnHover', textColorOnFixedOnHover);
+      }
     }
-    
+
     this.toolbarSettings = toolbar;
+    // console.log(this.toolbarSettings);
   }
 
   getLanguages() {
@@ -193,7 +283,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
     const email = this.siteValues.emails[0];
     if (email) {
-      this.toolbarSettings.contacts.email.mail = email;
+      this.toolbarSettings.contacts.email.mail = email.mail;
     }
   }
 
@@ -203,6 +293,32 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.appService.sitelang = item.lang;
       this.messageService.sendMessage(this.messageService.messages.changeLanguage, item.lang);
     }
+  }
+
+  openTool(option: string) {
+    if (option === this.toolOpen) {
+      this.toolOpen = null;
+    } else {
+      this.toolOpen = option;
+    }
+  }
+
+  login($event: any) {
+    this.toolOpen = null;
+    setTimeout(() => {
+      this.userData = $event;
+    }, 300);
+  }
+
+  logout() {
+    this.toolOpen = null;
+    setTimeout(() => {
+      this.userData = {};
+    }, 300);
+  }
+
+  logErr(err: any, functionName: string) {
+    this.appService.logErr(err, functionName, 'ToolbarComponent');
   }
 
   ngOnDestroy(): void {

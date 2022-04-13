@@ -1,12 +1,14 @@
-<div *ngIf="toolbarSettings" class="toolbar" [class.fixed]="toolbarSettings.fixed" [class.navIsFixed]="navIsFixed">
-    <div class="toolbar-content" [class.container]="toolbarSettings.container" 
-        [ngStyle]="navIsFixed ? toolbarSettings.onFixed.styles : toolbarSettings.main.styles">
+<div id="toolbar" class="toolbar" [class.fixed]="toolbarSettings?.fixed" [class.navIsFixed]="navIsFixed">
+    <div *ngIf="toolbarSettings" class="toolbar-content" [class.container]="toolbarSettings.container" 
+        [ngStyle]="navIsFixed ? toolbarSettings.onFixedStyles.styles : toolbarSettings.mainStyles.styles">
         <span *ngIf="isBrowser" class="toggle-sidenav">
             <a (click)="toggleSidenav.emit(true)"><i class="fas fa-bars"></i></a>
         </span>
 
-        <a class="logo {{toolbarSettings.logo.position}}" [ngStyle]="toolbarSettings.logo.styles"
-            [routerLink]="'/'+selectedLang.lang"><img [src]="toolbarSettings.logo.src" alt="" width="100%">
+        <a class="logo {{toolbarSettings.logo.position}} {{toolbarSettings.logo.style}}"
+            [routerLink]="'/'+selectedLang.lang" [ngStyle]="toolbarSettings.logo.styles">
+            <img [src]="toolbarSettings.logo.src" [alt]="siteValues.name" 
+                [style.width]="toolbarSettings.logo.logoWidth" [style.height]="toolbarSettings.logo.logoHeight">
         </a>
 
         <span *ngIf="siteValues.name" class="site-name {{toolbarSettings.siteName.position}}" 
@@ -26,11 +28,25 @@
             </mat-menu>
         </div>
 
-        <div *ngIf="isBrowser" class="tools {{toolbarSettings.tools.position}}">
+        <div *ngIf="isBrowser && layoutLoaded" class="tools {{toolbarSettings.tools.position}}">
             <span class="item user">
-                <span class="item-btn" [ngStyle]="toolbarSettings.tools.btnStyles">
-                    <a mat-icon-button><i class="fas fa-user"></i></a>
+                <span class="item-btn" (click)="openTool('userMenu')" [ngStyle]="toolbarSettings.tools.btnStyles">
+                    <app-user-avatar-template [userData]="userData" width="26" circle="true"></app-user-avatar-template>
                 </span>
+
+                <div class="menu-dropdown" [class.open]="toolOpen==='userMenu'">
+                    <div class="dropdown-content">
+                        <ng-container *ngIf="!userData.username">
+                            <app-login (emitLogin)="login($event)" (close)="toolOpen=null"></app-login>
+                        </ng-container>
+    
+                        <ng-container *ngIf="userData.username">
+                            <app-user-menu [userData]="userData" (emitLogout)="logout()"></app-user-menu>
+                        </ng-container>
+                    </div>
+
+                    <div *ngIf="toolOpen==='userMenu'" class="backdrop fixed" (click)="toolOpen=null"></div>
+                </div>
             </span>
         </div>
 
@@ -44,27 +60,55 @@
         </div>
 
         <div class="contacts {{toolbarSettings.contacts.position}}">
-            <span *ngIf="toolbarSettings.contacts.tel" class="phone item">
-                <a mat-button [href]="'tel:'+toolbarSettings.contacts.tel.value" [ngStyle]="toolbarSettings.contacts.btnStyles"><i class="fas fa-phone-alt"></i></a>
-                <a *ngIf="!toolbarSettings.contacts.tel.iconOnly" class="txt" [href]="'tel:'+toolbarSettings.contacts.tel.value">{{toolbarSettings.contacts.tel.viewValue}}</a>
-            </span>
+            <ng-container *ngIf="toolbarSettings.contacts.tel">
+                <span *ngIf="toolbarSettings.contacts.tel.value" class="phone item {{toolbarSettings.contacts.tel.viewMod}}">
+                    <a mat-button [href]="'tel:'+toolbarSettings.contacts.tel.value" [ngStyle]="toolbarSettings.contacts.btnStyles"><i class="fas fa-phone-alt"></i></a>
+                    <a class="txt" [href]="'tel:'+toolbarSettings.contacts.tel.value">{{toolbarSettings.contacts.tel.viewValue}}</a>
+                </span>
+            </ng-container>
 
-            <span *ngIf="toolbarSettings.contacts.email" class="email item">
-                <a mat-button [href]="'mailto:'+toolbarSettings.contacts.email.mail" [ngStyle]="toolbarSettings.contacts.btnStyles"><i class="fas fa-envelope"></i></a>
-                <a *ngIf="!toolbarSettings.contacts.email.iconOnly" class="txt" [href]="'mailto:'+toolbarSettings.contacts.email.mail">{{toolbarSettings.contacts.email.mail}}</a>
-            </span>
+            <ng-container *ngIf="toolbarSettings.contacts.email">
+                <span *ngIf="toolbarSettings.contacts.email.mail" class="email item {{toolbarSettings.contacts.email.viewMod}}">
+                    <a mat-button [href]="'mailto:'+toolbarSettings.contacts.email.mail" [ngStyle]="toolbarSettings.contacts.btnStyles"><i class="fas fa-envelope"></i></a>
+                    <a class="txt" [href]="'mailto:'+toolbarSettings.contacts.email.mail">{{toolbarSettings.contacts.email.mail}}</a>
+                </span>
+            </ng-container>
         </div>
 
-        <div class="site-menu {{toolbarSettings.menu.position}}">
+        <div class="site-menu {{toolbarSettings.menu.position}} {{toolbarSettings.menu.clear ? 'clear' : ''}}">
             <app-menu 
                 position="toolbar" 
                 [navIsFixed]="navIsFixed" 
                 [siteValues]="siteValues" 
                 [menuData]="menuData" 
+                [config]="toolbarSettings.menu"
                 [isBrowser]="isBrowser" 
-                [style.height]="toolbarSettings.menu.height+'px'"></app-menu>
+                [style.height]="toolbarSettings.menu.menuHeight"></app-menu>
         </div>
     </div>
 
-    <div class="toolbar-bg" [ngStyle]="navIsFixed ? toolbarSettings.onFixed.bg.styles : toolbarSettings.main.bg.styles"></div>
+    <div class="toolbar-bg" [ngStyle]="navIsFixed ? toolbarSettings?.onFixed?.bg?.styles : toolbarSettings?.main?.bg?.styles"></div>
+</div>
+
+<div class="toolbar-bottom">
+    <ng-container *ngIf="toolbarSettings?.contacts?.position!=='hidden'">
+        <ng-container *ngIf="toolbarSettings?.contacts?.tel">
+            <ng-container *ngIf="toolbarSettings.contacts.tel.value">
+                <a mat-button [href]="'tel:'+toolbarSettings.contacts.tel.value"><i class="fas fa-phone-alt"></i></a>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="toolbarSettings?.contacts?.email">
+            <ng-container *ngIf="toolbarSettings.contacts.email.mail">
+                <a mat-button [href]="'mailto:'+toolbarSettings.contacts.email.mail"><i class="fas fa-envelope"></i></a>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngFor="let item of siteValues.socials">
+        <a [href]="item.href" mat-button [target]="item.target">
+            <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
+            <img *ngIf="item.imgIcon && !item.faIcon" [src]="'assets/imgs/icons/'+item.imgIcon" alt="" width="18">
+        </a>
+    </ng-container>
 </div>

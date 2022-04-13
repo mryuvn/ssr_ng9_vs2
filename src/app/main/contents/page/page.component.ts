@@ -31,6 +31,8 @@ export class PageComponent implements OnInit, OnDestroy {
   langsData: any = [
     {
       lang: 'vi',
+      err: 'Lỗi',
+      backToHome: 'Trang chủ',
       pageComments: {
         title: 'Bình luận'
       },
@@ -40,6 +42,8 @@ export class PageComponent implements OnInit, OnDestroy {
     },
     {
       lang: 'en',
+      err: 'Err',
+      backToHome: 'Home page',
       pageComments: {
         title: 'Comments'
       },
@@ -162,6 +166,7 @@ export class PageComponent implements OnInit, OnDestroy {
     this.params = this.route.snapshot.params;
     this.lang = this.route.snapshot.params.lang;
     this.appService.sitelang = this.lang;
+    
     this.getLangData();
 
     this.routerLoading = true;
@@ -218,12 +223,16 @@ export class PageComponent implements OnInit, OnDestroy {
     });
 
     if (this.isBrowser) {
-      this.socketioService.emit('client_emit', { message: 'hello' });
+      const logErr = (err: any, message: string) => this.appService.logErr(err, message, 'PageComponent');
+
+      this.socket = this.socketioService.on('on_connected').subscribe(data => {
+        console.log(data);
+      }, err => logErr(err, 'Socket on_connected'));
 
       this.socket = this.socketioService.on('updateCatData').subscribe((data: any) => {
         console.log(data);
         
-      }, err => this.appService.logErr(err, 'Socket on updateCatData', 'PageComponent'));
+      }, err => logErr(err, 'Socket on updateCatData'));
     }
   }
 
@@ -236,6 +245,10 @@ export class PageComponent implements OnInit, OnDestroy {
   setGlobalStyles() {
     if (this.isBrowser) {
       const layoutSettings = this.appService.domainData.layoutSettings;
+      // console.log(layoutSettings);
+
+      const wrapper = document.getElementById('wrapper') as HTMLElement;
+
       const colors = layoutSettings?.colors;
       if (colors) {
         this.layoutService.globalColors = colors;
@@ -262,21 +275,20 @@ export class PageComponent implements OnInit, OnDestroy {
         let background = findColor('background');
         if (!background) { background = { hex: '#bbdefb' } };
         const backgroundColor = background.rgba ? background.rgba : background.hex;
-  
-        let fontFamily = layoutSettings.fontFamily ? layoutSettings.fontFamily : 'Mitr';
-        let fontSize = layoutSettings.fontSize ? layoutSettings.fontSize : '16 px';
-        let fontWeight = layoutSettings.fontSize ? layoutSettings.fontSize : 300;
-  
-        const wrapper = document.getElementById('wrapper') as HTMLElement;
+
         wrapper?.style.setProperty('--primaryColor', primaryColor);
         wrapper?.style.setProperty('--accentColor', accentColor);
         wrapper?.style.setProperty('--warnColor', warnColor);
         wrapper?.style.setProperty('--whiteColor', whiteColor);
         wrapper?.style.setProperty('--backgroundColor', backgroundColor);
-        wrapper?.style.setProperty('--fontFamily', fontFamily);
-        wrapper?.style.setProperty('--fontSize', fontSize);
-        wrapper?.style.setProperty('--fontWeight', fontWeight);
       }
+
+      let fontFamily = layoutSettings.fontFamily ? layoutSettings.fontFamily : 'Mitr';
+      let fontSize = layoutSettings.fontSize ? layoutSettings.fontSize : '16 px';
+      let fontWeight = layoutSettings.fontWeight ? layoutSettings.fontWeight : 300;
+      wrapper?.style.setProperty('--fontFamily', fontFamily);
+      wrapper?.style.setProperty('--fontSize', fontSize);
+      wrapper?.style.setProperty('--fontWeight', fontWeight);
     }
   }
 
@@ -286,6 +298,7 @@ export class PageComponent implements OnInit, OnDestroy {
     }
     const domainData = this.appService.domainData;
     const covers = this.appService.isArray(domainData?.layoutSettings?.covers).data;
+    
     const mainCover = covers[0];
     if (mainCover) {
       mainCover.src = this.appService.getFileSrc(mainCover);
@@ -333,6 +346,7 @@ export class PageComponent implements OnInit, OnDestroy {
           this.appService.userAgent = res.userAgent;
           this.appService.domainData = res.data;
           this.appService.uploadPath = this.appService.uploadPath + res.data.id;
+          this.setFavicons(this.appService.domainData);
           this.setGlobalStyles();
           this.getSiteData();
           this.getModuleData();
@@ -516,9 +530,11 @@ export class PageComponent implements OnInit, OnDestroy {
 
   getPageConfig() {
     let alias = this.moduleData.aliasData.find((item: any) => item.name === this.data.alias);
-
     if (this.moduleData.level > 0) {
       alias = this.mainModule.aliasData.find((item: any) => item.name === this.data.alias);
+      if (!alias) {
+        alias = this.mainModule.aliasData.find((item: any) => item.name === 'general');
+      }
     }
     const aliasConfig = alias?.pageConfig;
 
@@ -653,9 +669,10 @@ export class PageComponent implements OnInit, OnDestroy {
   renderSamePosts() {
     const mainModuleConfig = this.findMainModuleConfig();
     const onSidebar = mainModuleConfig.childModulesDependence === true;
-    this.postStyles = this.getPostsStyles(onSidebar);
-    if (this.postStyles) { 
-      this.postStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
+    const postStyles = this.getPostsStyles(onSidebar);
+    if (postStyles) { 
+      postStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
+      this.postStyles = postStyles;
     }
     // console.log('this.postStyles');
     // console.log(this.postStyles);
@@ -691,13 +708,18 @@ export class PageComponent implements OnInit, OnDestroy {
     if (this.moduleData.level === 0) {
       childCatStyles.position = 'afterContent';
       childCatStyles.type = 'product';
-      childCatStyles.postStyles = this.getPostsStyles(false);
+      let postStyles = this.getPostsStyles(false);
+      if (!postStyles) { postStyles = {} };
+      childCatStyles.postStyles = postStyles;
     } else {
       const childModulesDependence = mainModuleConfig.childModulesDependence;
       const onSidebar = childModulesDependence && this.moduleData.level === 1;
       childCatStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
       childCatStyles.type = onSidebar ? 'menu' : 'product';
-      childCatStyles.postStyles = this.getPostsStyles(onSidebar);
+
+      let postStyles = this.getPostsStyles(onSidebar);
+      if (!postStyles) { postStyles = {} };
+      childCatStyles.postStyles = postStyles;
     }
     
     this.childCatStyles = childCatStyles;
@@ -712,7 +734,9 @@ export class PageComponent implements OnInit, OnDestroy {
       sameCatStyles.position = onSidebar ? 'onSidebar' : 'afterContent';
       sameCatStyles.type = onSidebar ? 'menu' : 'product';
 
-      sameCatStyles.postStyles = this.getPostsStyles(onSidebar);
+      let postStyles = this.getPostsStyles(onSidebar);
+      if (!postStyles) { postStyles = {} };
+      sameCatStyles.postStyles = postStyles;
       this.sameCatStyles = sameCatStyles;
 
 
@@ -732,6 +756,8 @@ export class PageComponent implements OnInit, OnDestroy {
     const mainModuleConfig = this.findMainModuleConfig();
     if (this.moduleData.level > 1 && mainModuleConfig.childModulesDependence) {
       this.parentCatPosts = [ this.parentCat ];
+      console.log(this.parentCatPosts);
+      
       
       const parentCatPostsStypes: any = {};
       const onSidebar = true;
@@ -779,6 +805,52 @@ export class PageComponent implements OnInit, OnDestroy {
       this.messageService.sendMessage(this.messageService.messages.layoutLoaded, true);
       this.messageService.sendMessage(this.messageService.messages.routerLoading, this.routerLoading);
     }, 300);
+  }
+
+  setFavicons(domainData: any) {
+    // console.log(domainData);
+    let favicons: any = []; //Get favicons from domainData.layoutSettings
+    favicons = [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        sizes: null,
+        href: 'favicon.ico'
+      },
+      {
+        rel: 'apple-touch-icon',
+        type: null,
+        sizes: '180x180',
+        href: 'assets/favicon_io/apple-touch-icon.png'
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: 'assets/favicon_io/favicon-32x32.png'
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: 'assets/favicon_io/favicon-16x16.png'
+      },
+      {
+        rel: 'manifest',
+        type: null,
+        sizes: null,
+        href: 'assets/favicon_io/site.webmanifest'
+      }
+    ]
+    favicons.forEach((item: any) => {
+      const data = {
+        rel: item.rel,
+        type: item.type,
+        sizes: item.sizes,
+        href: item.href
+      }
+      this.setTagsService.setFavicon(data);
+    });
   }
 
   updateTags() {

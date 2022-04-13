@@ -1,0 +1,67 @@
+<div class="login">
+    <form *ngIf="formData" (ngSubmit)="userLogin(formData)" #loginForm="ngForm">
+        <span class="title">{{langContent.formTitle}}</span>
+
+        <div class="option">
+            <mat-radio-group [(ngModel)]="formData.userOption" name="userOption" (ngModelChange)="selectUserOption(formData)">
+                <mat-radio-button class="example-radio-button" *ngFor="let item of langContent.userOptions" [value]="item.type">
+                    {{item.title}}
+                  </mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <div class="form-field username">
+            <input class="text-input" [type]="formData.accType.value==='phone' ? 'hidden' : 'text'" [(ngModel)]="formData.username" name="username" required
+                [placeholder]="formData.accType.titleValue" autocomplete="off">
+
+            <ng-container *ngIf="formData.accType.value==='phone'">
+                <div class="phone-form-field">
+                    <app-phone-number-template 
+                        [lang]="lang" 
+                        [data]="null" 
+                        [label]="'empty'" 
+                        appearance="" 
+                        floatLabel="always" 
+                        [required]="false" 
+                        [isNumberOnly]="true" 
+                        (emitData)="getPhoneNumber($event)"></app-phone-number-template>
+                </div>
+            </ng-container>
+
+            <a mat-button class="acc-type" [matMenuTriggerFor]="accTypesMenu"><i class="icon {{formData.accType.faIcon}}"></i></a>
+            <mat-menu #accTypesMenu="matMenu">
+                <span mat-menu-item *ngFor="let item of accTypes" (click)="formData.accType=item; formData.username=''">{{item.titleValue}}</span>
+            </mat-menu>
+
+            <ng-container *ngIf="isLogeds.length>0">
+                <a mat-icon-button class="select-user" (click)="formData.openIsLogeds=!formData.openIsLogeds"><i class="fas fa-caret-down"></i></a>
+                <div class="is-logeds" [class.open]="formData.openIsLogeds">
+                    <span class="is-loged-item" *ngFor="let item of isLogeds" 
+                        (click)="formData.username=item.username; formData.openIsLogeds=false;">{{item.username}}</span>
+                    <div *ngIf="formData.openIsLogeds" class="backdrop fixed" (click)="formData.openIsLogeds=false"></div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="form-field password">
+            <input class="text-input" [type]="formData.viewPass ? 'text' : 'password'" [(ngModel)]="formData.password" name="password" 
+                required [placeholder]="langContent.password" autocomplete="off">
+            <a mat-button><i class="icon fas fa-lock"></i></a>
+            <a mat-icon-button class="view-pass" [class.active]="formData.viewPass"
+                (click)="formData.viewPass=!formData.viewPass"><i class="fas fa-eye"></i></a>
+        </div>
+
+        <em *ngIf="formData.loginErr" class="login-err text-error">{{formData.loginErr}}</em>
+        <button mat-raised-button class="user-login bg-accent text-white" [disabled]="loginForm.invalid">{{langContent.login}}</button>
+
+        <span class="or"> - {{langContent.or}} - </span>
+        <app-social-login [lang]="lang" (emitSocialUser)="socialLogin($event)"></app-social-login>
+    </form>
+
+    <div class="bottom">
+        <a class="forgit-pass" [routerLink]="'/'">{{langContent.forgotPass}}</a>
+        <a class="create-acc" (click)="signUpTemplate.openDialog(formData); close.emit()">{{langContent.createAcc}}</a>
+    </div>
+</div>
+
+<app-sign-up #signUpTemplate></app-sign-up>

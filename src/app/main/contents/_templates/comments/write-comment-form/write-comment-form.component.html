@@ -1,11 +1,15 @@
 <div class="write-comment-form">
     <div class="avatar">
-        <img [src]="userData.avatarUrl ? userData.avatarUrl : 'assets/imgs/profile.jpg'" alt="" width="100%">
+        <app-user-avatar-template [userData]="userData" [width]="avatarWidth" [circle]="true"></app-user-avatar-template>
     </div>
     
     <form (ngSubmit)="submit()">
-        <mat-form-field [appearance]="config?.appearance" [floatLabel]="config?.floatLabel" [class.empty]="!content">
-            <textarea [(ngModel)]="content" name="content" matInput [placeholder]="langContent?.writeComment?.placeholder" autosize></textarea>
+        <mat-form-field [appearance]="config?.appearance" [floatLabel]="config?.floatLabel" 
+            [class.empty]="!formData.content" [class.on-rep-for-user]="cmData?.repFor?.name">
+            <textarea [id]="inputID" [(ngModel)]="formData.content" name="content" matInput [placeholder]="langContent?.writeComment?.placeholder" autosize></textarea>
+            <span *ngIf="cmData?.repFor?.name" class="rep-for-user-name">
+                {{cmData?.repFor?.name}} <i class="fas fa-times" (click)="cmData.repFor=null; formData.repFor=null;"></i>
+            </span>
         </mat-form-field>
     
         <div class="buttons">
@@ -15,7 +19,7 @@
             </div>
 
             <div class="submit">
-                <button mat-button [disabled]="!content" [ngStyle]="config?.submit?.styles">
+                <button mat-button [disabled]="!formData.content" [ngStyle]="config?.submit?.styles">
                     <span *ngIf="config?.submit?.icon" class="icon" [innerHtml]="config?.submit?.icon | safeHtml"></span>
                     <span class="txt" *ngIf="!config?.submit?.iconOnly">{{langContent?.writeComment?.send}}</span>
                 </button>

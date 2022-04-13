@@ -11,6 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { UserAvatarTemplateModule } from 'src/app/templates/user-avatar-template/user-avatar-template.module';
+import { AccountModule } from '../account/account.module';
+
 @NgModule({
   declarations: [ToolbarComponent],
   imports: [
@@ -18,7 +21,9 @@ import { MatMenuModule } from '@angular/material/menu';
     RouterModule.forChild(routes),
     SafeHtmlModule,
     MenuModule,
-    MatButtonModule, MatIconModule, MatMenuModule
+    MatButtonModule, MatIconModule, MatMenuModule,
+    UserAvatarTemplateModule,
+    AccountModule
   ],
   exports: [ToolbarComponent]
 })

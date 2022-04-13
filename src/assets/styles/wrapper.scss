@@ -69,6 +69,7 @@
         app-toolbar {
             position: relative;
             z-index: 99;
+            display: block;
         }
 
         .toolbar {
@@ -131,6 +132,10 @@
     .scroll-top {
         .mat-button {
             margin-top: -40px;
+
+            @media (max-width: 574px) {
+                margin-top: -75px;
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ export class FormDataComponent implements OnInit, OnDestroy {
   @Input() formID!: number;
   @Input() lang!: string;
   @Input() title!: boolean;
+  @Input() bodyStyles!: boolean;
 
   commonData: any = {};
   langsData: any = [
@@ -316,6 +317,7 @@ export class FormDataComponent implements OnInit, OnDestroy {
         e.contentSettings = this.appService.isObject(e.contentSettings).data;
         const submit = e.contentSettings.submit;
         this.layoutService.getElementStyles(submit);
+        e.bodyStyles = this.appService.isObject(e.contentSettings.bodyStyles).data;
 
         e.fields = this.appService.isArray(e.fields).data;
         e.fields.forEach((field: any) => {

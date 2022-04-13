@@ -1,0 +1,144 @@
+.cm-item {
+    position: relative;
+
+    .avatar {
+        position: absolute;
+        left: 0;
+    }
+
+    .cm-content {
+        position: relative;
+        font-size: 14px;
+        margin-top: .5rem;
+        margin-bottom: 1rem;
+
+        .head {
+            position: relative;
+
+            .user-name {
+                font-weight: 400;
+                font-size: 90%;
+            }
+    
+            .time {
+                font-size: 12px;
+                opacity: .7;
+                margin-left: 1rem;
+            }
+    
+            .cm-tools {
+                position: absolute;
+                right: -9px;
+                top: -9px;
+            }
+
+            .rep-tools {
+                position: absolute;
+                top: -6px;
+                right: -12px;
+                display: none;
+            }
+        }
+
+        .txt {
+            position: relative;
+            white-space: pre-wrap;
+    
+            a:hover {
+                color: var(--warnColor);
+            }
+    
+            .read-more {
+                margin-left: 0.5rem;
+    
+                a {
+                    white-space: nowrap;
+    
+                    i {
+                        font-size: 90%;
+                        margin-right: -3px;
+                    }
+                }
+            }
+
+            .tagged {
+                color: var(--accentColor);
+                margin-right: .3rem;
+                font-weight: 400;
+            }
+        }
+    
+        .btns {
+            position: relative;
+            flex-direction: row;
+            display: flex;
+    
+            .fellings {
+                position: relative;
+    
+                .emojis {
+                    position: absolute;
+                    left: 0;
+                    bottom: 22px;
+                    display: flex;
+                    background-color: var(--whiteColor);
+                    border-radius: 4px;
+                    box-shadow: 0 2px 3px -2px rgba(0,0,0,0.5);
+                    padding: 1px 7px;
+                    visibility: hidden;
+                    opacity: 0;
+    
+                    .mat-icon-button {
+                        i {
+                            font-size: 22px;
+                        }
+                    }
+                    .mat-icon-button:hover {
+                        color: var(--warnColor)
+                    }
+                }
+                .emojis.open {
+                    visibility: visible;
+                    opacity: 1;
+                    bottom: 26px;
+                }
+            }
+    
+            .btn-item {
+                font-size: 90%;
+                display: flex;
+                margin-right: 1rem;
+                height: 30px;
+                flex-direction: row;
+                align-items: flex-end;
+
+                mat-icon {
+                    font-size: 20px;
+                    width: 20px;
+                    height: 20px;
+                }
+    
+                i {
+                    font-size: 16px;
+                    margin-right: 3px;
+                    margin-bottom: 3px;
+                }
+
+                i.expand-icon {
+                    font-size: 90%;
+                    margin-left: .3rem;
+                }
+            }
+    
+            .btn-item:hover, .btn-item.active {
+                color: var(--warnColor) !important;
+            }
+        }
+    }
+
+    .cm-content:hover {
+        .rep-tools {
+            display: block !important;
+        }
+    }
+}

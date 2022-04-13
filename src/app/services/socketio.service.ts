@@ -10,6 +10,11 @@ import { AppService } from './app.service';
 export class SocketioService {
 
   public messages = {
+    user: {
+      login: 'userLogin',
+      logout: 'userLogout',
+      clientSignUp: 'clientSignUp'
+    },
     webContact: 'clientSendContact',
     webComment: {
       write: 'clientWriteComment',

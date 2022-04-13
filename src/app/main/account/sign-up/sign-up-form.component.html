@@ -1,0 +1,102 @@
+<div class="sign-up-form">
+    <h4 class="title">{{langContent.formTitle}}</h4>
+
+    <ng-container *ngIf="formData">
+        <form class="form-data" (ngSubmit)="submit(formData)" #registerForm="ngForm">
+            <!-- username -->
+            <div class="form-field">
+                <input type="hidden" [(ngModel)]="formData.username" name="username" required>
+
+                <ng-container *ngIf="formData.accType.value==='email'">
+                    <app-email-template 
+                        [lang]="lang" 
+                        [data]="{mail: formData.username}" 
+                        [label]="true" 
+                        appearance="outline" 
+                        floatLabel="always" 
+                        [required]="true" 
+                        (emitData)="formData.username=$event"></app-email-template>
+                </ng-container>
+
+                <ng-container *ngIf="formData.accType.value==='phone'">
+                    <app-phone-number-template 
+                        [lang]="lang" 
+                        [data]="formData.phoneNUmber" 
+                        [label]="true" 
+                        appearance="outline" 
+                        floatLabel="always" 
+                        [required]="true" 
+                        [isNumberOnly]="true" 
+                        (emitData)="getPhoneNumber($event)"></app-phone-number-template>
+                </ng-container>
+
+                <a mat-button class="acc-type" [matMenuTriggerFor]="accTypesMenu"><i class="icon {{formData.accType.faIcon}}"></i></a>
+                <mat-menu #accTypesMenu="matMenu">
+                    <ng-container *ngFor="let item of accTypes">
+                        <span *ngIf="!item.disabled" mat-menu-item (click)="formData.accType=item">{{item.titleValue}}</span>
+                    </ng-container>
+                </mat-menu>
+            </div>
+
+            <div class="row">
+                <!-- nickname -->
+                <div class="col-sm-6">
+                    <div class="form-field">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>{{langContent.nickname.label}}</mat-label>
+                            <input type="text" [(ngModel)]="formData.nickname" name="nickname" matInput 
+                                [placeholder]="langContent.nickname.placeholder" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- fullname -->
+                <div class="col-sm-6">
+                    <div class="form-field">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>{{langContent.fullname.label}}</mat-label>
+                            <input type="text" [(ngModel)]="formData.fullname" name="fullname" matInput required
+                                [placeholder]="langContent.fullname.placeholder" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-field">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>{{langContent.password.label}}</mat-label>
+                            <input [type]="formData.showPass ? 'text' : 'password'" [(ngModel)]="formData.password" name="password" 
+                                [minlength]="6" matInput required [placeholder]="langContent.password.placeholder" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-field">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>{{langContent.rePassword.label}}</mat-label>
+                            <input [type]="formData.showPass ? 'text' : 'password'" [(ngModel)]="formData.rePassword" name="rePassword" 
+                                (ngModelChange)="checkRePassword(formData)" [disabled]="!formData.password" 
+                                [minlength]="6" matInput required [placeholder]="langContent.rePassword.placeholder" autocomplete="off">
+                            <span *ngIf="formData.passwordNotMatch" class="mat-error">{{formData.passwordNotMatch}}</span>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <mat-checkbox [(ngModel)]="formData.showPass" name="showPass">
+                <span [class.checked]="formData.showPass">{{langContent.showPass}}</span></mat-checkbox>
+            <em class="password-note block size-90">({{langContent.passwordNote}})</em>
+
+            <div class="btns text-center">
+                <a mat-raised-button class="button" (click)="close()">{{langContent.cancel}}</a>
+                <button mat-raised-button class="button" 
+                    [disabled]="registerForm.invalid">{{langContent.submit}}</button>
+            </div>
+        </form>
+    </ng-container>
+
+    <ng-container *ngIf="processData">
+        <app-processing-template [lang]="lang" [data]="processData" (close)="close()" (retry)="submit(formData)"></app-processing-template>
+    </ng-container>
+</div>

@@ -11,7 +11,8 @@ export class MessageService {
     routerLoading: 'routerLoading',
     emitSiteData: 'emitSiteData',
     changeLanguage: 'changeLanguage',
-    emitDataSearchResult: 'emitDataSearchResult'
+    emitDataSearchResult: 'emitDataSearchResult',
+    openLogin: 'openLogin'
   }
 
   private subject = new Subject<any>();

@@ -19,7 +19,7 @@ export class PhoneNumberTemplateComponent implements OnInit, OnDestroy {
 
   @Input() lang!: string;
   @Input() data: any;
-  @Input() label!: boolean;
+  @Input() label: any;
   @Input() appearance: any;
   @Input() floatLabel: any;
   @Input() required: any;

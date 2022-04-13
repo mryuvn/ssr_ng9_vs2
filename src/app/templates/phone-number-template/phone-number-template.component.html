@@ -1,6 +1,6 @@
 <div class="phone-number-template {{appearance}}">
     <mat-form-field class="code" [appearance]="appearance" [floatLabel]="'always'">
-        <mat-label *ngIf="label">{{langContent.code.label}}</mat-label>
+        <mat-label *ngIf="label">{{label==='empty' ? '' : langContent.code.label}}</mat-label>
         <input type="text"
             [placeholder]="langContent.code.placeholder"
             aria-label="Number"
@@ -22,8 +22,8 @@
     </mat-form-field>
 
     <mat-form-field class="number" [appearance]="appearance" [floatLabel]="floatLabel">
-        <mat-label *ngIf="label">{{langContent.number.label}}</mat-label>
-        <input type="text"  [(ngModel)]="number" matInput [required]="required" 
+        <mat-label *ngIf="label">{{label==='empty' ? '' : langContent.number.label}}</mat-label>
+        <input type="text" [(ngModel)]="number" matInput [required]="required" 
             (ngModelChange)="getData()"
             [placeholder]="langContent.number.placeholder" autocomplete="off">
 

@@ -31,6 +31,17 @@ export class SetTagsService {
     link.setAttribute('href', canURL);
   }
 
+  setFavicon(data: any) {
+    const link: HTMLLinkElement = this.dom.createElement('link');
+    link.setAttribute('rel', data.rel);
+
+    if (data.type) { link.setAttribute('type', data.type) };
+    if (data.sizes) { link.setAttribute('sizes', data.sizes) };
+
+    this.dom.head.appendChild(link);
+    link.setAttribute('href', data.href);
+  }
+
   updateTags(data) {
     if (data.title) {
       this.title.setTitle(data.title);
@@ -57,52 +68,6 @@ export class SetTagsService {
     }
 
     this.meta.updateTag({ name: 'copyright', content: 'Mr.Yu Design' });
-
-    this.setFavicon({
-      rel: 'icon',
-      type: 'image/x-icon',
-      sizes: null,
-      href: 'favicon.ico'
-    });
-
-    this.setFavicon({
-      rel: 'apple-touch-icon',
-      type: null,
-      sizes: '180x180',
-      href: 'assets/favicon_io/apple-touch-icon.png'
-    });
-
-    this.setFavicon({
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '32x32',
-      href: 'assets/favicon_io/favicon-32x32.png'
-    });
-
-    this.setFavicon({
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '16x16',
-      href: 'assets/favicon_io/favicon-16x16.png'
-    });
-
-    this.setFavicon({
-      rel: 'manifest',
-      type: null,
-      sizes: null,
-      href: 'assets/favicon_io/site.webmanifest'
-    });
-  }
-
-  setFavicon(data: any) {
-    const link: HTMLLinkElement = this.dom.createElement('link');
-    link.setAttribute('rel', data.rel);
-
-    if (data.type) { link.setAttribute('type', data.type) };
-    if (data.sizes) { link.setAttribute('sizes', data.sizes) };
-
-    this.dom.head.appendChild(link);
-    link.setAttribute('href', data.href);
   }
 
   removeTags() {

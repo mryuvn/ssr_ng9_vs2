@@ -1,7 +1,7 @@
 <ng-container *ngIf="formData && isBrowser">
-    <h4 *ngIf="title" class="title">{{formData.nameValue}}</h4>
+    <form class="form-data" (ngSubmit)="submit(formData, dataForm)" #dataForm="ngForm" [ngStyle]="bodyStyles ? formData.bodyStyles : null">
+        <h4 *ngIf="title" class="title">{{formData.nameValue}}</h4>
 
-    <form class="form-data" (ngSubmit)="submit(formData, dataForm)" #dataForm="ngForm">
         <div class="row">
             <ng-container *ngFor="let field of formData.fields; index as i;">
                 <div class="field {{field.colsClass}}">

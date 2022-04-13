@@ -1,0 +1,65 @@
+.sign-up-form {
+    position: relative;
+    width: 550px;
+    max-width: 100%;
+
+    .title {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-data {
+        position: relative;
+        
+        .form-field {
+            position: relative;
+    
+            .acc-type {
+                position: absolute;
+                right: 0;
+                top: 5px;
+                min-width: auto;
+                height: 50px;
+                border-radius: 0 4px 4px 0;
+            }
+        }
+
+        mat-checkbox {
+            span.checked {
+                color: var(--danger);
+            }
+        }
+    
+        .btns {
+            margin-top: 1rem;
+            margin-bottom: .3rem;
+            
+            .button {
+                height: 50px;
+                min-width: 80px;
+            }
+    
+            button {
+                background-color: var(--danger);
+                color: #fff;
+            }
+        }
+    }
+
+    .processing-template {
+        .status, .message {
+            color: #ffff00;
+        }
+
+        .btns {
+            .bg-accent {
+                background-color: var(--primary);
+            }
+
+            .bg-warn {
+                background-color: var(--danger);
+                color: #fff !important;
+            }
+        }
+    }
+}

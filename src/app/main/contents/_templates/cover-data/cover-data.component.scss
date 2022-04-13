@@ -5,19 +5,5 @@
                 display: inherit;
             }
         }
-
-        @media (max-width: 1023px) {
-            h2 {
-                .txt {
-                    font-size: 80%;
-                }
-            }
-
-            .caption {
-                .txt {
-                    font-size: 90%;
-                }
-            }
-        }
     }
 }

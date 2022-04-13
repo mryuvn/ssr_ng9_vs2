@@ -46,7 +46,7 @@ import { FooterModule } from './main/footer/footer.module';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '139381155536-901pdp8e39mt0o94blo90n0i5pl8sllf.apps.googleusercontent.com' //Chua cap nhat ID moi 
+              '139381155536-901pdp8e39mt0o94blo90n0i5pl8sllf.apps.googleusercontent.com' //VFL Group on LocalhostTest
             ),
           },
           {

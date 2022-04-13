@@ -1,0 +1,11 @@
+<div *ngIf="userData" class="user-menu">
+    <div class="user-data">
+        <app-user-avatar-template [userData]="userData" width="70" circle="true"></app-user-avatar-template>
+        <span class="name">{{userData.nickname ? userData.nickname : (userData.fullname ? userData.fullname : userData.username)}}</span>
+    </div>
+    
+    <a *ngIf="accManage.href" [href]="accManage.href" target="_blank" class="menu-item">{{langContent.manageAcc}}</a>
+    <a *ngIf="accManage.route" [routerLink]="accManage.route" class="menu-item">{{langContent.manageAcc}}</a>
+
+    <a mat-button class="log-out bg-warn text-white" (click)="logout()">{{langContent.logout}}</a>
+</div>

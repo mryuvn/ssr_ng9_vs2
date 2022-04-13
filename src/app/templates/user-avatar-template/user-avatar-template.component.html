@@ -1,0 +1,20 @@
+<div *ngIf="userData" class="user-avatar-template" [class.circle]="circle" 
+    [style.width]="(width ? width : 40)+'px'" [style.height]="(width ? width : 40)+'px'">
+
+    <ng-container *ngIf="!userData.username">
+        <img src="assets/imgs/profile.jpg" alt="" width="100%">
+    </ng-container>
+
+    <ng-container *ngIf="userData.username">
+        <ng-container *ngIf="avatar?.type!=='iframe'">
+            <img *ngIf="avatar?.viewImage" [src]="avatar.src" alt="" width="100%">
+            <span *ngIf="!avatar?.viewImage" class="first-letter">
+                <div class="txt">{{firstLetter | uppercase}}</div>
+            </span>
+        </ng-container>
+    
+        <ng-container *ngIf="avatar?.type==='iframe'">
+            <div class="iframe" [innerHtml]="avatar.src | safeHtml"></div>
+        </ng-container>
+    </ng-container>
+</div>

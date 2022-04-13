@@ -18,11 +18,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-import { AvatarTemplateModule } from 'src/app/templates/avatar-template/avatar-template.module';
+import { UserAvatarTemplateModule } from 'src/app/templates/user-avatar-template/user-avatar-template.module';
+import { CmItemComponent } from './cm-item/cm-item.component';
 
 @NgModule({
-  declarations: [CommentsComponent, WriteCommentFormComponent],
+  declarations: [CommentsComponent, WriteCommentFormComponent, CmItemComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes), 
@@ -30,7 +30,7 @@ import { AvatarTemplateModule } from 'src/app/templates/avatar-template/avatar-t
     FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule,
     AutosizeModule,
     MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule,
-    AvatarTemplateModule
+    UserAvatarTemplateModule
   ],
   exports: [CommentsComponent]
 })

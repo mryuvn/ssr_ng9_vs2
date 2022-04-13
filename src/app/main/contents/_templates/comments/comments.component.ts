@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/services/app.service';
 import { FilesService } from 'src/app/services/files.service';
 import { LanguageService } from 'src/app/services/language.service';
@@ -13,8 +14,11 @@ import { SocketioService } from 'src/app/services/socketio.service';
 })
 export class CommentsComponent implements OnInit, OnDestroy {
 
+  subscription: Subscription;
+
   @Input() lang!: string;
   @Input() pageData: any;
+  @Input() maxLength: number;
 
   socket: any;
   
@@ -22,10 +26,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
   langsData: any = [
     {
       lang: 'vi',
+      loginMess: 'ĐĂNG NHẬP để có thể thảo luận và hơn thế nữa!',
+      noComment: 'Chưa có bình luận nào ở đây. Hãy là người đầu tiên để lại bình luận cho chúng tôi nào!',
       passersby: 'Khách vãng lai',
       writeComment: {
         label: 'Viết bình luận',
-        placeholder: 'Nhập nội dung của bạn...',
+        placeholder: 'Viết bình luận của bạn...',
         send: 'Gửi',
         upload: {
           tooltip: 'Ảnh/Video',
@@ -39,10 +45,17 @@ export class CommentsComponent implements OnInit, OnDestroy {
       like: 'Thích',
       reply: 'Trả lời',
       readMore: 'Xem thêm',
-      hideAway: 'Ẩn bớt'
+      hideAway: 'Ẩn bớt',
+      comment: 'Bình luận',
+      comments: 'Bình luận',
+      feedback: 'Phản hồi',
+      feedbacks: 'Phản hồi',
+      profileLink: '/vi/ho-so/'
     },
     {
       lang: 'en',
+      loginMess: 'LOG IN for discussion and more',
+      noComment: 'There is not any comment here. Be the first to leave us a comment, plese!',
       passersby: 'Passersby',
       writeComment: {
         label: 'Write comment',
@@ -60,7 +73,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
       like: 'Like',
       reply: 'Reply',
       readMore: 'Read more',
-      hideAway: 'Hide away'
+      hideAway: 'Hide away',
+      comment: 'Comment',
+      comments: 'Comments',
+      feedback: 'Feedback',
+      feedbacks: 'Feedbacks',
+      profileLink: '/en/profile/'
     }
   ];
   langContent: any = {};
@@ -68,7 +86,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   userData: any = {};
 
+  DATA: any = [];
   dataSource: any = [];
+  viewSource: any = [];
+ 
+  start: number = 0;
+  end: number = 0;
 
   emojis: any = [
     {
@@ -153,33 +176,63 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   isBrowser!: boolean;
 
-  // $ npm run ng g c main/contents/_templates/comments/
-  
+  messages = {
+    write: '',
+    reply: ''
+  }
+
+  devMod: boolean = true;
+  viewData!: boolean;
+
+  // $ npm run ng g c main/contents/_templates/comments/cm-item
   constructor(
     private appService: AppService,
     private languageService: LanguageService,
     private messageService: MessageService,
     private filesService: FilesService,
     private socketioService: SocketioService
-  ) { }
+  ) { 
+    this.subscription = messageService.getMessage().subscribe(message => {
+      if (message.text === socketioService.messages.user.login || message.text === socketioService.messages.user.logout) {
+        this.userData = appService.getUserData();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.isBrowser = this.appService.isBrowser;
     this.userData = this.appService.userData;
 
-    // console.log('-----this.pageData');
-    // console.log(this.pageData);
+    if (this.devMod) {
+      const hostname = this.appService.hostname;
+      this.viewData = hostname === 'localhost';
+    } else {
+      this.viewData = true;
+    }
 
     this.getLangData();
 
-    const messages = {
-      write: this.socketioService.messages.webComment.write + '_' + this.appService.domain,
-      reply: this.socketioService.messages.webComment.reply + '_' + this.appService.domain
+    if (!this.maxLength) { this.maxLength = 1 };
+    if (this.appService.USERS) {
+      this.getData();
+    } else {
+      this.getUsers();
     }
+
+    this.messages.write = this.socketioService.messages.webComment.write + '_' + this.appService.domain + '_' + this.pageData.cat + '_' + this.pageData.id;
+    this.messages.reply = this.socketioService.messages.webComment.reply + '_' + this.appService.domain + '_' + this.pageData.cat + '_' + this.pageData.id;
+
     if (this.isBrowser) {
-      this.socket = this.socketioService.on(messages.write).subscribe(content => {
-        this.addComment(content.data);
+      this.socket = this.socketioService.on(this.messages.write).subscribe(content => {
+        const newComment = content.data;
+        this.renderComment(newComment);
+        this.dataSource.unshift(newComment);
+        this.viewSource.unshift(newComment);
       }, err => this.appService.logErr(err, 'Socket listien on: messages.write', 'CommentsComponent'));
+
+      this.socket = this.socketioService.on(this.messages.reply).subscribe(content => {
+        this.updateReply(content.data);
+      }, err => this.appService.logErr(err, 'Socket listien on: messages.reply', 'CommentsComponent'));
     }
   }
 
@@ -189,32 +242,237 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.dateFormat = this.commonData.dateFormat;
   }
 
+  logErr(err: any, functionName: string) {
+    this.appService.logErr(err, functionName, 'CommentsComponent');
+  }
+
+  getUsers() {
+    const logErr = (err: any) => this.logErr(err, 'getUsers()');
+    this.appService.getUsers().subscribe(res => {
+      if (res.data) {
+        res.data.forEach((e) => {
+          this.appService.renderUser(e);
+        });
+        this.appService.USERS = res.data;
+        this.getData();
+      } else {
+        logErr(res.err);
+      }
+    }, err => logErr(err));
+  }
+
+  getData() {
+    const logErr = (err: any) => this.logErr(err, 'getData()');
+    this.appService.getSqlData({
+      table: this.appService.tables.webComments,
+      where: 'WHERE postID = "' + this.pageData.id + '" AND postCat = "' + this.pageData.cat + '" AND enabled = 1',
+      orderBy: 'ORDER BY id DESC'
+    }).subscribe(res => {
+      if (res.mess === 'ok') {
+        this.DATA = res.data;
+        this.renderData();
+      } else {
+        logErr(res.err);
+      }
+    }, err => logErr(err));
+  }
+
+  renderData() {
+    const DATA = this.DATA.filter((item: any) => item.enabled);
+    const dataSource: any = [];
+    DATA.forEach((e: any) => {
+      this.renderComment(e);
+      if (!e.commentID) {
+        const reps = DATA.filter((item: any) => item.commentID === e.id);
+        e.reps = reps.filter((item: any) => !item.replyID);
+
+        e.reps.forEach((rep: any) => {
+          rep.reps = DATA.filter((item: any) => item.replyID === rep.id);
+        });
+        dataSource.push(e);
+      }
+    });
+    this.dataSource = dataSource;
+    // console.log(this.dataSource);
+    this.exportData();
+  }
+
+  exportData() {
+    this.start = this.viewSource.length;
+    this.end = this.start + this.maxLength;
+
+    const newData = this.dataSource.slice(this.start, this.end);
+    this.viewSource = this.viewSource.concat(newData);
+  }
+
   addComment($event: any) {
-    if ($event) {
-      this.renderComment($event);
-      this.dataSource.unshift($event);
+    let content = JSON.stringify({
+      comment: $event.content,
+      repFor: $event.repFor,
+      tags: []
+    });
+    const logErr = (err: any) => this.logErr(err, 'addComment()');
+    const dataPost = {
+      table: this.appService.tables.webComments,
+      fields: {
+        postID: this.pageData.id,
+        postCat: this.pageData.cat,
+        content: content,
+        user: JSON.stringify({
+          username: this.userData.alias,
+          userAgent: this.appService.userAgent
+        })
+      },
+      options: {
+        createdTime: true
+      }
+    }
+    this.appService.addSqlData(dataPost).subscribe(res => {
+      if (res.mess === 'ok') {
+        const newComment = res.data;
+        newComment.enabled = 1;
+        this.DATA.unshift(newComment);
+
+        this.renderComment(newComment);
+        this.dataSource.unshift(newComment);
+        this.viewSource.unshift(newComment);
+
+        const dataEmit = {
+          message: this.messages.write,
+          emit: false,
+          broadcast: true,
+          content: {
+            data: newComment
+          }
+        }
+        this.socketioService.emit('client_emit', dataEmit);
+      } else {
+        logErr(res.err);
+      }
+    }, err => logErr(err));
+  }
+
+  reply(cm: any, rp: any, rpRep: any, cmIndex: number, repForUser: any, ) {
+    cm.repFor = {
+      name: repForUser ? repForUser.nickname ? repForUser.nickname : repForUser.fullname : '',
+      username: repForUser.alias
+    };
+    
+    cm.replyData = {};
+    cm.replyData.commentID = cm.id;
+    if (rp) {
+      cm.replyData.replyID = rpRep ? rpRep.id : rp.id;
+    }
+
+    if (this.isBrowser) {
+      const inputID = 'replyInput' + cmIndex;
+      const input = document.getElementById(inputID) as HTMLElement;
+      setTimeout(() => {
+        input?.focus();
+      }, 1);
     }
   }
 
   addReply($event: any, comment: any) {
-    console.log($event);
-    console.log(comment);
-    
+    let content = JSON.stringify({
+      comment: $event.content,
+      repFor: comment.repFor,
+      tags: []
+    });
+
+    const dataPost = {
+      table: this.appService.tables.webComments,
+      fields: {
+        postID: this.pageData.id,
+        postCat: this.pageData.cat,
+        commentID: comment.id,
+        replyID: comment.replyData?.replyID,
+        content: content,
+        user: JSON.stringify({
+          username: this.userData.alias,
+          userAgent: this.appService.userAgent
+        })
+      },
+      options: {
+        createdTime: true
+      }
+    }
+
+    const logErr = (err: any) => this.logErr(err, 'addReply()');
+    this.appService.addSqlData(dataPost).subscribe(res => {
+      if (res.mess === 'ok') {
+        const newReply = res.data;
+        newReply.enabled = 1;
+        this.updateReply(newReply)
+
+        const dataEmit = {
+          message: this.messages.reply,
+          emit: false,
+          broadcast: true,
+          content: {
+            data: newReply
+          }
+        }
+        this.socketioService.emit('client_emit', dataEmit);
+      } else {
+        logErr(res.err);
+      }
+    }, err => logErr(err));
+
+    setTimeout(() => {
+      comment.repFor = null;
+      comment.replyData = null;
+    }, 1);
+  }
+
+  updateReply(newReply: any) {
+    this.renderComment(newReply);
+
+    const updateToSource = (dataSource: any) => {
+      const comment = dataSource.find((item) => item.id === newReply.commentID);
+      if (comment) {
+        if (newReply.replyID) {
+          const reply = comment.reps.find((item: any) => item.id === newReply.replyID);
+          if (reply) {
+            reply.reps.unshift(newReply);
+            reply.showReplies = true;
+          }
+        } else {
+          comment.reps.unshift(newReply);
+          comment.showReplies = true;
+        }
+      }
+    }
+
+    // updateToSource(this.viewSource);
+    updateToSource(this.dataSource);
   }
 
   renderComment(e: any) {
-    const user = e.userData ? e.userData : {};
+    e.user = this.appService.isObject(e.user).data;
+    e.userData = this.appService.USERS.find((item: any) => item.alias === e.user.username);
+    if (!e.userData) { e.userData = {} };
+    const user = e.userData;
     e.name = user.nickname ? user.nickname : (user.fullname ? user.fullname : this.langContent.passersby) ;
 
     if (e.content) {
+      //get user has been taged or reply ...
+      
+      const content = this.appService.isObject(e.content).data;
+      e.repFor = content.repFor;
+      e.tags = content.tags;
+      
+      e.comment = content.comment;
       const length = 150;
-      if (e.content.length > length) {
-        e.shortContent = e.content.substring(0, length) + '...';
+      if (e.comment.length > length) {
+        e.shortContent = e.comment.substring(0, length) + '...';
         e.contentView = e.shortContent;
       } else {
-        e.contentView = e.content;
+        e.contentView = e.comment;
       }
     }
+
+    e.reps = [];
 
     this.getFellings(e);
   }
@@ -236,31 +494,20 @@ export class CommentsComponent implements OnInit, OnDestroy {
     e.fellings.title = this.languageService.getLangValue(emoji?.title, this.lang);
   }
 
-  selectEmoji(item: any, cm: any) {
-    cm.openEmojis = false;
-    cm.fellings.status = item.value;
-    cm.fellings.faIcon = item.faIcon;
-    cm.fellings.matIcon = item.matIcon;
-    cm.fellings.title = this.languageService.getLangValue(item.title, this.lang);
-
-    const fellingItem = {
-      user: this.userData.alias,
-      status: cm.fellings.status
-    }
-    const index = cm.fellingsData.findIndex((i: any) => i.user === fellingItem.user);
-    if (index === -1) {
-      cm.fellingsData.push(fellingItem);
+  viewHiddenData(view: boolean) {
+    if (view) {
+      this.dataSource = this.DATA;
     } else {
-      cm.fellingsData.splice(index, 1, fellingItem);
+      this.dataSource = this.DATA.filter((item: any) => item.enabled);
     }
   }
 
-  expandContent(data: any,) {
-    data.openContent = !data.openContent;
-    data.contentView = data.openContent ? data.content : data.shortContent;
+  login() {
+    this.messageService.sendMessage(this.messageService.messages.openLogin, null);
   }
 
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
     if (this.socket) {
       this.socket.unsubscribe();
     }

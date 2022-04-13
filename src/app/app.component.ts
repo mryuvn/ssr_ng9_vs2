@@ -39,6 +39,7 @@ export class AppComponent {
     messageService.getMessage().subscribe(message => {
       if (message.text === messageService.messages.layoutLoaded) {
         this.layoutLoaded = message.data;
+        this.scrollToTop();
       }
       if (message.text === messageService.messages.routerLoading) {
         this.routerLoading = message.data;

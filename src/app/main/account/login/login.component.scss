@@ -1,0 +1,100 @@
+.login {
+    .username, .password {
+        height: 40px;
+
+        input.text-input {
+            font-size: 90%;
+            font-weight: 300;
+            height: 100%;
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 40px;
+            border: 1px solid rgba($color: #000000, $alpha: 0.2);
+            border-radius: 4px;
+        }
+        input.text-input:focus {
+            border-color: var(--danger);
+        }
+
+        .phone-form-field {
+            position: relative;
+            overflow: hidden;
+            height: 40px;
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 4px;
+            padding: 0 12px;
+
+            .phone-number-template {
+                position: absolute;
+                width: 100%;
+                top: -10px;
+
+                input {
+                    font-size: 90%;
+                    font-weight: 300;
+                }
+
+                .number {
+                    width: 100%;
+                }
+
+                .mat-error {
+                    display: none;
+                }
+            }
+        }
+
+        .mat-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: auto;
+            height: 100%;
+            width: 40px;
+            border-radius: 0;
+
+            .icon {
+                opacity: .6;
+            }
+        }
+
+        .view-pass, .select-user {
+            position: absolute;
+            top: 0;
+            right: 30px;
+            opacity: .5;
+        }
+        .view-pass.active {
+            color: var(--accentColor);
+            opacity: 1;
+        }
+
+        .is-logeds {
+            position: absolute;
+            right: 0;
+            width: 100%;
+            z-index: 99;
+            background-color: var(--whiteColor);
+            box-shadow: 0 2px 4px -2px rgba(0,0,0,0.5);
+            border-radius: 0 0 4px 4px;
+            margin-top: 0;
+            visibility: hidden;
+            opacity: 0;
+
+            .is-loged-item {
+                position: relative;
+                display: block;
+                padding: .5rem 1rem;
+                cursor: pointer;
+                z-index: 2;
+            }
+            .is-loged-item:hover {
+                background-color: var(--backgroundColor);
+            }
+        }
+        .is-logeds.open {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}

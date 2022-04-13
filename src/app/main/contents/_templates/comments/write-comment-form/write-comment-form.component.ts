@@ -12,10 +12,13 @@ import { SocketioService } from 'src/app/services/socketio.service';
 })
 export class WriteCommentFormComponent implements OnInit {
 
+  @Input() inputID!: string;
   @Input() commonData: any;
   @Input() langContent: any;
   @Input() config: any;
   @Input() userData: any;
+  @Input() avatarWidth: any;
+  @Input() cmData: any;
 
   @Output() emitData = new EventEmitter();
 
@@ -33,12 +36,12 @@ export class WriteCommentFormComponent implements OnInit {
     }
   }
 
-  content: string = '';
+  formData: any = {};
+  
 
   constructor(
     private appService: AppService,
-    private layoutService: LayoutService,
-    private socketioService: SocketioService
+    private layoutService: LayoutService
   ) { }
 
   ngOnInit(): void {
@@ -54,33 +57,13 @@ export class WriteCommentFormComponent implements OnInit {
   }
 
   submit() {
-    const data = {
-      content: this.content,
-      userData: {
-        username: this.userData.username,
-        nickname: this.userData.nickname,
-        fullname: this.userData.fullname,
-        avatar: this.userData.avatar,
-        avatarUrl: this.userData.avatarUrl,
-        userLevel: this.userData.userLevel
-      },
-      createdTime: new Date()
+    if (this.cmData?.repFor) {
+      this.formData.repFor = this.cmData?.repFor;
     }
-
-    this.emitData.emit(data);
-
-    const dataEmit = {
-      message: this.socketioService.messages.webComment.write + '_' + this.appService.domain,
-      emit: false,
-      broadcast: true,
-      content: {
-        data: data
-      }
-    }
-    this.socketioService.emit('client_emit', dataEmit);
+    this.emitData.emit(this.formData);
 
     setTimeout(() => {
-      this.content = '';
+      this.formData = {};
     }, 1);
     
   }

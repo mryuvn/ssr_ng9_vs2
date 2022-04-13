@@ -1,0 +1,56 @@
+<div *ngIf="data" class="cm-item {{class}}" [style.padding-left]="(avatarWidth+10)+'px'">
+    <div class="avatar">
+        <app-user-avatar-template [userData]="data.userData" [width]="avatarWidth" [circle]="true"></app-user-avatar-template>
+    </div>
+    
+    <div class="cm-content">
+        <div class="head">
+            <span class="user-name">{{data.name}}</span>
+            <em class="time">{{data.createdTime | date:dateFormat + ' HH:mm:ss'}}</em>
+        
+            <span *ngIf="isBrowser && userData.username" class="{{class==='comment' ? 'cm-tools' : 'rep-tools'}}">
+                <!-- <a mat-icon-button><mat-icon>{{class==='comment' ? 'more_vert' : 'arrow_drop_down'}}</mat-icon></a> -->
+                <a mat-icon-button><mat-icon>more_vert</mat-icon></a>
+            </span>
+        </div>
+
+        <div class="txt">
+            <a *ngIf="data.repFor" [routerLink]="langContent.profileLink+data.repFor.username" class="tagged">{{data.repFor.name}}</a>
+
+            <span *ngIf="data.contentView" [innerHtml]="data.contentView"></span>
+            <span *ngIf="data.shortContent && isBrowser" class="read-more font-400" 
+                (click)="expandContent(data)">
+                <a>
+                    <i class="{{data.openContent ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}}"></i>
+                    {{data.openContent ? langContent?.hideAway : langContent?.readMore}}
+                </a>
+            </span>
+        </div>
+
+        <div *ngIf="isBrowser && userData.username" class="btns">
+            <span class="fellings" (mouseover)="data.openEmojis=true" (mouseleave)="data.openEmojis=false">
+                <a class="btn-item" [class.active]="data.fellings.status">
+                    <i *ngIf="data.fellings.faIcon" class="{{data.fellings.faIcon}}"></i>
+                    <mat-icon *ngIf="!data.fellings.faIcon">{{data.fellings.matIcon}}</mat-icon>
+                    {{data.fellings.title}}
+                </a>
+
+                <span class="emojis" [class.open]="data.openEmojis">
+                    <ng-container *ngFor="let item of emojis">
+                        <a mat-icon-button (click)="selectEmoji(item, data)">
+                            <i *ngIf="item.faIcon" class="{{item.faIcon}}"></i>
+                            <mat-icon *ngIf="!item.faIcon">{{item.matIcon}}</mat-icon>
+                        </a>
+                    </ng-container>
+                </span>
+            </span>
+
+            <a class="btn-item" (click)="reply.emit()"><mat-icon>reply</mat-icon> {{langContent.reply}}</a>
+
+            <a class="btn-item" (click)="data.showReplies=!data.showReplies">
+                <i class="fas fa-comments"></i> {{data.reps?.length}} {{data.reps?.length > 1 ? langContent.feedbacks : langContent.feedback}}
+                <i *ngIf="data.reps?.length > 0" class="expand-icon {{data.showReplies ? 'fas fa-angle-up' : 'fas fa-angle-down'}}"></i>
+            </a>
+        </div>
+    </div>
+</div>

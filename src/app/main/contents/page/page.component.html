@@ -1,5 +1,6 @@
 <div id="page-layout" [class.loaded]="routerLoaded">
-    <div class="page-cover" [style.color]="coverConfig.color ? coverConfig.color.rgba : ''">
+    <div class="page-cover" [class.with-avatar]="coverConfig.avatar?.enable && data.avatarImages.length>0" 
+        [style.color]="coverConfig.color ? coverConfig.color.rgba : ''" [style.max-height]="data.notFound || data.err ? 'unset' : ''">
         <div class="cover-image">
             <img [src]="mainCover" [alt]="data.name" class="cover-img">
         </div>
@@ -34,9 +35,31 @@
                 <app-cover-data [title]="pageTitle" [caption]="pageCaption" [data]="data" [coverConfig]="coverConfig"></app-cover-data>
             </ng-container>
         </ng-container>
-    </div>
 
-    <div *ngIf="data.mess" class="error-message"><em>{{data.mess}}</em></div>
+        <div *ngIf="data.notFound" class="page-not-found">
+            <div class="data">
+                <span class="err-code">404</span>
+                <span class="title">{{data.title}}</span>
+                <span class="mess">{{data.mess}}</span>
+
+                <a mat-button [routerLink]="'/'+lang">
+                    <span class="icon"><i class="fas fa-arrow-right"></i></span> <span class="txt">{{langContent.backToHome}}</span>
+                </a>
+            </div>
+        </div>
+    
+        <div *ngIf="data.err" class="connect-err">
+            <div class="data">
+                <span class="err-code">505</span>
+                <span class="title">{{data.title}}</span>
+                <span class="mess">{{data.mess}}</span>
+        
+                <a mat-button (click)="getDomainData()">
+                    <span class="icon"><i class="fas fa-sync"></i></span> <span class="txt">{{langData.retry}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <ng-container *ngIf="data.cat!=='home_page'">
         <div class="page-content" [class.hidden]="data.mess" [ngStyle]="contentConfig?.styles">
@@ -80,7 +103,7 @@
                                     className="child-cats-list after-content"></app-cats-list>
                             </div>
 
-                            <div *ngIf="data.id" class="page-comments">
+                            <div *ngIf="data.id && isBrowser" class="page-comments">
                                 <h4 class="title">{{langContent.pageComments.title}}</h4>
                                 <app-comments [lang]="lang" [pageData]="data"></app-comments>
                             </div>
@@ -100,11 +123,13 @@
 
                     <div *ngIf="contentConfig?.sidebar!=='none'" class="sidebar {{contentConfig?.sidebarCols}}">
                         <ng-container *ngIf="routerLoaded">
-                            <ng-container *ngIf="posts.length>0 && postStyles.position==='onSidebar'">
-                                <div class="posts">
-                                    <h4 class="cat-name">{{moduleData.nameValue}}</h4>
-                                    <app-products-list [dataSource]="posts" [config]="postStyles" [activeID]="data.id"></app-products-list>
-                                </div>
+                            <ng-container *ngIf="moduleData.level<2 || !moduleConfig.childModulesDependence">
+                                <ng-container *ngIf="posts.length>0 && postStyles.position==='onSidebar'">
+                                    <div class="posts">
+                                        <h4 class="cat-name">{{moduleData.nameValue}}</h4>
+                                        <app-products-list [dataSource]="posts" [config]="postStyles" [activeID]="data.id"></app-products-list>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
                             <ng-container *ngIf="parentCatPosts.length>0">

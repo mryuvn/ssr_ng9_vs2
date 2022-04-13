@@ -1,7 +1,15 @@
 .web-comments {
-    .avatar {
-        overflow: hidden;
-        border-radius: 50%;
+    .login-mess {
+        background-color: var(--backgroundColor);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px -2px;
+    }
+
+    .user-avatar-template {
+        .first-letter {
+            font-size: 20px;
+        }
     }
 
     .write-comment {
@@ -17,8 +25,6 @@
                 position: absolute;
                 top: 1rem;
                 left: 1rem;
-                width: 40px;
-                height: 40px;
             }
 
             .buttons {
@@ -38,148 +44,110 @@
     }
 
     .comments-list {
-        .cm-item {
+        .cm-data {
+            position: relative;
             background-color: var(--whiteColor);
             padding: 1rem;
             margin-bottom: 1.5rem;
             box-shadow: 0 2px 7px -5px rgba($color: #000000, $alpha: 1.0);
 
-            .cm-head {
-                position: relative;
-                flex-direction: column;
-                display: flex;
-                place-content: center;
-
-                .user-data {
-                    flex-direction: column;
-                    display: flex;
-                    place-content: center;
-                    padding-left: 50px;
-    
-                    .avatar {
-                        position: absolute;
-                        left: 0;
-                    }
-    
-                    .user-name {
-                        font-weight: 400;
-                        font-size: 90%;
-                    }
-    
-                    .time {
-                        font-size: 12px;
-                        opacity: .7
-                    }
-                }
-    
-                .cm-user {
-                    .avatar {
-                        width: 40px;
-                        height: 40px;
-                    }
-                }
-
-                .cm-tools {
-                    position: absolute;
-                    right: -1rem;
-                }
-            }
-
-            .cm-content {
-                font-size: 14px;
-                margin-top: .5rem;
-                padding-left: 50px;
-            }
-
-            .txt {
-                white-space: pre-wrap;
-
-                a:hover {
-                    color: var(--warnColor);
-                }
-
-                .read-more {
-                    margin-left: 0.5rem;
-
-                    a {
-                        white-space: nowrap;
-
-                        i {
-                            font-size: 90%;
-                            margin-right: -3px;
-                        }
-                    }
-                }
-            }
-
-            .btns {
-                flex-direction: row;
-                display: flex;
-
-                .fellings {
-                    position: relative;
-
-                    .emojis {
-                        position: absolute;
-                        left: 0;
-                        bottom: 24px;
-                        display: flex;
-                        background-color: var(--whiteColor);
-                        border-radius: 4px;
-                        box-shadow: 0 2px 3px -2px rgba(0,0,0,0.5);
-                        padding: 1px 7px;
-                        visibility: hidden;
-                        opacity: 0;
-
-                        .mat-icon-button {
-                            i {
-                                font-size: 22px;
-                            }
-                        }
-                        .mat-icon-button:hover {
-                            color: var(--warnColor)
-                        }
-                    }
-                    .emojis.open {
-                        visibility: visible;
-                        opacity: 1;
-                        bottom: 34px;
-                    }
-                }
-
-                .btn-item {
-                    display: flex;
-                    margin-right: 1rem;
-                    height: 34px;
-                    flex-direction: row;
-                    align-items: flex-end;
-
-                    i {
-                        font-size: 20px;
-                        margin-right: 3px;
-                        margin-bottom: 3px;
-                    }
-                }
-
-                .btn-item:hover, .btn-item.active {
-                    color: var(--warnColor) !important;
-                }
-            }
-
             .replies {
                 padding-left: 50px;
-                margin-top: 1rem;
 
-                .avatar {
-                    width: 30px;
-                    height: 30px;
+                .rp-data {
+                    position: relative;
+                    overflow: hidden;
+                    padding: .5rem 1rem 0;
+                    border-radius: 4px;
+                    margin-bottom: 1rem;
+
+                    .avatar {
+                        .first-letter {
+                            background-color: var(--whiteColor) !important;
+                        }
+                    }
+                }
+                .rp-data::before {
                     position: absolute;
-                    left: 0;
+                    background: var(--backgroundColor);
+                    content: '';
                     top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: inherit;
+                    opacity: 1;
+                }
+                .cm-item.reply-rep {
+                    .cm-content {
+                        padding: .5rem 1rem;
+                        border-radius: 4px;
+                    }
+
+                    .cm-content:before {
+                        position: absolute;
+                        background: var(--whiteColor);
+                        content: '';
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: inherit;
+                        box-shadow: 0 1px 2px -1px rgba($color: #000000, $alpha: 0.5);
+                        opacity: 0.5;
+                    }
+                }
+
+                .rp-replies {
+                    padding-left: 40px;
                 }
 
                 .write-comment-form {
                     padding-left: 40px;
+
+                    .avatar {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                    }
+
+                    .on-rep-for-user {
+                        .mat-form-field-infix {
+                            padding-top: 28px;
+                        }
+                    }
+
+                    .rep-for-user-name {
+                        position: absolute;
+                        background-color: var(--backgroundColor);
+                        top: 0;
+                        padding: 0px .5rem;
+                        border-radius: 4px;
+                        margin-right: .3rem;
+                        height: 22px;
+                        padding-right: 20px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+
+                        i {
+                            font-size: 12px;
+                            opacity: .7;
+                            cursor: pointer;
+                            position: absolute;
+                            right: 0;
+                            height: 100%;
+                            width: 20px;
+                            flex-direction: column;
+                            display: flex;
+                            place-content: center;
+                            align-items: center;
+                        }
+                        i:hover {
+                            opacity: 1;
+                            color: #ff0000;
+                        }
+                    }
 
                     .mat-form-field-infix {
                         margin-bottom: 26px;

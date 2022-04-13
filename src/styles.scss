@@ -231,23 +231,25 @@ button:focus, .mat-icon-button:focus, .mat-raised-button:focus, .mat-button:focu
 
 .cdk-overlay-pane, .mat-dialog-title, 
 mat-card, 
-mat-form-field, 
 mat-label, 
 .mat-table,
 .mat-button, 
 .mat-raised-button, 
 .mat-radio-button, 
-.mat-form-field-infix, .mat-form-field-suffix, .mat-form-field-prefix, 
-.mat-select-value-text, 
-.mat-select-placeholder,
-.mat-option-text, 
 .mat-menu-item, 
 .mat-tab-label, 
 .mat-slide-toggle-content,
 .mat-checkbox-label {
-    font-family: 'Mitr', sans-serif;
-    font-weight: 300;
-    // font-size: 16px;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    font-size: inherit !important;
+}
+
+mat-form-field, .mat-form-field-infix, .mat-form-field-suffix, .mat-form-field-prefix, 
+.mat-select-value-text, .mat-select-placeholder, .mat-option-text {
+    font-family: 'Mitr', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 14px !important;
 }
   
 .mat-button, .mat-raised-button {
