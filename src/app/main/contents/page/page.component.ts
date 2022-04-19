@@ -172,8 +172,13 @@ export class PageComponent implements OnInit, OnDestroy {
     this.routerLoading = true;
 
     this.moduleRoute = this.params.moduleRoute;
-
-    this.getDomainData();
+ 
+    if (this.appService.domainData) {
+      this.getSiteData();
+      this.getModuleData();
+    } else {
+      this.getDomainData();
+    }
 
     this.myObserve = this.router.events.subscribe(val => {
       if (val instanceof RoutesRecognized) {
@@ -336,24 +341,19 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   getDomainData() {
-    if (this.appService.domainData) {
-      this.getSiteData();
-      this.getModuleData();
-    } else {
-      this.appService.getDomainData().subscribe(res => {
-        if (res.mess === 'ok') {
-          this.appService.userAgent = res.userAgent;
-          this.appService.domainData = res.data;
-          this.appService.uploadPath = this.appService.uploadPath + res.data.id;
-          // this.setFavicons(this.appService.domainData);
-          this.setGlobalStyles();
-          this.getSiteData();
-          this.getModuleData();
-        } else {
-          this.appService.logErr(res.err, 'getDomainData()', 'PageComponent');
-        }
-      }, err => this.appService.logErr(err, 'getDomainData()', 'PageComponent'));
-    }
+    this.appService.getDomainData().subscribe(res => {
+      if (res.mess === 'ok') {
+        this.appService.userAgent = res.userAgent;
+        this.appService.domainData = res.data;
+        this.appService.uploadPath = this.appService.uploadPath + res.data.id;
+        // this.setFavicons(this.appService.domainData);
+        this.setGlobalStyles();
+        this.getSiteData();
+        this.getModuleData();
+      } else {
+        this.appService.logErr(res.err, 'getDomainData()', 'PageComponent');
+      }
+    }, err => this.appService.logErr(err, 'getDomainData()', 'PageComponent'));
   }
 
   getModuleData() {
@@ -401,10 +401,12 @@ export class PageComponent implements OnInit, OnDestroy {
 
   findModuleData() {
     let e: any;
-    if (this.moduleRoute && this.pageService.MODULES) {
-      e = this.pageService.MODULES.find((item: any) => item.route === this.moduleRoute);
-    } else {
-      e = this.pageService.MODULES.find((item: any) => item.alias === 'home_page');
+    if (this.pageService.MODULES) {
+      if (this.moduleRoute) {
+        e = this.pageService.MODULES.find((item: any) => item.route === this.moduleRoute);
+      } else {
+        e = this.pageService.MODULES.find((item: any) => item.alias === 'home_page');
+      }
     }
 
     if (e) {
