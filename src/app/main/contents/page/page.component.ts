@@ -223,12 +223,10 @@ export class PageComponent implements OnInit, OnDestroy {
     });
 
     if (this.isBrowser) {
-      this.socketioService.onConect();
-      
       const logErr = (err: any, message: string) => this.appService.logErr(err, message, 'PageComponent');
 
       this.socket = this.socketioService.on('on_connected').subscribe(data => {
-        console.log(data);
+        // console.log(data);
       }, err => logErr(err, 'Socket on_connected'));
 
       this.socket = this.socketioService.on('updateCatData').subscribe((data: any) => {
@@ -343,8 +341,8 @@ export class PageComponent implements OnInit, OnDestroy {
       this.getModuleData();
     } else {
       this.appService.getDomainData().subscribe(res => {
+        console.log(res);
         if (res.mess === 'ok') {
-          // console.log(res);
           this.appService.userAgent = res.userAgent;
           this.appService.domainData = res.data;
           this.appService.uploadPath = this.appService.uploadPath + res.data.id;
