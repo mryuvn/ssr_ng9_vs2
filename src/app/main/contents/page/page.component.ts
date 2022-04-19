@@ -223,6 +223,8 @@ export class PageComponent implements OnInit, OnDestroy {
     });
 
     if (this.isBrowser) {
+      this.socketioService.onConect();
+      
       const logErr = (err: any, message: string) => this.appService.logErr(err, message, 'PageComponent');
 
       this.socket = this.socketioService.on('on_connected').subscribe(data => {

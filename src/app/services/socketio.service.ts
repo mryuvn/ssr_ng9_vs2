@@ -36,7 +36,7 @@ export class SocketioService {
   }
 
   public onConect() {
-    console.log('Connected to to SocketIo server on ' + this.baseUrl);
+    // console.log(this.socket);
   }
 
   public emit(message, data) {
