@@ -213,10 +213,13 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.getLangData();
 
     if (!this.maxLength) { this.maxLength = 1 };
-    if (this.appService.USERS) {
-      this.getData();
-    } else {
-      this.getUsers();
+
+    if (this.viewData) {
+      if (this.appService.USERS) {
+        this.getData();
+      } else {
+        this.getUsers();
+      }
     }
 
     this.messages.write = this.socketioService.messages.webComment.write + '_' + this.appService.domain + '_' + this.pageData.cat + '_' + this.pageData.id;

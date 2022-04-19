@@ -14,7 +14,7 @@
         <span *ngIf="siteValues.name" class="site-name {{toolbarSettings.siteName.position}}" 
             [ngStyle]="toolbarSettings.siteName.styles" [innerHtml]="siteValues.name | safeHtml"></span>
     
-        <div *ngIf="isBrowser && siteLangs.length>0" 
+        <div *ngIf="isBrowser && layoutLoaded && siteLangs.length>0" 
             class="langs {{toolbarSettings.langs.position}}" [ngStyle]="toolbarSettings.langs.styles">
             <a class="selected-lang" [matMenuTriggerFor]="langsMenu">
                 <span class="flag-icon flag-icon-{{selectedLang.flagCode}}"></span>
@@ -87,10 +87,10 @@
         </div>
     </div>
 
-    <div class="toolbar-bg" [ngStyle]="navIsFixed ? toolbarSettings?.onFixed?.bg?.styles : toolbarSettings?.main?.bg?.styles"></div>
+    <div *ngIf="isBrowser" class="toolbar-bg" [ngStyle]="navIsFixed ? toolbarSettings?.onFixed?.bg?.styles : toolbarSettings?.main?.bg?.styles"></div>
 </div>
 
-<div class="toolbar-bottom">
+<div *ngIf="isBrowser && layoutLoaded" class="toolbar-bottom">
     <ng-container *ngIf="toolbarSettings?.contacts?.position!=='hidden'">
         <ng-container *ngIf="toolbarSettings?.contacts?.tel">
             <ng-container *ngIf="toolbarSettings.contacts.tel.value">

@@ -144,14 +144,12 @@ export class AppService {
   }
 
   getDomainData() {
-    console.log(this.domain);
     const data = {
       api_key: this.api.password,
       domain: this.domain
     }
     const query = JSON.stringify(data);
     const url = this.api.base + this.api.apiRoute + '/get-domain-data?data=' + query;
-    console.log(url);
     return this.http.get<any>(url);
   }
 

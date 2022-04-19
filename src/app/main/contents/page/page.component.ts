@@ -341,12 +341,11 @@ export class PageComponent implements OnInit, OnDestroy {
       this.getModuleData();
     } else {
       this.appService.getDomainData().subscribe(res => {
-        console.log(res);
         if (res.mess === 'ok') {
           this.appService.userAgent = res.userAgent;
           this.appService.domainData = res.data;
           this.appService.uploadPath = this.appService.uploadPath + res.data.id;
-          this.setFavicons(this.appService.domainData);
+          // this.setFavicons(this.appService.domainData);
           this.setGlobalStyles();
           this.getSiteData();
           this.getModuleData();
@@ -402,7 +401,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
   findModuleData() {
     let e: any;
-    if (this.moduleRoute) {
+    if (this.moduleRoute && this.pageService.MODULES) {
       e = this.pageService.MODULES.find((item: any) => item.route === this.moduleRoute);
     } else {
       e = this.pageService.MODULES.find((item: any) => item.alias === 'home_page');
@@ -804,7 +803,7 @@ export class PageComponent implements OnInit, OnDestroy {
       this.routerLoaded = true;
       this.messageService.sendMessage(this.messageService.messages.layoutLoaded, true);
       this.messageService.sendMessage(this.messageService.messages.routerLoading, this.routerLoading);
-    }, 300);
+    }, 100);
   }
 
   setFavicons(domainData: any) {
