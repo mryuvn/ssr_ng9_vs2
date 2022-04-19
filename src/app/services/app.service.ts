@@ -22,7 +22,7 @@ export class AppService {
     password: '32727a5ebaac9326f075f6804c0733e3',
     base: '',
     local: 'http://localhost:8998',
-    server: 'http://45.119.81.184:8998',
+    server: 'https://ws-api.yuvn.shop',
     filesStorage: '',
     apiRoute: '/web-pages',
     get: '/get-data?data=',
@@ -34,7 +34,7 @@ export class AppService {
   public uploadPath: string = 'wp';
 
   public vflApi = {
-    server: 'https://api.vfl-admin.com',
+    server: 'https://api.yuvn.shop',
     local: 'http://localhost:3333'
   }
   public publicApi!: string;
@@ -109,11 +109,11 @@ export class AppService {
   ) {
     this.isServer = isPlatformServer(this.platformId);
     this.isBrowser = isPlatformBrowser(this.platformId);
-    console.log('isServer: ' + this.isServer);
-    console.log('isBrowser: ' + this.isBrowser);
+    // console.log('isServer: ' + this.isServer);
+    // console.log('isBrowser: ' + this.isBrowser);
     
     this.hostname = this.isServer ? this.request.hostname :  document.location.hostname;
-    console.log('---hostname = ' + this.hostname);
+    // console.log('---hostname = ' + this.hostname);
 
     if (this.hostname !== 'localhost') {
       this.domain = this.hostname;
