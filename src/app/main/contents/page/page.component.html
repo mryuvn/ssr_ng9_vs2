@@ -104,8 +104,7 @@
                             </div>
 
                             <div *ngIf="data.id && isBrowser" class="page-comments">
-                                <h4 class="title">{{langContent.pageComments.title}}</h4>
-                                <app-comments [lang]="lang" [pageData]="data"></app-comments>
+                                <app-comments [lang]="lang" [pageData]="data" [title]="langContent.pageComments.title"></app-comments>
                             </div>
 
                             <div *ngIf="posts.length>0 && postStyles.position==='afterContent'" class="posts">

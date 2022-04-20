@@ -22,8 +22,9 @@ export class ProductItemComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.data.itemStyles = this.config.itemStyles.styles;
-    this.data.titleStyles = this.config.title.styles;
+    this.data.itemStyles = this.config?.itemStyles?.styles;
+    this.data.titleStyles = this.config?.title?.styles;
+    this.data.captionStyles = this.config?.caption?.styles;
 
     setTimeout(() => {
       if (this.isBrowser) {

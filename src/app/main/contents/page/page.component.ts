@@ -452,14 +452,16 @@ export class PageComponent implements OnInit, OnDestroy {
     const catData = {
       id: this.moduleData.id,
       alias: this.moduleData.alias,
+      mainModuleAlias: this.mainModule?.alias,
+      parrentCatAlias: this.parentCat?.alias,
       manager: this.tables.manager,
       posts: this.tables.posts,
       orderBy: orderBy
     };
     this.appService.getPageData(catData).subscribe(res => {
       if (res.mess === 'ok') {
-        this.pageService.POSTS = res.data;
-        this.dataSource = res.data;
+        this.pageService.POSTS = res.posts;
+        this.dataSource = res.posts;
         this.renderData();
       } else {
         this.data = this.languageService.getLoadingErr(this.lang);
@@ -480,22 +482,23 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   renderData() {
-    const general = this.dataSource.find((item: any) => item.alias === this.alias.general && item.lang === this.lang);
+    const general = this.dataSource.find((item: any) => item.cat === this.moduleData.alias && item.alias === this.alias.general && item.lang === this.lang);
     if (general) {
       this.general = general;
+      this.FAQs = general.faqs;
       if (this.moduleData.level > 1) {
         const parentCat = this.pageService.MODULES.find((item: any) => item.id === this.moduleData.cat);
         if (parentCat) {
-          this.pageTitle = parentCat.nameValue;
-          this.pageCaption = null;
-        } else {
-          this.pageTitle = general.name;
-          this.pageCaption = general.caption;
+          const parentCatData = this.dataSource.find((item: any) => item.cat === parentCat.alias && item.alias === this.alias.general && item.lang === this.lang);
+          this.pageTitle = parentCatData?.name;
+          this.pageCaption = parentCatData?.caption;
+          if (parentCatData) {
+            this.FAQs = parentCatData.faqs.concat(this.FAQs);
+          }
         }
-      } else {
-        this.pageTitle = general.name;
-        this.pageCaption = general.caption;
       }
+      if (!this.pageTitle) { this.pageTitle = general.name };
+      if (!this.pageCaption) { this.pageCaption = general.caption };
 
       if (this.params.pageID) {
         const aliasData = this.moduleData.aliasData.find((item: any) => item.name === this.alias.post);
@@ -508,7 +511,7 @@ export class PageComponent implements OnInit, OnDestroy {
         if (post) {
           this.renderPost(post);
           this.data = post;
-          this.FAQs = general.faqs.concat(post.faqs);
+          this.FAQs = this.FAQs.concat(post.faqs);
           this.getPageConfig();
           this.renderArticles();
           this.renderSamePosts();
@@ -519,7 +522,6 @@ export class PageComponent implements OnInit, OnDestroy {
       } else {
         this.renderPost(general);
         this.data = general;
-        this.FAQs = this.data.faqs;
         this.getPageConfig();
         this.renderArticles();
         this.renderSamePosts();
@@ -762,8 +764,6 @@ export class PageComponent implements OnInit, OnDestroy {
     const mainModuleConfig = this.findMainModuleConfig();
     if (this.moduleData.level > 1 && mainModuleConfig.childModulesDependence) {
       this.parentCatPosts = [ this.parentCat ];
-      console.log(this.parentCatPosts);
-      
       
       const parentCatPostsStypes: any = {};
       const onSidebar = true;

@@ -18,6 +18,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   @Input() lang!: string;
   @Input() pageData: any;
+  @Input() title!: string;
   @Input() maxLength: number;
 
   socket: any;

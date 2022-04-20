@@ -22,9 +22,9 @@
                 <a *ngIf="data.route" [routerLink]="data.route" [innerHtml]="data.name | safeHtml"></a>
                 <span *ngIf="!data.route" [innerHtml]="data.name | safeHtml" [ngStyle]="data.titleStyles"></span>
             </span>
-    
-            <span *ngIf="data.summary && config.caption.enable" class="summary" [innerHtml]="data.summary | safeHtml"></span>
         </ng-container>
+    
+        <span *ngIf="data.summary && config.caption.enable" class="summary" [innerHtml]="data.summary | safeHtml" [ngStyle]="data.captionStyles"></span>
     </div>
 
     <a *ngIf="data.route && config.coverLink==='cover'" [routerLink]="data.route" class="cover-link"></a>

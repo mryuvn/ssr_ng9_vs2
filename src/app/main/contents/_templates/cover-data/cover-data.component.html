@@ -12,10 +12,10 @@
                     <span *ngIf="!title" [innerHtml]="data.name | safeHtml" class="txt"></span>
                 </h2>
     
-                <span *ngIf="coverConfig.caption?.enable && data.caption" 
+                <span *ngIf="coverConfig.caption?.enable && caption" 
                     class="caption {{coverConfig.caption?.colorClass}}" [ngStyle]="coverConfig.caption?.styles">
                     <span *ngIf="caption" [innerHtml]="caption | safeHtml" class="txt"></span>
-                    <span *ngIf="!caption" [innerHtml]="data.caption | safeHtml" class="txt"></span>
+                    <span *ngIf="!caption && data.caption" [innerHtml]="data.caption | safeHtml" class="txt"></span>
                 </span>
         
                 <ng-container *ngIf="data.contentData.actButton">

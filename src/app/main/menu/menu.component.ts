@@ -25,8 +25,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   ) { 
     this.subscription = messageService.getMessage().subscribe(message => {
       if (message.text === messageService.messages.emitSiteData) {
-        if (message.data.menu) { this.menuData = message.data.menu };
-        if (message.data.siteValues) { this.siteValues = message.data.siteValues };
+        setTimeout(() => {
+          if (message.data.menu) { this.menuData = message.data.menu };
+          if (message.data.siteValues) { this.siteValues = message.data.siteValues };
+        }, 1);
       }
     });
   }

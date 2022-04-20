@@ -1,3 +1,5 @@
+<h4 *ngIf="viewData" class="title">{{title}}</h4>
+
 <div *ngIf="viewData" class="web-comments">
     <div *ngIf="isBrowser" class="write-comment">
         <a *ngIf="!userData.username" class="login-mess text-error size-90 block font-300 click" 
