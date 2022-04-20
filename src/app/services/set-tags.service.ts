@@ -7,8 +7,6 @@ import { DOCUMENT } from '@angular/common';
 })
 export class SetTagsService {
 
-  // url: string;
-
   constructor(
     private meta: Meta,
     private title: Title,

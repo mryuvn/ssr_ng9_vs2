@@ -346,14 +346,20 @@ export class PageComponent implements OnInit, OnDestroy {
         this.appService.userAgent = res.userAgent;
         this.appService.domainData = res.data;
         this.appService.uploadPath = this.appService.uploadPath + res.data.id;
-        // this.setFavicons(this.appService.domainData);
+        this.setFavicons(this.appService.domainData);
         this.setGlobalStyles();
         this.getSiteData();
         this.getModuleData();
       } else {
-        this.appService.logErr(res.err, 'getDomainData()', 'PageComponent');
+        this.data = this.languageService.getLoadingErr(this.lang);
+        this.dataLoaded();
+        this.logErr(res.err, 'getDomainData()');
       }
-    }, err => this.appService.logErr(err, 'getDomainData()', 'PageComponent'));
+    }, err => {
+      this.data = this.languageService.getLoadingErr(this.lang);
+      this.dataLoaded();
+      this.logErr(err, 'getDomainData()');
+    });
   }
 
   getModuleData() {
@@ -371,16 +377,16 @@ export class PageComponent implements OnInit, OnDestroy {
           this.pageService.MODULES = res.data;
           this.findModuleData();
         } else {
-          this.appService.logErr(res.err, 'getModuleData()', 'PageComponent');
           this.data = this.languageService.getLoadingErr(this.lang);
           this.articles = [];
           this.dataLoaded();
+          this.logErr(res.err, 'getModuleData()');
         }
       }, err => {
-        this.appService.logErr(err, 'getModuleData()', 'PageComponent');
         this.data = this.languageService.getLoadingErr(this.lang);
         this.articles = [];
         this.dataLoaded();
+        this.logErr(err, 'getModuleData()');
       });
     }
   }
@@ -443,7 +449,6 @@ export class PageComponent implements OnInit, OnDestroy {
 
   getPageData() {
     const orderBy = this.moduleConfig?.contentData?.samePosts?.orderBy;
-    
     const catData = {
       id: this.moduleData.id,
       alias: this.moduleData.alias,
@@ -457,16 +462,16 @@ export class PageComponent implements OnInit, OnDestroy {
         this.dataSource = res.data;
         this.renderData();
       } else {
-        this.appService.logErr(res.err, 'getDomainData()', 'PageComponent');
         this.data = this.languageService.getLoadingErr(this.lang);
         this.articles = [];
         this.dataLoaded();
+        this.logErr(res.err, 'getPageData()');
       }
     }, err => {
-      this.appService.logErr(err, 'getDomainData()', 'PageComponent');
       this.data = this.languageService.getLoadingErr(this.lang);
       this.articles = [];
       this.dataLoaded();
+      this.logErr(err, 'getPageData()');
     });
   }
 
@@ -805,7 +810,7 @@ export class PageComponent implements OnInit, OnDestroy {
       this.routerLoaded = true;
       this.messageService.sendMessage(this.messageService.messages.layoutLoaded, true);
       this.messageService.sendMessage(this.messageService.messages.routerLoading, this.routerLoading);
-    }, 100);
+    }, 300);
   }
 
   setFavicons(domainData: any) {
@@ -843,15 +848,31 @@ export class PageComponent implements OnInit, OnDestroy {
         href: 'assets/favicon_io/site.webmanifest'
       }
     ]
-    favicons.forEach((item: any) => {
-      const data = {
-        rel: item.rel,
-        type: item.type,
-        sizes: item.sizes,
-        href: item.href
+    // favicons.forEach((item: any) => {
+    //   const data = {
+    //     rel: item.rel,
+    //     type: item.type,
+    //     sizes: item.sizes,
+    //     href: item.href
+    //   }
+    //   this.setTagsService.setFavicon(data);
+    // });
+  
+  
+    if (domainData?.layoutSettings?.favicons) {
+      domainData.layoutSettings.favicons.forEach((img: any) => {
+        img.src = this.appService.getFileSrc(img);
+      });
+      const favicon = domainData.layoutSettings.favicons[0];
+      if (favicon) {
+        const data = {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: favicon.src
+        }
+        this.setTagsService.setFavicon(data);
       }
-      this.setTagsService.setFavicon(data);
-    });
+    }
   }
 
   updateTags() {
@@ -871,6 +892,10 @@ export class PageComponent implements OnInit, OnDestroy {
 
     const avatar = this.data.avatarImages?.find((item: any) => item.isImage);
     let logo = this.appService.domainData?.layoutSettings?.webAvatar;
+    
+    if (!logo && this.appService.domainData?.layoutSettings?.logos) {
+      logo = this.appService.domainData.layoutSettings.logos[0];
+    }
     if (logo) {
       logo.src = this.appService.getFileSrc(logo);
     }
@@ -886,6 +911,10 @@ export class PageComponent implements OnInit, OnDestroy {
     this.setTagsService.updateTags(data);
   }
 
+  logErr(err: any, functionName: string) {
+    this.appService.logErr(err, functionName, 'PageComponent');
+  }
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const number = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -899,12 +928,8 @@ export class PageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.setTagsService.removeTags();
     this.subscription.unsubscribe();
-    if (this.socket) {
-      this.socket.unsubscribe();
-    }
-    if (this.myObserve) {
-      this.myObserve.unsubscribe();
-    }
+    if (this.socket) { this.socket.unsubscribe() };
+    if (this.myObserve) { this.myObserve.unsubscribe() };
   }
 
 }

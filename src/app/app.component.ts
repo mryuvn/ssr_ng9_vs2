@@ -21,6 +21,7 @@ export class AppComponent {
   navIsFixed: boolean = false;
   toolOpen: boolean = false;
   sidenavOpen: boolean = false;
+  loadingLogo!: string;
   
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -37,10 +38,22 @@ export class AppComponent {
     this.isBrowser = appService.isBrowser;
 
     messageService.getMessage().subscribe(message => {
+      if (message.text === messageService.messages.emitSiteData) {
+        const logos = message.data.domainData?.layoutSettings?.logos;
+        if (logos) {
+          const img = logos[0];
+          if (img) {
+              this.loadingLogo = appService.getFileSrc(img);
+          }
+        }
+      }
       if (message.text === messageService.messages.layoutLoaded) {
         this.layoutLoaded = message.data;
-        this.scrollToTop();
+        if (this.isBrowser) {
+          this.scrollToTop();
+        }
       }
+
       if (message.text === messageService.messages.routerLoading) {
         this.routerLoading = message.data;
       }

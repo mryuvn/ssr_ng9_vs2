@@ -17,6 +17,6 @@
 </div>
 
 <div *ngIf="!layoutLoaded && isBrowser" id="preloading">
-    <img src="assets/imgs/logo/logo.png" [alt]="siteName" width="130" class="logo">
+    <img *ngIf="loadingLogo" [src]="loadingLogo" [alt]="siteName" width="100" class="logo">
     <img src="assets/imgs/loading_nice.gif" alt="" width="420" class="loading-icon">
 </div>
