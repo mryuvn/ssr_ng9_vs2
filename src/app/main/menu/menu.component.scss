@@ -108,3 +108,53 @@ ul {
         }
     }
 }
+
+.menu.on-sidenav {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    .menu-item, .menu-child {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-right: 20px;
+    }
+
+    a {
+        color: inherit;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: row;
+        align-items: center;
+        padding-left: 20px;
+        min-height: 40px;
+        border-radius: 0 20px 20px 0;
+
+        .icon {
+            width: 24px;
+            margin-right: 3px;
+            flex-direction: row;
+            display: flex;
+        }
+    }
+
+    .menu-item {
+        a {
+            text-transform: uppercase;
+        }
+    }
+
+    .menu-child {
+        a {
+            font-weight: 200;
+        }
+    }
+
+    .menu-item:hover, .menu-child:hover {
+        a {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--warnColor) !important;
+        }
+    }
+}

@@ -56,10 +56,10 @@ export class AppComponent {
 
       if (message.text === messageService.messages.routerLoading) {
         this.routerLoading = message.data;
+        this.sidenavOpen = false;
       }
     });
   }
-
 
   closeTools(favouriteTool, cartTool, accountTool) {
     this.toolOpen = null;

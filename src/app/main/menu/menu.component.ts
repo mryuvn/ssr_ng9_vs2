@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'src/app/services/message.service';
 
@@ -17,6 +17,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   
   @Input() siteValues: any;
   @Input() menuData: any;
+
+  @Output() closeSidenav = new EventEmitter();
 
   menuItemStyles: any;
 
@@ -41,6 +43,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (this.isBrowser && ID) {
       const el = document.getElementById(ID);
       el?.scrollIntoView({ behavior: 'smooth' });
+      if (el) { this.closeSidenav.emit(); }
     }
   }
 

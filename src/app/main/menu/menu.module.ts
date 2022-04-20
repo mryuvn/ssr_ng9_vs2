@@ -5,11 +5,14 @@ import { MenuComponent } from './menu.component';
 import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [];
 
+import { SafeHtmlModule } from 'src/app/safe-html';
+
 @NgModule({
   declarations: [MenuComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SafeHtmlModule
   ],
   exports: [MenuComponent]
 })

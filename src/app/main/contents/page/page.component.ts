@@ -311,7 +311,10 @@ export class PageComponent implements OnInit, OnDestroy {
     }
     
     const language = getData(domainData.languages);
-    if (language) { this.siteValues = language };
+    if (language) { 
+      this.siteValues = language;
+      this.appService.siteName = this.siteValues.name;
+    };
     
     if (this.siteValues.tels) {
       this.siteValues.tels.forEach((tel: any) => {
@@ -496,9 +499,12 @@ export class PageComponent implements OnInit, OnDestroy {
             this.FAQs = parentCatData.faqs.concat(this.FAQs);
           }
         }
+        if (!this.pageTitle) { this.pageTitle = general.name };
+        if (!this.pageCaption) { this.pageCaption = general.caption };
+      } else {
+        this.pageTitle = general.name;
+        this.pageCaption = general.caption;
       }
-      if (!this.pageTitle) { this.pageTitle = general.name };
-      if (!this.pageCaption) { this.pageCaption = general.caption };
 
       if (this.params.pageID) {
         const aliasData = this.moduleData.aliasData.find((item: any) => item.name === this.alias.post);
@@ -884,8 +890,7 @@ export class PageComponent implements OnInit, OnDestroy {
     } else {
       var title = this.data.title ? this.data.title : this.data.name;
     }
-    const siteName = this.siteValues.name ? this.siteValues.name : this.appService.siteName;
-    title = siteName + ' | ' + title;
+    if (this.siteValues.name) { title = this.siteValues.name + ' | ' + title };
 
     var description = this.data.description;
     if (!description) { description = seoTags.description };

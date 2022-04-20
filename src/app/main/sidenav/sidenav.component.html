@@ -1,14 +1,15 @@
 <div class="sidenav" [class.open]="open">
     <header>
-        <span class="siteName">Web demo</span>
-
-        <a mat-icon-button (click)="open=false; toggleSidenav.emit(open);"><i class="fas fa-arrow-left"></i></a>
+        <a class="site-name" [routerLink]="'/'">{{siteName}}</a>
+        <a mat-icon-button class="close-sidenav" (click)="open=false; toggleSidenav.emit(open);"><i class="fas fa-arrow-left"></i></a>
     </header>
 
-    <!-- <perfect-scrollbar>
-    </perfect-scrollbar> -->
-    <app-menu position="sidenav"></app-menu>
+    <div class="body">
+        <ng-container *ngIf="menuData">
+            <app-menu position="sidenav" [isBrowser]="isBrowser" [menuData]="menuData" (closeSidenav)="open=false; toggleSidenav.emit(open)"></app-menu>
+        </ng-container>
+    </div>
 </div>
 
-<div *ngIf="!open" class="toggle-sidenav" (click)="open=true; toggleSidenav.emit(open);"></div>
-<div *ngIf="open" class="backdrop dark fixed" (click)="open=false; toggleSidenav.emit(open);"></div>
+<div [class.open]="open" class="toggle-sidenav" (click)="open=true; toggleSidenav.emit(open);"></div>
+<div [class.open]="open" class="backdrop dark fixed" (click)="open=false; toggleSidenav.emit(open);"></div>

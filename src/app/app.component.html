@@ -1,5 +1,5 @@
-<div id="wrapper" [class.loaded]="layoutLoaded" [class.navIsFixed]="navIsFixed">
-    <app-sidenav *ngIf="isBrowser && layoutLoaded" [open]="sidenavOpen" (toggleSidenav)="sidenavOpen=$event"></app-sidenav>
+<div id="wrapper" [class.loaded]="layoutLoaded" [class.navIsFixed]="navIsFixed" [class.sidenav-open]="sidenavOpen">
+    <app-sidenav *ngIf="isBrowser && layoutLoaded" [open]="sidenavOpen" (toggleSidenav)="sidenavOpen=$event" [class.open]="sidenavOpen"></app-sidenav>
 
     <div class="wrapper-content">
         <app-toolbar [isBrowser]="isBrowser" [navIsFixed]="navIsFixed" (toggleSidenav)="sidenavOpen=$event"></app-toolbar>

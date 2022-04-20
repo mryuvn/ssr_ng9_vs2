@@ -1,20 +1,23 @@
 <ul *ngIf="menuData" class="menu on-{{position}}" [class.navIsFixed]="navIsFixed">
     <ng-container *ngFor="let menu of menuData">
-        <li (mouseover)="menu.itemStyles=config?.itemOnHover?.styles" (mouseleave)="menu.itemStyles=config?.item?.styles">
+        <li (mouseover)="menu.itemStyles=config?.itemOnHover?.styles" (mouseleave)="menu.itemStyles=config?.item?.styles" [class.hidden]="!menu.enabled">
             <span class="menu-item">
                 <a *ngIf="menu.destination.type==='route'" [routerLink]="menu.destination.value">
+                    <span *ngIf="position==='sidenav'" class="icon" [innerHtml]="menu.icon | safeHtml"></span>
                     <span class="anchor-text" [ngStyle]="menu.itemStyles ? menu.itemStyles : config?.item?.styles">
                         <span class="txt">{{menu.title}}</span>
                     </span>
                 </a>
     
                 <a *ngIf="menu.destination.type==='href'" [href]="menu.destination.value" target="_blank">
+                    <span *ngIf="position==='sidenav'" class="icon" [innerHtml]="menu.icon | safeHtml"></span>
                     <span class="anchor-text" [ngStyle]="menu.itemStyles ? menu.itemStyles : config?.item?.styles">
                         <span class="txt">{{menu.title}}</span>
                     </span>
                 </a>
 
                 <a *ngIf="menu.destination.type==='scrollTo'" (click)="scrollTo(menu.destination.value)">
+                    <span *ngIf="position==='sidenav'" class="icon" [innerHtml]="menu.icon | safeHtml"></span>
                     <span class="anchor-text" [ngStyle]="menu.itemStyles ? menu.itemStyles : config?.item?.styles">
                         <span class="txt">{{menu.title}}</span>
                     </span>
@@ -24,16 +27,19 @@
             <ng-container *ngIf="menu.childs">
                 <ul *ngIf="menu.childs.length>0" class="childs">
                     <ng-container *ngFor="let child of menu.childs">
-                        <li class="menu-child">
+                        <li class="menu-child" [class.hidden]="!child.enabled">
                             <a *ngIf="child.destination.type==='route'" [routerLink]="child.destination.value">
+                                <span *ngIf="position==='sidenav'" class="icon" [innerHtml]="child.icon | safeHtml"></span>
                                 <span class="txt">{{child.title}}</span>
                             </a>
     
                             <a *ngIf="child.destination.type==='href'" [href]="child.destination.value" target="_blank">
+                                <span *ngIf="position==='sidenav'" class="icon" [innerHtml]="child.icon | safeHtml"></span>
                                 <span class="txt">{{child.title}}</span>
                             </a>
     
                             <a *ngIf="child.destination.type==='scrollTo'" (click)="scrollTo(child.destination.value)">
+                                <span *ngIf="position==='sidenav'" class="icon" [innerHtml]="child.icon | safeHtml"></span>
                                 <span class="txt">{{child.title}}</span>
                             </a>
                         </li>
