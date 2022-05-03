@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-avatar-template',
@@ -16,11 +17,18 @@ export class AvatarTemplateComponent implements OnInit {
   @Input() marginTop: any;
   @Input() circle!: boolean;
 
-  constructor() { }
+  mainImage: any = {};
+
+  constructor(
+    private appService: AppService
+  ) { }
 
   ngOnInit(): void {
-    if (!this.noImage) {
-      this.noImage = 'no-image.jpg'
+    if (!this.noImage) { this.noImage = this.appService.webAvatar };
+    if (!this.noImage) { this.noImage = 'assets/imgs/no-image.jpg' };
+
+    if (this.dataSource.length > 0) {
+      this.mainImage = this.dataSource[0];
     }
   }
 

@@ -419,17 +419,17 @@
         .product-images {
             app-avatar-template {
                 display: block;
+                margin-bottom: 1.5rem;
             }
         }
         .product-images.float-default, .product-images.float-center {
             margin: auto;
-
-            app-avatar-template {
-                margin-bottom: 1.5rem;
-            }
         }
         .product-images.float-left {
             margin-right: 1.5rem;
+        }
+        .product-images.float-hidden {
+            display: none;
         }
 
         h1, h2, h3, h4 {
@@ -450,6 +450,10 @@
 
         .text {
             margin-bottom: 1.5rem;
+
+            div {
+                margin-bottom: .7rem;
+            }
         }
 
         .content-data {

@@ -14,7 +14,7 @@
     "prerender": "ng run webapp:prerender",
     "start:ssr": "pm2 start dist/webapp/server/main.js",
     "restart:ssr": "pm2 restart dist/webapp/server/main.js",
-    "stop": "pm2 stop dist/webapp/server/main.js"
+    "stop:ssr": "pm2 stop dist/webapp/server/main.js"
   },
   "private": true,
   "dependencies": {

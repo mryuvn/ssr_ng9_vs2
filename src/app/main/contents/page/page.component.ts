@@ -85,6 +85,7 @@ export class PageComponent implements OnInit, OnDestroy {
   dataSource: any = [];
   
   mainCover: string = 'assets/imgs/main_cover.jpg';
+  webAvatar: any = {};
   pageTitle!: string;
   pageCaption!: string;
   general: any = {};
@@ -308,6 +309,13 @@ export class PageComponent implements OnInit, OnDestroy {
     if (mainCover) {
       mainCover.src = this.appService.getFileSrc(mainCover);
       this.mainCover = mainCover.src;
+    }
+
+    const webAvatar = this.appService.domainData?.layoutSettings?.webAvatar;
+    if (webAvatar) {
+      webAvatar.src = this.appService.getFileSrc(webAvatar);
+      this.webAvatar = webAvatar;
+      this.appService.webAvatar = this.webAvatar.src;
     }
     
     const language = getData(domainData.languages);
@@ -536,8 +544,7 @@ export class PageComponent implements OnInit, OnDestroy {
       this.data = this.languageService.getPageNotFound(this.lang);
       this.articles = [];
     }
-    // console.log('---data')
-    // console.log(this.data);
+    console.log('---data'); console.log(this.data);
 
     this.dataLoaded();
   }
@@ -710,6 +717,14 @@ export class PageComponent implements OnInit, OnDestroy {
     this.posts = postsList;
     // console.log('--Posts');
     // console.log(this.posts);
+
+    // const newsApi = 'https://fcsapi.com/api-v3/news/news?access_key=';
+    // const access_key = 'q4MATKZyRgW9duVgSm87XqsSk';
+    // const find = 'EUR/USD';
+    // const url = newsApi + access_key + '&find=' + find;
+    // this.appService.getAnyApi(url).subscribe(res => {
+    //   console.log(res);
+    // }, err => this.logErr(err, 'Get news api'));
   }
 
   renderChildCats() {
@@ -897,7 +912,6 @@ export class PageComponent implements OnInit, OnDestroy {
 
     const avatar = this.data.avatarImages?.find((item: any) => item.isImage);
     let logo = this.appService.domainData?.layoutSettings?.webAvatar;
-    
     if (!logo && this.appService.domainData?.layoutSettings?.logos) {
       logo = this.appService.domainData.layoutSettings.logos[0];
     }

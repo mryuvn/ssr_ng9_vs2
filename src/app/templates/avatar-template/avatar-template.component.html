@@ -1,30 +1,28 @@
-<ng-container *ngIf="dataSource">
-    <div *ngIf="dataSource.length>0" class="avatar-template" [class.circle]="circle" [ngStyle]="heightStyles">
-        <div class="image-item main-image" [class.iframe]="dataSource[0].type==='iframe'">
-            <div *ngIf="!dataSource[0].viewImage" class="no-image">
-                <img [src]="'assets/imgs/'+noImage" alt="" width="100%">
-            </div>
-    
-            <ng-container *ngIf="dataSource[0].viewImage">
-                <img *ngIf="dataSource[0].type!=='iframe'" class="image" [class.landscape]="dataSource[0].landscape"
-                    [src]="dataSource[0].src" [alt]="dataSource[0].alt ? dataSource[0].alt : alt" [ngStyle]="marginTop">
-            </ng-container>
-    
-            <div *ngIf="dataSource[0].type==='iframe'" class="iframe" [innerHtml]="dataSource[0].src | safeHtml"></div>
+<div class="avatar-template" [class.circle]="circle" [ngStyle]="heightStyles">
+    <div class="image-item main-image" [class.iframe]="mainImage?.type==='iframe'">
+        <div *ngIf="!mainImage?.viewImage" class="no-image">
+            <img [src]="noImage" alt="" width="100%">
         </div>
-    
-        <!-- <div *ngFor="let item of dataSource; index as i;" class="{{i===0 ? 'main' : 'other'}} avatar-{{i}}">
-            <div *ngIf="!item.viewImage && isBrowser" class="no-image">
-                <img [src]="'assets/imgs/'+noImage" alt="" width="100%">
-            </div>
-    
-            <ng-container *ngIf="item.viewImage">
-                <div *ngIf="item.type!=='iframe'" class="image">
-                    <img [src]="item.src" [alt]="item.alt ? item.alt : alt" [class.landscape]="item.landscape">
-                </div>
-    
-                <div *ngIf="item.type==='iframe'" class="iframe" [innerHtml]="item.src | safeHtml"></div>
-            </ng-container>
-        </div> -->
+
+        <ng-container *ngIf="mainImage?.viewImage">
+            <img *ngIf="mainImage.type!=='iframe'" class="image" [class.landscape]="mainImage.landscape"
+                [src]="mainImage.src" [alt]="mainImage.alt ? mainImage.alt : alt" [ngStyle]="marginTop">
+        </ng-container>
+
+        <div *ngIf="mainImage?.type==='iframe'" class="iframe" [innerHtml]="mainImage.src | safeHtml"></div>
     </div>
-</ng-container>
+
+    <!-- <div *ngFor="let item of dataSource; index as i;" class="{{i===0 ? 'main' : 'other'}} avatar-{{i}}">
+        <div *ngIf="!item.viewImage && isBrowser" class="no-image">
+            <img [src]="'assets/imgs/'+noImage" alt="" width="100%">
+        </div>
+
+        <ng-container *ngIf="item.viewImage">
+            <div *ngIf="item.type!=='iframe'" class="image">
+                <img [src]="item.src" [alt]="item.alt ? item.alt : alt" [class.landscape]="item.landscape">
+            </div>
+
+            <div *ngIf="item.type==='iframe'" class="iframe" [innerHtml]="item.src | safeHtml"></div>
+        </ng-container>
+    </div> -->
+</div>

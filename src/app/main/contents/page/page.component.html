@@ -69,14 +69,15 @@
                         <div class="content-data {{FAQs.length>0 ? 'faqs-'+contentConfig?.faqs?.position : ''}}">
                             <div class="page-data">
                                 <ng-container *ngIf="routerLoaded && data.avatarImages">
-                                    <div *ngIf="data.avatarImages.length>0" class="product-images float-{{contentConfig?.avatar?.position}}" 
+                                    <div class="product-images float-{{contentConfig?.avatar?.position}}" 
                                         [ngStyle]="contentConfig?.avatar?.pictureStyles">
                                         <app-avatar-template [ngStyle]="contentConfig?.avatar?.styles" 
                                             [dataSource]="data.avatarImages" 
                                             [alt]="data.name"  
                                             [isBrowser]="isBrowser" 
                                             [heightStyles]="contentConfig?.avatar?.heightStyles" 
-                                            [circle]="contentConfig?.avatar?.circle"></app-avatar-template>
+                                            [circle]="contentConfig?.avatar?.circle"
+                                            [noImage]="webAvatar?.src"></app-avatar-template>
                                     </div>
                                 </ng-container>
         
