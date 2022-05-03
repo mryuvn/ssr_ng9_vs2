@@ -192,7 +192,7 @@ export class ProductsListComponent implements OnInit {
     } else if (this.config.viewMod === 'pagination') {
       
     } else {
-      this.DATA = this.dataSource;
+      this.DATA = this.appService.sortArray(this.dataSource);
     }
 
     this.DATA.forEach((e: any) => {
