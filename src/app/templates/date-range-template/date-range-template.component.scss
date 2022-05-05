@@ -1,0 +1,29 @@
+.date-range-template {
+    display: flex;
+    flex-direction: row;
+
+    .field {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        width: 125px;
+        margin-right: .5rem;
+
+        input {
+            visibility: hidden;
+        }
+
+        .value {
+            flex-direction: column;
+            display: flex;
+
+            .title {
+                font-size: 11px;
+            }
+
+            .date {
+                font-size: 80%;
+            }
+        }
+    }
+}

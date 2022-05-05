@@ -73,7 +73,7 @@ export class AppComponent {
   onWindowScroll() {
     const number = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     let fixedNumber = 50;
-    fixedNumber = 100;
+    // fixedNumber = 100;
     if (number > fixedNumber) {
       this.navIsFixed = true;
     } else if (this.navIsFixed && number < fixedNumber) {

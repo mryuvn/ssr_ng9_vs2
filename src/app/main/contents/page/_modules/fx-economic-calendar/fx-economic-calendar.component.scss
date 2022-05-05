@@ -1,0 +1,233 @@
+.fx-economic-calendar {
+    .head {
+        position: relative;
+        margin-bottom: 1rem;
+        flex-direction: row;
+        display: flex;
+        height: 50px;
+        align-items: center;
+        border-bottom: 4px solid rgba($color: #000000, $alpha: 0.1);
+
+        .date-filter {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+
+            .submit {
+                background-color: var(--accentColor);
+                color: var(--white);
+                min-width: auto;
+                width: 36px;
+                height: 32px;
+            }
+            .submit:hover {
+                color: var(--white)
+            }
+        }
+
+        .tools {
+            position: absolute;
+            right: 0;
+
+            .data-filter {
+                position: relative;
+                align-items: center;
+                margin-right: 1rem;
+                width: 180px;
+                border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+
+                input {
+                    background: none;
+                    width: 100%;
+                    font-weight: 300;
+                    font-size: 90%;
+                    border: none;
+                    padding-left: 17px;
+                }
+
+                .search-icon {
+                    position: absolute;
+                    left: 0;
+                    font-size: 12px;
+                    opacity: .5;
+                }
+            }
+
+            @media (max-width: 767px) {
+                .data-filter, mat-checkbox, .get-data {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .dates-list {
+        .mat-tab-label {
+            min-width: auto;
+        }
+
+        .mat-tab-label-active {
+            .mat-tab-label-content {
+                font-weight: 400;
+            }
+        }
+    }
+
+    h4.title {
+        margin-bottom: 1rem;
+        margin-top: 1.5rem;
+        font-size: 16px !important;
+    }
+
+    .data-item {
+        background-color: var(--backgroundColor);
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        border-radius: 4px;
+        box-shadow: 0 2px 2px -2px rgba(0,0,0,0.5);
+
+        .header {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+
+            @media (min-width: 768px) {
+                align-items: center;
+
+                .news-title {
+                    margin-left: 1rem;
+                }
+            }
+
+            @media (max-width: 767px) {
+                flex-direction: column;
+
+                .news-title {
+                    margin-top: .7rem;
+                }
+            }
+
+            .time {
+                font-size: 80%;
+                background-color: var(--accentColor);
+                padding: 2px 7px;
+                color: var(--white);
+                border-radius: 4px;
+                margin-right: 17px;
+            }
+    
+            .star.enable {
+                color: var(--warnColor);
+            }
+    
+            .star:not(.enable) {
+                opacity: .3;
+            }
+
+            .stars, .flag-code {
+                margin-right: 1rem;
+            }
+
+            .news-title {
+                font-weight: 400;
+            }
+
+            .expand-item {
+                position: absolute;
+                right: -1rem;
+            }
+        }
+
+        .details {
+            margin-top: .5rem;
+
+            .data-row {
+                margin-left: -.5rem;
+                margin-right: -.5rem;
+
+                .data-col {
+                    padding-left: .5rem;
+                    padding-right: .5rem;
+                }
+            }
+
+            @media (min-width: 768px) {
+                padding-left: 90px;
+
+                .data-col {
+                    width: 33.3333333333%;
+                }
+            }
+
+            @media (max-width: 567px) {
+                .data-col {
+                    width: 100%;
+
+                    .title {
+                        width: 90px;
+                        display: inline-block;
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            .title {
+                opacity: .7;
+                margin-right: .5rem;
+            }
+
+            .value {
+                font-weight: 400;
+                color: var(--accentColor);
+            }
+        }
+
+        .comment {
+            margin-top: .3rem;
+
+            .show-comment {
+                display: inline-flex;
+                flex-direction: row;
+                align-items: center;
+
+                i {
+                    font-size: 11px;
+                    margin-left: .3rem;
+                }
+            }
+
+            .txt {
+                display: block;
+                font-size: 90%;
+                opacity: .7;
+            }
+        }
+        .comment.open {
+            .show-comment {
+                i {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .data-item.open {
+        .expand-item {
+            i {
+                transform: rotate(90deg);
+            }
+        }
+    }
+
+    .data-item.collapse-mod:not(.open) {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+
+        .details {
+            display: none;
+        }
+    }
+}

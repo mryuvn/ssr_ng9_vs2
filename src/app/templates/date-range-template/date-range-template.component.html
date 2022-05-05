@@ -1,0 +1,41 @@
+<!-- <div class="date-range-template">
+  <input type="text" [formControl]="startDate">
+    <input matInput [matDatepicker]="picker" [formControl]="startDate">
+    <mat-datepicker-toggle matSuffix [for]="picker">
+      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+    </mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+</div> -->
+
+
+
+<!-- <mat-form-field appearance="fill">
+  <mat-label>Angular forms</mat-label>
+  <input matInput [matDatepicker]="picker1" [formControl]="date">
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+</mat-form-field> -->
+
+<div class="date-range-template">
+  <div class="field start">
+    <span class="value">
+      <span class="title">Từ ngày </span>
+      <span class="date">{{data.start | date:'dd/MM/yyyy'}}</span>
+    </span>
+
+    <input matInput [matDatepicker]="start" [formControl]="startDate" (ngModelChange)="getStartDate(startDate)" readonly>
+    <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+    <mat-datepicker #start></mat-datepicker>
+  </div>
+  
+  <div class="field end">
+    <span class="value">
+      <span class="title">Đến ngày</span>
+      <span class="date">{{data.end | date:'dd/MM/yyyy'}}</span>
+    </span>
+
+    <input matInput [matDatepicker]="end" [formControl]="endDate" (ngModelChange)="getEndDate(endDate)" readonly>
+    <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+    <mat-datepicker #end></mat-datepicker>
+  </div>
+</div>

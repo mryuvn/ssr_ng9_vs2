@@ -90,6 +90,11 @@
                 
                                     <div *ngIf="content.content" class="text" [innerHtml]="content.content | safeHtml"></div>
                                 </ng-container>
+
+                                <!-- moduleTemplates -->
+                                <ng-container *ngIf="contentConfig?.moduleTemplate==='fx-economic-calendar'">
+                                    <app-fx-economic-calendar></app-fx-economic-calendar>
+                                </ng-container>
                             </div>
 
                             <div *ngIf="contentConfig?.faqs?.position && contentConfig?.faqs?.position!=='none' && FAQs.length>0" class="page-faqs">

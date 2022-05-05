@@ -40,7 +40,6 @@ import { CarouselModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md
 import { ButtonTemplateModule } from 'src/app/templates/button-template/button-template.module';
 import { AvatarTemplateModule } from 'src/app/templates/avatar-template/avatar-template.module';
 
-
 import { CoverDataModule } from '../_templates/cover-data/cover-data.module';
 import { ArticleModule } from '../_templates/article/article.module';
 import { CatsListModule } from '../_templates/cats-list/cats-list.module';
@@ -50,6 +49,7 @@ import { AdsBannersModule } from '../_templates/ads-banners/ads-banners.module';
 import { FormDataModule } from '../_templates/form-data/form-data.module';
 import { CommentsModule } from '../_templates/comments/comments.module';
 import { FaqsModule } from '../_templates/faqs/faqs.module';
+import { FxEconomicCalendarModule } from './_modules/fx-economic-calendar/fx-economic-calendar.module';
 
 @NgModule({
   declarations: [PageComponent, WebDomainsComponent],
@@ -70,7 +70,8 @@ import { FaqsModule } from '../_templates/faqs/faqs.module';
     AdsBannersModule,
     FormDataModule,
     CommentsModule,
-    FaqsModule
+    FaqsModule,
+    FxEconomicCalendarModule
   ]
 })
 export class PageModule { }

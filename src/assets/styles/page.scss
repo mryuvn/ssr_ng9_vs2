@@ -415,6 +415,11 @@
                     }
                 }
             }
+
+            .banners {
+                position: sticky;
+                top: 80px;
+            }
         }
 
         .product-images {

@@ -121,12 +121,12 @@ a:hover {
 .flex {
     display: flex;
 }
-.flex.column {
-    flex-direction: column;
+.flex-column {
+    display: flex;
     place-content: center;
 }
-.flex.row {
-    flex-direction: row;
+.flex-row {
+    display: flex;
     align-items: center;
 }
   
@@ -407,5 +407,11 @@ mat-form-field {
     }
     .mat-button-disabled {
         cursor: not-allowed !important;
+    }
+}
+
+mat-checkbox {
+    label {
+        margin: 0;
     }
 }

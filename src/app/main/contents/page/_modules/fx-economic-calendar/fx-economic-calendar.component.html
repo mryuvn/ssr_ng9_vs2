@@ -1,0 +1,88 @@
+
+<div class="fx-economic-calendar">
+    <ng-container *ngIf="isBrowser">
+        <div class="head">
+            <div class="date-filter">
+                <app-date-range-template [start]="startDate" [end]="endDate" (emitData)="getDuration($event)"></app-date-range-template>
+                <a *ngIf="duration.searchBtn" mat-button class="submit" (click)="reloadData()"><i class="fas fa-search"></i></a>
+            </div>
+    
+            <div class="tools flex-row">
+                <div class="data-filter flex-row">
+                    <i class="search-icon fas fa-search"></i>
+                    <input type="text" [(ngModel)]="filterValue" placeholder="Tìm kiếm nhanh..." autocomplete="off">
+                </div>
+    
+                <mat-checkbox [(ngModel)]="collapse" (ngModelChange)="markCollapse(collapse)">Thu gọn</mat-checkbox>
+    
+                <a *ngIf="hostname==='localhost'" mat-icon-button class="get-data" (click)="getData()"><i class="fas fa-redo"></i></a>
+            </div>
+        </div>
+    
+        <div class="dates-list">
+            <mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="onTabChanged($event)">
+                <ng-container *ngFor="let item of dates">
+                    <!-- <div class="date-item">
+                        {{item.time | date:'dd/MM'}}
+                    </div> -->
+                    <mat-tab [label]="item.time | date:'dd/MM'"></mat-tab>
+                </ng-container>
+            </mat-tab-group>
+        </div>
+    </ng-container>
+
+    <div class="data-source">
+        <ng-container *ngFor="let e of dataSource">
+            <ng-container *ngIf="e.time===selectedDate">
+                <h4 class="title">Tin tức ngày {{e.date | date:'dd/MM/yyyy'}}</h4>
+    
+                <ng-container *ngFor="let item of e.data | searchFilter: filterValue">
+                    <div class="data-item" [class.collapse-mod]="collapse" [class.open]="item.open">
+                        <div class="header">
+                            <span *ngIf="isBrowser" class="flex-row">
+                                <span class="time">{{item.date | date: 'HH:mm:ss'}}</span>
+                                <span class="stars">
+                                    <span *ngFor="let star of item.stars" class="star" 
+                                        [class.enable]="star.enable"><i class="fas fa-star"></i></span>
+                                </span>
+                                <div class="flag-code"> <span class="flag-icon flag-icon-{{item.flagCode}}"></span> </div>
+                                <span class="currency">{{item.currency}}</span>
+                            </span>
+        
+                            <span class="news-title">{{item.title}}</span>
+        
+                            <a *ngIf="collapse && isBrowser" mat-icon-button class="expand-item" (click)="item.open=!item.open"><i class="fas fa-angle-right"></i></a>
+                        </div>
+        
+                        <div class="details">
+                            <div class="data-row">
+                                <div class="data-col">
+                                    <span class="title">{{'Previous'}}: </span>
+                                    <span class="value">{{item.previous ? item.previous : '-'}} {{item.scale}}</span>
+                                </div>
+        
+                                <div class="data-col">
+                                    <span class="title">{{'Forecast'}}: </span>
+                                    <span class="value">{{item.forecast ? item.forecast : '-'}} {{item.scale}}</span>
+                                </div>
+        
+                                <div class="data-col">
+                                    <span class="title">{{'Actual'}}: </span>
+                                    <span class="value">{{item.actual ? item.actual : '-'}} {{item.scale}}</span>
+                                </div>
+                            </div>
+        
+                            <div *ngIf="item.comment" class="comment" [class.open]="item.showComment">
+                                <a class="show-comment text-accent click" 
+                                    (click)="item.showComment=!item.showComment">Comment <i class="fas fa-arrow-down"></i>
+                                </a>
+        
+                                <span *ngIf="item.showComment" class="txt" [innerHtml]="item.comment | safeHtml"></span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
