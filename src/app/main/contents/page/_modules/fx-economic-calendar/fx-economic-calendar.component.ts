@@ -28,6 +28,8 @@ export class FxEconomicCalendarComponent implements OnInit {
   expand: boolean = false;
   filterValue!: string;
 
+  loadingData: any;
+
   isBrowser!: boolean;
 
   constructor(
@@ -47,7 +49,7 @@ export class FxEconomicCalendarComponent implements OnInit {
 
     const todayValue = new Date(today).getTime();
     const aDay = 1000*60*60*24;
-    const endDate = todayValue + aDay * 10;
+    const endDate = todayValue + aDay * 4;
     this.endDate = this.getDateString(new Date(endDate))
     const to = this.getDateString(new Date((endDate + aDay))); //Cần + 1 ngày cho API lấy dữ liệu
 
@@ -60,11 +62,14 @@ export class FxEconomicCalendarComponent implements OnInit {
 
     this.selectedDate = todayValue;
 
-    if (this.hostname === 'localhost') {
-      this.fakeData();
-    } else {
-      this.getData();
-    }
+    this.loadingData = { loading: true };
+    this.getData();
+
+    // if (this.hostname === 'localhost') {
+    //   this.fakeData();
+    // } else {
+    //   this.getData();
+    // }
   }
 
   getDateString(time: Date) {
@@ -112,8 +117,14 @@ export class FxEconomicCalendarComponent implements OnInit {
         this.renderData();
       } else {
         this.logErr(res, 'getData()');
+        this.loadingData = { err: res };
       }
-    }, err => this.logErr(err, 'getData()'));
+    }, err => {
+      this.logErr(err, 'getData()');
+      setTimeout(() => {
+        this.loadingData = { err: err };
+      }, 500);
+    });
   }
 
   fakeData() {
@@ -218,8 +229,12 @@ export class FxEconomicCalendarComponent implements OnInit {
     dataSource.forEach((item: any) => {
       item.data = this.DATA.filter((i: any) => i.dateValue === item.date);
     });
-    // console.log(dataSource);
     this.dataSource = dataSource;
+    console.log(this.dataSource);
+
+    setTimeout(() => {
+      this.loadingData = null;
+    }, 300);
   }
 
   getDatesArr() {
@@ -254,6 +269,8 @@ export class FxEconomicCalendarComponent implements OnInit {
   }
 
   reloadData() {
+    this.loadingData = { loading: true };
+
     this.startDate = this.duration.from;
     const endDate = new Date(this.duration.to);
     const endTime = endDate.getTime() - 1000*60*60*24;

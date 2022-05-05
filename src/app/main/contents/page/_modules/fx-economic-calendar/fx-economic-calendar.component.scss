@@ -230,4 +230,12 @@
             display: none;
         }
     }
+
+    .loading-data {
+        flex-direction: column;
+        display: flex;
+        place-content: center;
+        align-items: center;
+        text-align: center;
+    }
 }
