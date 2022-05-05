@@ -21,7 +21,6 @@ export class ArticleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // console.log(this.article);
     const database = this.article.config.database;
     if (database) {
       if (database.type === 'cats' || database.type === 'posts') {

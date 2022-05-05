@@ -3,7 +3,7 @@
         <img [src]="article.mainCover" [alt]="article.name" class="cover-img">
     </div>
 
-    <app-cover-data [data]="article" [coverConfig]="article.config.cover"></app-cover-data>
+    <app-cover-data [data]="article" [caption]="article.caption" [coverConfig]="article.config.cover"></app-cover-data>
 
     <div *ngIf="dataSource" 
         class="content posts" [class.container]="article.config.cover.container">

@@ -90,6 +90,7 @@
             .data {
                 flex-direction: column;
                 display: flex;
+                width: inherit;
             }
             .data.text-left {
                 align-items: flex-start;

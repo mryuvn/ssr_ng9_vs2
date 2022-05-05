@@ -167,7 +167,7 @@
 
     <ng-container *ngIf="!data.mess">
         <ng-container *ngFor="let article of articles">
-            <app-article [id]="article.elementID" [article]="article"></app-article>
+            <app-article *ngIf="article.enabled" [id]="article.elementID" [article]="article"></app-article>
         </ng-container>
     </ng-container>
 
