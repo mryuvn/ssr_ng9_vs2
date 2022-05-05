@@ -675,7 +675,8 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   renderArticles() {
-    const articles: any = this.dataSource.filter((item: any) => item.alias === this.alias.article);
+    let articles: any = this.dataSource.filter((item: any) => item.alias === this.alias.article);
+    articles = this.appService.sortArray(articles);
     articles.forEach((e: any) => {
       if(!e.config.cover) { e.config.cover = {} };
       this.layoutService.getCoverConfig(e, e.config.cover);
