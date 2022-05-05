@@ -21,7 +21,6 @@ export class FxEconomicCalendarComponent implements OnInit {
   endDate: string;
   duration: any = {};
 
-  selectedDate!: number;
   tabIndex: number = 0;
 
   collapse: boolean = false;
@@ -58,10 +57,7 @@ export class FxEconomicCalendarComponent implements OnInit {
       to: to
     }
 
-    this.getDatesArr();
-
-    this.selectedDate = todayValue;
-
+    //Nghiên cứu lại chỗ này khi truy cập vào giờ chuyển giao sang ngày mới 00:00
     this.loadingData = { loading: true };
     this.getData();
 
@@ -230,28 +226,11 @@ export class FxEconomicCalendarComponent implements OnInit {
       item.data = this.DATA.filter((i: any) => i.dateValue === item.date);
     });
     this.dataSource = dataSource;
-    console.log(this.dataSource);
+    // console.log(this.dataSource);
 
     setTimeout(() => {
       this.loadingData = null;
     }, 300);
-  }
-
-  getDatesArr() {
-    const aDay = 1000*60*60*24;
-    const start = new Date(this.duration.from).getTime();
-    const end = new Date(this.duration.to).getTime();
-    const length = (end - start) / aDay;
-
-    const dateArr: any = [];
-    for (let index = 0; index < length; index++) {
-      const time = start + aDay * index;
-      const item = {
-        time: time
-      };
-      dateArr.push(item);
-    }
-    this.dates = dateArr;
   }
 
   getDuration($event) {
@@ -277,20 +256,11 @@ export class FxEconomicCalendarComponent implements OnInit {
     this.endDate = this.getDateString(new Date(endTime));
     this.duration.searchBtn = false;
     this.getData();
-    this.getDatesArr();
-
-    const index = this.dates.findIndex((item: any) => item.time === this.selectedDate);
-    if (index === -1) {
-      this.selectedDate = this.dates[0]?.time;
-      this.tabIndex = 0;
-    } else {
-      this.tabIndex = index;
-    }
+    this.tabIndex = 0;
   }
 
   onTabChanged($event: any) {
-    const item = this.dates[$event.index];
-    this.selectedDate = item?.time;
+    // console.log($event);
   }
 
   logErr(err: any, funcName: string) {

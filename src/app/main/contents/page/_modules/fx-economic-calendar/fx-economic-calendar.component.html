@@ -21,11 +21,8 @@
     
         <div class="dates-list" [class.hidden]="loadingData">
             <mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="onTabChanged($event)">
-                <ng-container *ngFor="let item of dates">
-                    <!-- <div class="date-item">
-                        {{item.time | date:'dd/MM'}}
-                    </div> -->
-                    <mat-tab [label]="item.time | date:'dd/MM'"></mat-tab>
+                <ng-container *ngFor="let item of dataSource">
+                    <mat-tab [label]="item.date | date:'dd/MM'"></mat-tab>
                 </ng-container>
             </mat-tab-group>
         </div>
@@ -37,8 +34,8 @@
     </div>
 
     <div class="data-source" [class.hidden]="loadingData">
-        <ng-container *ngFor="let e of dataSource">
-            <ng-container *ngIf="e.time===selectedDate">
+        <ng-container *ngFor="let e of dataSource; index as i;">
+            <ng-container *ngIf="i===tabIndex">
                 <h4 class="title">Tin tức ngày {{e.date | date:'dd/MM/yyyy'}}</h4>
     
                 <ng-container *ngFor="let item of e.data | searchFilter: filterValue">
