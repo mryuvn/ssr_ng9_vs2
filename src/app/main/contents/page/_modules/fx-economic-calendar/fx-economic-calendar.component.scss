@@ -112,11 +112,17 @@
 
             .time {
                 font-size: 80%;
-                background-color: var(--accentColor);
-                padding: 2px 7px;
-                color: var(--white);
+                // background-color: var(--accentColor);
+                // padding: 2px 7px;
+                // color: var(--white);
                 border-radius: 4px;
                 margin-right: 17px;
+            }
+
+            .star {
+                i {
+                    font-size: 14px;
+                }
             }
     
             .star.enable {

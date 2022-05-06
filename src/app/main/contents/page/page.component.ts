@@ -544,7 +544,7 @@ export class PageComponent implements OnInit, OnDestroy {
       this.data = this.languageService.getPageNotFound(this.lang);
       this.articles = [];
     }
-    // console.log('---data'); console.log(this.data);
+    console.log('---data'); console.log(this.data);
 
     this.dataLoaded();
   }

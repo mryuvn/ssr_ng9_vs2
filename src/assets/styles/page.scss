@@ -468,12 +468,22 @@
             padding: 1rem;
         }
 
+        .other-note {
+            padding: 1rem;
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
         @media (min-width: 992px) {
             .content-data.faqs-left, .content-data.faqs-right {
                 display: flex;
     
-                .page-data, .page-faqs {
-                    width: 50%;
+                .page-data {
+                    width: 60%;
+                }
+
+                .page-faqs {
+                    width: 40%;
                 }
             }
             .content-data.faqs-left {

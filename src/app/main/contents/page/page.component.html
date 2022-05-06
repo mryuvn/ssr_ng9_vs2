@@ -97,8 +97,12 @@
                                 </ng-container>
                             </div>
 
-                            <div *ngIf="contentConfig?.faqs?.position && contentConfig?.faqs?.position!=='none' && FAQs.length>0" class="page-faqs">
-                                <app-faqs [dataSource]="FAQs" [langContent]="langContent.faqs"></app-faqs>
+                            <div *ngIf="FAQs.length>0 || data.contentData?.otherNote" class="page-faqs">
+                                <div *ngIf="data.contentData?.otherNote" class="other-note text" [innerHtml]="data.contentData.otherNote | safeHtml"></div>
+
+                                <ng-container *ngIf="FAQs.length>0">
+                                    <app-faqs [dataSource]="FAQs" [langContent]="langContent.faqs"></app-faqs>
+                                </ng-container>
                             </div>
                         </div>
 
