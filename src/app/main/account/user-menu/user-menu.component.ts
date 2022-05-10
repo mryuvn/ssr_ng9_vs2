@@ -27,11 +27,13 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     {
       lang: 'vi',
       manageAcc: 'Quản lý tài khoản',
+      webAdmin: 'Quản trị trang web',
       logout: 'Đăng xuất'
     },
     {
       lang: 'en',
       manageAcc: 'Manage your account',
+      webAdmin: 'Web admin',
       logout: 'Log out'
     }
   ];
@@ -69,8 +71,8 @@ export class UserMenuComponent implements OnInit, OnDestroy {
   ];
 
   accManage: any = {};
-
   socialUser: SocialUser;
+  adminLevel!: boolean;
 
   constructor(
     private appService: AppService,
@@ -89,6 +91,8 @@ export class UserMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getLangData();
+
+    this.adminLevel = this.userData.provider === 'users' || this.userData.provider === 'admins';
 
     const e = this.accManagerLinks.find((item: any) => item.provider === this.userData?.provider);
     if (e) {

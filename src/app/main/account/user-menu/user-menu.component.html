@@ -7,5 +7,7 @@
     <a *ngIf="accManage.href" [href]="accManage.href" target="_blank" class="menu-item">{{langContent.manageAcc}}</a>
     <a *ngIf="accManage.route" [routerLink]="accManage.route" class="menu-item">{{langContent.manageAcc}}</a>
 
-    <a mat-button class="log-out bg-warn text-white" (click)="logout()">{{langContent.logout}}</a>
+    <a href="https://web-admin.yuvn.shop" class="menu-item" target="_blank">{{langContent.webAdmin}}</a>
+
+    <a *ngIf="adminLevel" mat-button class="log-out bg-warn text-white" (click)="logout()">{{langContent.logout}}</a>
 </div>
