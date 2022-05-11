@@ -699,7 +699,7 @@ export class PageComponent implements OnInit, OnDestroy {
     // console.log('this.postStyles');
     // console.log(this.postStyles);
     
-    const postsList = this.dataSource.filter((item: any) => item.alias === this.alias.post && item.lang === this.data.lang);
+    const postsList = this.dataSource.filter((item: any) => item.alias === this.alias.post && item.lang === this.data.lang && item.enabled);
     postsList.forEach((e: any) => {
       this.renderPost(e);
       e.prodItemID = this.moduleData.table_name + e.id;
